@@ -7,6 +7,6 @@ A --> B[Look for an item]
 
 B --> C{Did you find it?}
 C -->|Yes| D(Stop looking)
-C -->|No| E{Do you need it?}
+C -->|No| E{Ich bin dein Vater}
 E -->|Yes| B
 E -->|No| D
