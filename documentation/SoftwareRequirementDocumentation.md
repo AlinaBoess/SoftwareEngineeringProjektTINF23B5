@@ -35,6 +35,19 @@ Der Zweck dieser Software Requirements Specification (SRS) ist es, eine klare un
 Diese SRS soll somit als Referenzdokument für alle Beteiligten dienen und sicherstellen, dass alle Anforderungen an das Restaurant-Buchungssystem klar und verständlich festgehalten sind.
 
 ### 1.2 Umfang  
+Das Projekt wird als Webanwendung entwickelt, die eine Interaktion zwischen Benutzern (Kunden) und Restaurantmitarbeitern (Administratoren) ermöglicht.
+- Akteure
+   - Benutzer: Kunden, die Reservierungen vornehmen.
+   - Administratoren: Restaurantmitarbeiter, die Tische verwalten und Reservierungen einsehen.
+
+- Geplante Teilsysteme
+   - Tischverwaltung: Administratoren können Tische erstellen und die verfügbaren Reservierungen einsehen.
+   - Tischplan und Verfügbarkeitsanzeige: Benutzer können einen interaktiven Tischplan einsehen und einen gewünschten Zeitblock wählen.
+   - Reservierungssystem: Benutzer können Tische reservieren, erhalten eine Bestätigung und können Reservierungen stornieren.
+   - Feedbacksystem: Benutzer haben die Möglichkeit, Feedback zu ihren Erfahrungen abzugeben.
+   - Benutzersystem: Erstellung von Konten für Benutzer und Administratoren.
+- Technische Umsetzung: Die Webanwendung wird in C#, ASP.NET, HTML, JavaScript/TypeScript und CSS entwickelt und nutzt eine SQL-Datenbank.
+
 ### 1.3 Definitionen, Akronyme und Abkürzungen  
 ### 1.4 Referenzen  
 ### 1.5 Überblick  
