@@ -61,6 +61,23 @@ Das Projekt wird als Webanwendung entwickelt, die eine Interaktion zwischen Benu
 - **JavaScript/TypeScript**: Programmiersprachen, die verwendet werden, um interaktive und dynamische Inhalte auf Webseiten zu erstellen.
 
 ### 1.4 Referenzen  
+Die folgende Liste enthält alle Dokumente und Quellen, auf die im Rahmen dieser Software Requirements Specification (SRS) verwiesen wird:
+1. **Template von RUP SRS**  
+   Titel: RUP Software Requirements Specification (SRS) Template  
+   Link: [RUP SRS Template](https://sceweb.sce.uhcl.edu/helm/REQ_ENG_WEB/My-Files/mod4/rup_srs.dot)
+2. **Projektdokumentation**  
+   Titel: Restaurant Buchungssystem – Projektdokumentation  
+   Autoren: Alina Moumen, Yahya, Alex, Lukas  
+   Link: [Dokumentation auf GitHub](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/tree/main/documentation)  
+3. **Code-Repository**  
+   Titel: Restaurant Buchungssystem – Code-Repository  
+   Autoren: Alina Moumen, Yahya, Alex, Lukas  
+   Link: [Code auf GitHub](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/tree/main/programCode)  
+4. **Blog**  
+   Titel: Restaurant Buchungssystem – Wöchentliche Blog-Beiträge  
+   Autoren: Alina Moumen, Yahya, Alex, Lukas  
+   Link: [Blog auf GitHub Discussions](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/discussions)  
+
 ### 1.5 Überblick  
 
 ## 2. Gesamtbeschreibung  
