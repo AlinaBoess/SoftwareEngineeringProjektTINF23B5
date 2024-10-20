@@ -5,7 +5,7 @@ Hier sind ein paar Updates zu unserem Projekt:
 
 ## Software Requirement Specification (SRS)
 Wir haben unsere SRS geschrieben und dokumentiert. 
-Ihr könnt euch dies unter [SRS](documentation/SoftwareRequirementDocumentation.md) anschauen.
+Ihr könnt euch dies unter [SRS](../documentation/SoftwareRequirementDocumentation.md) anschauen.
 
 ## sonstige Aufgaben
 Ansonsten haben wir uns noch hiermit beschäftigt:
