@@ -163,171 +163,80 @@ graph TD
 ## 3. Spezifische Anforderungen  
 
 ### 3.1 Funktionalität  
+Dieser Abschnitt erläutert die verschiedenen Anwendungsfälle, die im Use-Case Diagramm dargestellt sind, sowie deren Funktionalität.
 
-#### 3.1.1 Tisch reservieren
+Bis Dezember planen wir die Implementierung der folgenden Benutzerfunktionen:
+- **3.1.1 Anmelden**  
+  Benutzer können sich in ihr Konto einloggen, um auf die Funktionen des Systems zuzugreifen.
+  
+- **3.1.2 Verfügbare Reservierungen anzeigen**  
+  Benutzer können eine Übersicht über die verfügbaren Tische und Reservierungszeiten erhalten.
+  
+- **3.1.3 Tisch reservieren**  
+  Benutzer können einen verfügbaren Tisch für ein gewünschtes Datum und eine Uhrzeit reservieren.
+  
+- **3.1.4 Reservierungsbestätigung**  
+  Nach erfolgreicher Reservierung erhalten Benutzer eine Bestätigung ihrer Reservierung.
+  
+- **3.1.5 Reservierung stornieren**  
+  Benutzer haben die Möglichkeit, ihre Reservierungen zu stornieren, falls erforderlich.
 
-- **Beschreibung**
-Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer einen Tisch im Restaurant für ein bestimmtes Datum und eine bestimmte Uhrzeit reserviert.  
--**GUI Mockup**
-(Hier würdest du ein Mockup einfügen, das den Reservierungsprozess zeigt, z.B. Auswahl eines Datums, Uhrzeit und Tischauswahl.)
-- **Ablauf von Events (Sequenzdiagramm)**
-```mermaid
-sequenceDiagram
-    participant Benutzer
-    participant System
-    Benutzer ->> System: Tisch auswählen
-    System ->> System: Verfügbarkeit prüfen
-    System ->> Benutzer: Verfügbare Zeiten anzeigen
-    Benutzer ->> System: Zeit und Datum auswählen
-    System ->> System: Reservierung speichern
-    System ->> Benutzer: Bestätigung anzeigen
-```
-- **Vorbedingungen**
-    Der Benutzer muss ein Konto erstellt und sich eingeloggt haben.
-    Es muss mindestens ein Tisch im Restaurant verfügbar sein.
-- **Nachbedingungen**
-    Die Reservierung ist erfolgreich in der Datenbank gespeichert.
-    Der Benutzer erhält eine Bestätigung per E-Mail oder im System.
-- **Spezielle Anforderungen**
-      Die Reservierungsbestätigung sollte innerhalb von 5 Sekunden angezeigt werden.
-     Das System muss sicherstellen, dass es keine Doppelbuchungen gibt.
-- **Aufwandsschätzung / Story Points**
-    Story Points: 8
-        Frontend: 3 Punkte
-        Backend: 5 Punkte (Verfügbarkeit prüfen, Reservierung speichern, Doppelbuchung verhindern)
+- **3.1.6 Feedback geben**  
+  User können ihr Feedback zu der Reservierung geben.
 
-#### 3.1.1 Reservierung stornieren
-- **Beschreibung**
-Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer eine bestehende Tischreservierung stornieren kann. 
--**GUI Mockup**
-(Hier würdest du ein Mockup einfügen, das die Möglichkeit zur Stornierung anzeigt, z.B. eine Liste der bestehenden Reservierungen mit einer „Stornieren“-Schaltfläche.)
-- **Ablauf von Events (Sequenzdiagramm)**
-```mermaid
-sequenceDiagram
-    participant Benutzer
-    participant System
-    Benutzer ->> System: Reservierung auswählen
-    System ->> Benutzer: Reservierungsdetails anzeigen
-    Benutzer ->> System: Stornierung bestätigen
-    System ->> System: Reservierung aus Datenbank entfernen
-    System ->> Benutzer: Stornierungsbestätigung anzeigen
-```
-- **Vorbedingungen**
-    Der Benutzer muss ein Konto erstellt und sich eingeloggt haben.
-   Eine bestehende Reservierung muss vorliegen.
-- **Nachbedingungen**
-    Die Reservierung ist erfolgreich aus der Datenbank entfernt.
-   Der Tisch ist wieder als verfügbar markiert.
-- **Spezielle Anforderungen**
-      DDie Stornierungsbestätigung sollte innerhalb von 3 Sekunden angezeigt werden.
-- **Aufwandsschätzung / Story Points**
-    Story Points: 5
-     Frontend: 2 Punkte
-     Backend: 3 Punkte (Reservierung löschen, Verfügbarkeiten aktualisieren)verhindern)
+- **3.1.7 Reservierungen einsehen**  
+  Benutzer können alle ihre Reservireungen einsehen und verwalten.
 
-#### 3.1.3 Konto erstellen
+Bis Juni möchten wir die folgenden Administratorfunktionen implementieren:
+- **3.1.8 Anmelden**  
+  Administratoren können sich einloggen, um auf ihre Verwaltungsfunktionen zuzugreifen.
+
+- **3.1.9 Tischverwaltung**  
+  Administratoren können die Tische im System verwalten, einschließlich der Verfügbarkeit und Einstellungen.
+
+- **3.1.10 Reservierungsübersicht**  
+  Administratoren können eine Übersicht über alle Reservierungen erhalten.
+
+- **3.1.11 Feedback abgeben**  
+  Administratoren können das Feedback der Benutzer einsehen und darauf reagieren.
+
+#### 3.1.1 Anmelden
+
 - **Beschreibung**  
-Dieser Use Case beschreibt den Prozess, bei dem ein neuer Benutzer ein Konto im System erstellt, um Reservierungen vornehmen zu können.  
+Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer sich in das Restaurantbuchungssystem einloggt, um auf die Funktionen des Systems zugreifen zu können. Der Benutzer gibt seine Anmeldedaten ein und erhält bei erfolgreicher Anmeldung Zugriff auf seine Reservierungen und weitere Funktionen.
+
 - **GUI Mockup**  
-(Hier würdest du ein Mockup einfügen, das das Registrierungsformular zeigt, in dem der Benutzer seine Daten eingibt.)  
+(Hier würdest du ein Mockup einfügen, das das Anmeldeformular zeigt, einschließlich Felder für E-Mail und Passwort.)
+
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
 sequenceDiagram
     participant Benutzer
     participant System
-    Benutzer ->> System: Registrierungsformular ausfüllen
-    System ->> System: Eingaben validieren
-    System ->> System: Benutzerkonto erstellen
-    System ->> Benutzer: Bestätigung anzeigen
+    Benutzer ->> System: Anmeldedaten eingeben
+    System ->> System: Anmeldedaten überprüfen
+    alt Erfolgreiche Anmeldung
+        System ->> Benutzer: Zugang gewähren
+    else Fehlgeschlagene Anmeldung
+        System ->> Benutzer: Fehlermeldung anzeigen
+    end
 ```
-- **Vorbedingungen**  
-    Der Benutzer darf kein bestehendes Konto haben.  
-- **Nachbedingungen**  
-    Das Benutzerkonto ist erfolgreich in der Datenbank gespeichert.  
-- **Spezielle Anforderungen**  
-    Eingaben müssen validiert werden (z.B. E-Mail-Format, Passwortstärke).  
-- **Aufwandsschätzung / Story Points**  
-    Story Points: 5  
-        Frontend: 2 Punkte  
-        Backend: 3 Punkte (Datenbankeintrag, Validierung)  
 
-#### 3.1.4 Feedback abgeben
-- **Beschreibung**  
-Dieser Use Case beschreibt den Prozess, bei dem ein Benutzer nach einer Reservierung Feedback zur Erfahrung im Restaurant abgeben kann.  
-- **GUI Mockup**  
-(Hier würdest du ein Mockup einfügen, das ein Feedback-Formular zeigt.)  
-- **Ablauf von Events (Sequenzdiagramm)**  
-```mermaid
-sequenceDiagram
-    participant Benutzer
-    participant System
-    Benutzer ->> System: Feedback-Formular ausfüllen
-    System ->> System: Eingaben validieren
-    System ->> System: Feedback speichern
-    System ->> Benutzer: Bestätigung anzeigen
-```
 - **Vorbedingungen**  
-    Der Benutzer muss ein Konto erstellt und sich eingeloggt haben.  
-    Der Benutzer muss eine Reservierung vorgenommen haben, um Feedback zu geben.  
-- **Nachbedingungen**  
-    Das Feedback ist erfolgreich in der Datenbank gespeichert.  
-- **Spezielle Anforderungen**  
-    Eingaben müssen validiert werden.  
-- **Aufwandsschätzung / Story Points**  
-    Story Points: 4  
-        Frontend: 2 Punkt  
-        Backend: 2 Punkte (Feedback speichern)  
+    - Der Benutzer muss bereits ein Konto im System erstellt haben.
 
-#### 3.1.5 Tische verwalten
-- **Beschreibung**  
-Dieser Use Case beschreibt den Prozess, bei dem Administratoren Tische im System hinzufügen, bearbeiten oder löschen können.  
-- **GUI Mockup**  
-(Hier würdest du ein Mockup einfügen, das die Verwaltungsoberfläche für Tische zeigt.)  
-- **Ablauf von Events (Sequenzdiagramm)**  
-```mermaid
-sequenceDiagram
-    participant Administrator
-    participant System
-    Administrator ->> System: Tisch hinzufügen/bearbeiten/löschen
-    System ->> System: Eingaben validieren
-    System ->> System: Änderungen speichern
-    System ->> Administrator: Bestätigung anzeigen
-```
-- **Vorbedingungen**  
-    Der Administrator muss ein Konto erstellt und sich eingeloggt haben.  
 - **Nachbedingungen**  
-    Die Änderungen sind erfolgreich in der Datenbank gespeichert.  
-- **Spezielle Anforderungen**  
-    Eingaben müssen validiert werden (z.B. Tischgröße, Kapazität).  
-- **Aufwandsschätzung / Story Points**  
-    Story Points: 7  
-        Frontend: 2 Punkte  
-        Backend: 5 Punkte (Tischverwaltung, Datenbankoperationen)  
+    - Der Benutzer ist erfolgreich angemeldet und hat Zugriff auf die Funktionen des Systems.
+    - Bei einer Fehlermeldung bleibt der Benutzer auf der Anmeldeseite.
 
-#### 3.1.6 Verfügbarkeiten einsehen
-- **Beschreibung**  
-Dieser Use Case beschreibt den Vorgang, bei dem Benutzer und Administratoren die verfügbaren Tische und deren Reservierungen einsehen können.  
-- **GUI Mockup**  
-(Hier würdest du ein Mockup einfügen, das eine Übersicht der verfügbaren Tische zeigt.)  
-- **Ablauf von Events (Sequenzdiagramm)**  
-```mermaid
-sequenceDiagram
-    participant Benutzer
-    participant System
-    Benutzer ->> System: Verfügbarkeiten anfragen
-    System ->> System: Daten abrufen
-    System ->> Benutzer: Verfügbare Tische anzeigen
-```
-- **Vorbedingungen**  
-    Der Benutzer muss kein Konto haben, um die Verfügbarkeiten einzusehen.  
-- **Nachbedingungen**  
-    Die verfügbaren Tische werden dem Benutzer angezeigt.  
 - **Spezielle Anforderungen**  
-    Die Abfrage sollte in weniger als 3 Sekunden erfolgen.  
+    - Die Anmeldedaten müssen sicher über HTTPS übertragen werden.
+    - Bei falschen Anmeldedaten sollte eine klare Fehlermeldung angezeigt werden.
+
 - **Aufwandsschätzung / Story Points**  
-    Story Points: 4  
-        Frontend: 2 Punkte  
-        Backend: 2 Punkte (Daten abrufen)  
+    - Story Points: 5  
+        - Frontend: 2 Punkte  
+        - Backend: 3 Punkte (Datenüberprüfung, Fehlerbehandlung)  
 
 ### 3.2 Benutzbarkeit  
 #### 3.2.1 Benutzeroberfläche (UI)
