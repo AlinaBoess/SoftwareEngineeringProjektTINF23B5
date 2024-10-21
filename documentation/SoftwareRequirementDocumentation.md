@@ -316,22 +316,253 @@ sequenceDiagram
         Frontend: 2 Punkte  
         Backend: 2 Punkte (Daten abrufen)  
 
-
-
-
-
-
-
 ### 3.2 Benutzbarkeit  
+#### 3.2.1 Benutzeroberfläche (UI)
+- **Beschreibung**  
+Die Benutzeroberfläche muss intuitiv und benutzerfreundlich gestaltet sein, um eine einfache Navigation und Nutzung des Systems zu ermöglichen.  
+- **GUI Mockup**  
+(Hier würdest du ein Mockup der Hauptbenutzeroberfläche einfügen.)  
+- **Spezielle Anforderungen**  
+    - Die Schriftgröße sollte anpassbar sein, um die Lesbarkeit zu verbessern.  
+    - Die Anwendung muss auf verschiedenen Bildschirmgrößen (PC, Tablet, Smartphone) responsiv sein.  
+#### 3.2.2 Benutzerführung
+- **Beschreibung**  
+Das System soll den Benutzer durch den Reservierungsprozess führen, um sicherzustellen, dass alle erforderlichen Schritte leicht verständlich sind.  
+- **GUI Mockup**  
+(Hier würdest du ein Mockup der Benutzerführung einfügen, z. B. Schritt-für-Schritt-Anleitungen.)  
+- **Spezielle Anforderungen**  
+    - Es sollten Tooltips und Hilfetexte bereitgestellt werden, um Benutzeranfragen zu beantworten.  
+    - Eine „Hilfe“-Schaltfläche sollte auf jeder Seite vorhanden sein, die auf häufige Fragen verweist.  
+#### 3.2.3 Fehlermeldungen
+- **Beschreibung**  
+Das System muss klare und hilfreiche Fehlermeldungen bereitstellen, wenn Benutzer fehlerhafte Eingaben machen oder wenn Probleme auftreten.  
+- **Spezielle Anforderungen**  
+    - Fehlermeldungen sollten direkt neben dem Eingabefeld angezeigt werden, das das Problem verursacht hat.  
+    - Fehlermeldungen sollten Vorschläge zur Behebung des Problems enthalten, z. B. „Bitte überprüfen Sie, ob das Datum in der Zukunft liegt.“  
+#### 3.2.4 Zugänglichkeit
+- **Beschreibung**  
+Das System soll den WCAG-Richtlinien (Web Content Accessibility Guidelines) entsprechen, um sicherzustellen, dass es für alle Benutzer, einschließlich Menschen mit Behinderungen, zugänglich ist.  
+- **Spezielle Anforderungen**  
+    - Alle Bilder und Grafiken müssen alternative Texte (Alt-Text) haben, um die Zugänglichkeit für Screenreader zu gewährleisten.  
+    - Die Anwendung muss mit Tastaturkürzeln navigierbar sein, um die Bedienung ohne Maus zu ermöglichen.  
+#### 3.2.5 Benutzerfeedback
+- **Beschreibung**  
+Das System soll eine Möglichkeit bieten, dass Benutzer Feedback zur Benutzeroberfläche und Benutzererfahrung geben können.  
+- **Spezielle Anforderungen**  
+    - Es sollte eine Feedback-Schaltfläche geben, die ein einfaches Formular zur Eingabe von Anregungen oder Beschwerden öffnet.  
+    - Benutzer sollten nach der Nutzung des Systems (z. B. nach einer Reservierung) zu Feedback aufgefordert werden.  
+#### 3.2.6 Schulungsmaterialien
+- **Beschreibung**  
+Das System muss Schulungsmaterialien bereitstellen, um Benutzern zu helfen, die Funktionen des Systems zu verstehen und effektiv zu nutzen.  
+- **Spezielle Anforderungen**  
+    - Es sollten Video-Tutorials und schriftliche Anleitungen bereitgestellt werden.  
+    - Schulungsmaterialien müssen in einem leicht zugänglichen Bereich der Anwendung zu finden sein.  
+
 ### 3.3 Zuverlässigkeit  
+#### 3.3.1 Verfügbarkeit
+- **Beschreibung**  
+Das System soll eine Verfügbarkeit von mindestens 99,5 % bieten. Dies bedeutet, dass es während der Betriebszeiten, die von Montag bis Sonntag von 08:00 bis 22:00 Uhr sind, regelmäßig aufgerufen werden kann.  
+- **Spezielle Anforderungen**  
+    - Wartungsarbeiten müssen im Voraus angekündigt werden und sollen idealerweise außerhalb der Betriebszeiten stattfinden, um die Auswirkungen auf die Benutzer zu minimieren.  
+    - Im Falle von Wartungsarbeiten sollte ein degradiertes Betriebsmodell zur Verfügung stehen, um grundlegende Funktionen weiterhin anzubieten.
+
+#### 3.3.2 Mean Time Between Failures (MTBF)
+- **Beschreibung**  
+Die durchschnittliche Zeit zwischen Ausfällen (MTBF) des Systems sollte mindestens 300 Stunden betragen.  
+- **Spezielle Anforderungen**  
+    - Das System muss so konzipiert sein, dass es für eine kontinuierliche Nutzung über einen Zeitraum von mehreren Wochen ohne Ausfälle betriebsfähig bleibt.
+
+#### 3.3.3 Mean Time To Repair (MTTR)
+- **Beschreibung**  
+Die durchschnittliche Reparaturzeit (MTTR) nach einem Systemausfall sollte nicht mehr als 4 Stunden betragen.  
+- **Spezielle Anforderungen**  
+    - Es sollte ein Notfallplan entwickelt werden, der schnelle Reaktionszeiten bei Ausfällen garantiert, um die Betriebszeit so schnell wie möglich wiederherzustellen.
+
+#### 3.3.4 Genauigkeit
+- **Beschreibung**  
+Das System muss eine Genauigkeit von mindestens 95 % bei der Verarbeitung von Reservierungsanfragen gewährleisten.  
+- **Spezielle Anforderungen**  
+    - Bei der Anzeige der verfügbaren Tische muss das System sicherstellen, dass die Daten in Echtzeit aktualisiert werden, um Verwirrung zu vermeiden.
+
+#### 3.3.5 Maximale Fehler- oder Defektrate
+- **Beschreibung**  
+Die maximale Fehler- oder Defektrate des Systems sollte nicht mehr als 1 Bug pro 1000 Zeilen Code (Bugs/KLOC) betragen.  
+- **Spezielle Anforderungen**  
+    - Dies gilt für die erste Produktionsversion des Systems und wird in zukünftigen Versionen überprüft und angepasst.
+
+#### 3.3.6 Fehler- oder Defektrate
+- **Beschreibung**  
+Die Fehler- oder Defektrate muss in drei Kategorien unterteilt werden: geringfügige, signifikante und kritische Fehler.  
+- **Spezielle Anforderungen**  
+    - **Kritische Fehler:** Vollständiger Verlust von Daten oder vollständige Unfähigkeit, bestimmte Teile der Systemfunktionalität zu nutzen.  
+    - **Signifikante Fehler:** Beeinträchtigung der Benutzererfahrung, die jedoch das System nicht unbenutzbar macht.  
+    - **Geringfügige Fehler:** Kleinere Fehler, die keine signifikanten Auswirkungen auf die Funktionalität haben.
+
 ### 3.4 Leistung  
+#### 3.4.1 Antwortzeit für Transaktionen
+- **Beschreibung**  
+Das System muss in der Lage sein, Transaktionen mit einer durchschnittlichen Antwortzeit von maximal 2 Sekunden durchzuführen. In Spitzenzeiten darf die maximale Antwortzeit nicht mehr als 5 Sekunden betragen.  
+- **Bezug auf Use Cases**  
+    - **Tisch reservieren:** Die Antwortzeit für die Reservierung eines Tisches sollte innerhalb von 2 Sekunden erfolgen.  
+    - **Reservierung stornieren:** Bei der Stornierung einer Reservierung sollte die Bestätigung innerhalb von 2 Sekunden angezeigt werden.  
+#### 3.4.2 Durchsatz
+- **Beschreibung**  
+Das System sollte in der Lage sein, mindestens 20 Transaktionen pro Sekunde (TPS) zu verarbeiten. Dies stellt sicher, dass mehrere Benutzer gleichzeitig Reservierungen vornehmen oder stornieren können, ohne dass die Leistung leidet.  
+- **Bezug auf Use Cases**  
+    - **Benutzersystem:** Bei gleichzeitigen Anfragen von mehreren Benutzern sollte das System weiterhin effizient arbeiten.
+
+#### 3.4.3 Kapazität
+- **Beschreibung**  
+Das System muss in der Lage sein, bis zu 1000 gleichzeitige Benutzeranfragen zu verarbeiten, ohne dass es zu Leistungseinbußen kommt. Die Kapazität für gleichzeitige Transaktionen sollte mindestens 2000 pro Stunde betragen.  
+
+#### 3.4.4 Degradationsmodi
+- **Beschreibung**  
+Im Falle einer Systemdegradation sollte das System einen Basisbetrieb anbieten, bei dem Benutzer weiterhin Tische einsehen und Reservierungen vornehmen können, jedoch ohne einige erweiterte Funktionen wie das Feedbacksystem.  
+- **Spezielle Anforderungen**  
+    - Die Benutzeroberfläche muss während des Degradationsbetriebs klar kommunizieren, dass einige Funktionen möglicherweise nicht verfügbar sind.
+
+#### 3.4.5 Ressourcenauslastung
+- **Beschreibung**  
+Das System sollte effizient mit Ressourcen umgehen, um eine optimale Leistung zu gewährleisten. Die maximalen Ressourcennutzungseinstellungen sollten wie folgt sein:  
+    - **Speicher:** Maximal 1 GB RAM pro Instanz  
+    - **Festplattenspeicher:** Mindestens 100 GB für die Datenbank  
+    - **Kommunikationsressourcen:** Die Bandbreite sollte 1 MB/s pro Benutzeranfrage nicht überschreiten.
+
 ### 3.5 Unterstützbarkeit  
+#### 3.5.1 Codierungsstandards
+- **Beschreibung**  
+Das System muss den folgenden Codierungsstandards folgen, um die Wartbarkeit und Lesbarkeit des Codes zu gewährleisten:  
+  - Verwendung von **C# Naming Conventions**: 
+    - Klassen- und Methodennamen sollten im PascalCase geschrieben werden.
+    - Variablen- und Feldnamen sollten im camelCase geschrieben werden.  
+  - **Code-Kommentare**: Jeder Codeabschnitt sollte durch Kommentare dokumentiert werden, um die Funktionsweise des Codes zu erklären und die Verständlichkeit zu erhöhen. 
+
+#### 3.5.2 Benennungskonventionen
+- **Beschreibung**  
+Alle Elemente des Systems (Variablen, Klassen, Methoden, etc.) müssen konsistent benannt werden, um Verwirrung zu vermeiden und die Wartbarkeit zu verbessern. Dies umfasst:  
+  - Verwendung von klaren und beschreibenden Namen, die die Funktionalität der jeweiligen Komponente widerspiegeln.  
+  - Einheitliche Benennung von Datenbanktabellen und -spalten, z. B. `reservierungen`, `benutzer`, `tische`.
+
+#### 3.5.3 Klassenbibliotheken
+- **Beschreibung**  
+Das System sollte auf bewährte Klassenbibliotheken zurückgreifen, die regelmäßig aktualisiert werden. Die Verwendung von gängigen Bibliotheken fördert die Wiederverwendbarkeit von Code und erleichtert die Wartung. Beispiele hierfür sind:  
+  - **Entity Framework** für Datenzugriff.  
+  - **ASP.NET Identity** für die Verwaltung von Benutzerauthentifizierung und -autorisierung.  
+
+#### 3.5.4 Wartungszugang
+- **Beschreibung**  
+Das System muss über einen klar definierten Wartungszugang verfügen, der es Administratoren ermöglicht, Wartungsarbeiten effizient durchzuführen, ohne den Betrieb der Anwendung zu stören. Dazu gehören:  
+  - Ein Admin-Panel zur Verwaltung von Tischen, Reservierungen und Benutzerdaten.  
+  - Protokollierung von Fehlern und Systemereignissen für die Fehlersuche und -analyse.  
+
+#### 3.5.5 Wartungshilfsprogramme
+- **Beschreibung**  
+Das System sollte Wartungshilfsprogramme beinhalten, die es den Entwicklern ermöglichen, gängige Wartungsaufgaben zu automatisieren. Dazu gehören:  
+  - **Backup-Skripte** für die regelmäßige Sicherung der Datenbank.  
+  - **Monitoring-Tools**, um die Systemleistung in Echtzeit zu überwachen und bei Bedarf Alarmmeldungen zu generieren.
+
 ### 3.6 Design-Beschränkungen  
+#### 3.6.1 Verwendete Programmiersprachen
+- **Beschreibung**  
+Das System muss in den folgenden Programmiersprachen entwickelt werden:  
+  - **C#**: Als Hauptprogrammiersprache für die Backend-Entwicklung unter Verwendung von ASP.NET.  
+  - **HTML, CSS und JavaScript/TypeScript**: Für die Frontend-Entwicklung, um eine ansprechende Benutzeroberfläche zu gewährleisten.  
+
+#### 3.6.2 Softwareentwicklungsprozess
+- **Beschreibung**  
+Das Entwicklungsteam muss den **Agilen Softwareentwicklungsprozess** anwenden, um iterative und inkrementelle Fortschritte zu erzielen. Dies umfasst regelmäßige Sprint-Planungen, Reviews und Retrospektiven zur kontinuierlichen Verbesserung.  
+
+#### 3.6.3 Entwicklungswerkzeuge
+- **Beschreibung**  
+Die folgenden Entwicklungswerkzeuge sind für die Erstellung der Anwendung vorgeschrieben:  
+  - **Visual Studio**: Als integrierte Entwicklungsumgebung (IDE) für die Entwicklung in C# und ASP.NET.  
+  - **Git**: Für die Versionskontrolle des Quellcodes, um die Zusammenarbeit im Team zu ermöglichen.  
+  - **SQL Server Management Studio**: Für die Verwaltung der SQL-Datenbank.  
+
+#### 3.6.4 Architektur- und Designbeschränkungen
+- **Beschreibung**  
+Das System muss eine **Client-Server-Architektur** verwenden, bei der der Server die Geschäftslogik und die Datenbankverwaltung übernimmt, während der Client (Browser) die Benutzeroberfläche darstellt. Diese Architektur soll sicherstellen, dass die Anwendung skalierbar und wartbar ist.  
+
+#### 3.6.5 Verwendung von gekauften Komponenten
+- **Beschreibung**  
+Für die Implementierung von Funktionalitäten sollten folgende gekaufte Komponenten verwendet werden:  
+  - **Drittanbieter-Bibliotheken**: Für spezifische Funktionen wie E-Mail-Benachrichtigungen und Zahlungsabwicklung, die von anerkannten Anbietern stammen.  
+  - **Frontend-Frameworks**: Wie z.B. **Bootstrap** für ein responsives Design und eine einheitliche Benutzeroberfläche.  
+
+#### 3.6.6 Datenbankmanagementsystem
+- **Beschreibung**  
+Das System muss eine relationale Datenbank mit **SQL Server** als Datenbankmanagementsystem verwenden, um die Datenverfügbarkeit, Integrität und Konsistenz zu gewährleisten.  
+
 ### 3.7 Online-Benutzerdokumentation und Hilfesystemanforderungen  
+#### 3.7.1 Anforderungen
+- **Beschreibung**  
+Für das Restaurant-Buchungssystem ist keine umfangreiche Online-Benutzerdokumentation oder ein Hilfesystem erforderlich.  
+Die Benutzeroberfläche wird so gestaltet, dass sie intuitiv und benutzerfreundlich ist, sodass die Benutzer in der Lage sind, alle erforderlichen Funktionen ohne zusätzliche Unterstützung zu nutzen.  
+
+#### 3.7.2 Unterstützung
+- **Notwendigkeit**  
+Da das System gezielt auf Benutzerfreundlichkeit ausgerichtet ist, ist ein separates Hilfesystem nicht notwendig. Bei spezifischen Fragen oder Problemen sollen die Benutzer die Möglichkeit haben, sich direkt an den Restaurant-Support zu wenden, der während der Geschäftszeiten zur Verfügung steht.  
+
 ### 3.8 Gekaufte Komponenten  
+#### 3.8.1 Beschreibung
+Für das Restaurant-Buchungssystem sind keine gekauften Komponenten erforderlich.  
+Das gesamte System wird mit Open-Source-Technologien und selbstentwickeltem Code implementiert, wodurch zusätzliche Kosten für Lizenzgebühren oder spezielle Komponenten vermieden werden.
+
+#### 3.8.2 Lizenzierungs- und Nutzungseinschränkungen
+Da keine externen gekauften Komponenten verwendet werden, entfallen alle Lizenzierungs- und Nutzungseinschränkungen. Alle entwickelten Softwarekomponenten unterliegen den internen Richtlinien des Entwicklungsteams und können ohne zusätzliche Beschränkungen genutzt werden.
+
+#### 3.8.3 Kompatibilitäts- und Interoperabilitätsstandards
+Da keine externen Komponenten verwendet werden, sind auch keine spezifischen Kompatibilitäts- oder Interoperabilitätsstandards erforderlich. Die entwickelten Komponenten werden so gestaltet, dass sie nahtlos innerhalb der Systemarchitektur funktionieren.
+
 ### 3.9 Schnittstellen  
+#### 3.9.1 Benutzeroberflächen
+Die Benutzeroberfläche des Restaurant-Buchungssystems wird webbasiert sein und eine intuitive, benutzerfreundliche Gestaltung aufweisen. Die Hauptfunktionen umfassen:
+- **Reservierungsseite:** Benutzer können verfügbare Tische, Datum und Uhrzeit auswählen und Reservierungen vornehmen.
+- **Administrationsseite:** Administratoren können Tische verwalten, Reservierungen einsehen und bearbeiten.
+- **Feedback-Seite:** Benutzer können nach einer Reservierung Feedback zur Erfahrung im Restaurant abgeben.
+
+Die Benutzeroberfläche wird in HTML, CSS und JavaScript/TypeScript entwickelt und ist responsiv, sodass sie auf verschiedenen Geräten (PCs, Tablets, Smartphones) optimal angezeigt wird.
+
+#### 3.9.2 Hardware-Schnittstellen
+Für das Restaurant-Buchungssystem sind keine spezifischen Hardware-Schnittstellen erforderlich. Das System wird vollständig auf Servern betrieben, auf die über das Internet zugegriffen wird. 
+Die Benutzer benötigen lediglich ein Endgerät mit Internetzugang und einen modernen Webbrowser.
+
+#### 3.9.3 Software-Schnittstellen
+Das System interagiert mit einer SQL-Datenbank zur Speicherung und Verwaltung von Benutzerdaten, Reservierungen und Tischen. Es werden keine externen Softwarekomponenten verwendet, sodass alle Schnittstellen intern innerhalb des Systems liegen.
+
+Die Hauptsoftware-Schnittstelle ist:
+- **Datenbankschnittstelle:** Diese Schnittstelle ermöglicht den Zugriff auf die Datenbank, um Daten zu speichern, abzurufen und zu bearbeiten.
+
+#### 3.9.4 Kommunikationsschnittstellen
+Das Restaurant-Buchungssystem kommuniziert über das Internet. Die Kommunikationsschnittstellen umfassen:
+- **HTTP/HTTPS:** Für die sichere Übertragung von Daten zwischen dem Benutzer und dem Server.
+- **WebSocket (optional):** Für Echtzeit-Kommunikation, z. B. Benachrichtigungen über Reservierungsbestätigungen oder Änderungen.
+
 ### 3.10 Lizenzierungsanforderungen  
-### 3.11 Rechtliche, urheberrechtliche und andere Hinweise  
+Für das Restaurant-Buchungssystem gelten folgende Lizenzierungsanforderungen:
+
+- **Keine Lizenzkosten:** Da es sich um ein Studentenprojekt handelt, fallen keine Lizenzgebühren für die Nutzung der Software an.
+- **Open-Source-Nutzung:** Die Software wird unter einer Open-Source-Lizenz bereitgestellt, die es Benutzern erlaubt, die Anwendung zu nutzen, zu modifizieren und zu verteilen, solange die ursprünglichen Autoren genannt werden.
+- **Einhaltung von Lizenzen Dritter:** Bei der Verwendung von externen Bibliotheken oder Tools müssen die jeweiligen Lizenzbedingungen eingehalten werden.
+- **Kollaboration und Dokumentation:** Alle Teammitglieder sind verpflichtet, an der Dokumentation des Projekts mitzuarbeiten, um Transparenz in Bezug auf die verwendeten Technologien und Lizenzen zu gewährleisten.
+
+### 3.11 Rechtliche, urheberrechtliche und andere Hinweise 
+Für das Restaurant-Buchungssystem gelten folgende rechtliche und urheberrechtliche Hinweise:
+
+- **Urheberrecht:** Alle Quellcodes, Dokumentationen und Designmaterialien, die im Rahmen dieses Projekts erstellt wurden, sind urheberrechtlich geschützt. Die Rechte liegen beim Entwicklungsteam (Alina Moumen, Yahya, Alex, Lukas) und dürfen ohne deren Zustimmung nicht verwendet oder verbreitet werden.
+
+- **Haftungsausschluss:** Die Software wird "so wie sie ist" bereitgestellt, ohne jegliche ausdrückliche oder stillschweigende Gewährleistung. Das Entwicklungsteam übernimmt keine Haftung für direkte, indirekte oder Folgeschäden, die aus der Nutzung oder der Unmöglichkeit der Nutzung der Software entstehen.
+
 ### 3.12 Anwendbare Standards  
 
+Die Entwicklung des Restaurant-Buchungssystems wird den allgemeinen Clean-Code-Standards und Namenskonventionen folgen. Zusätzlich werden wir eine Definition von „D“ erstellen, die hier hinzugefügt wird, sobald sie abgeschlossen ist.
+
 ## 4. Unterstützende Informationen  
+
+Für weitere Informationen können Sie das Team des Restaurant-Buchungssystems kontaktieren oder unseren Blog besuchen. Die Teammitglieder sind:
+
+- Alina Böß
+- Moumen Kheto
+- Yahya Ezz Edin
+- Alexander Fleig
+- Lukas Scharnweber
