@@ -120,15 +120,15 @@ Das System umfasst verschiedene Teilmengen von Anforderungen:
 ```mermaid
 graph TD
   subgraph "Benutzeraktionen"
-    UC1["Tisch reservieren"]
-    UC2["Reservierung stornieren"]
-    UC3["Feedback abgeben"]
-    UC4["Konto erstellen"]
+    UC1["Tisch reservieren (3)"]
+    UC2["Reservierung stornieren (3)"]
+    UC3["Feedback abgeben (4)"]
+    UC4["Konto erstellen (3)"]
   end
 
   subgraph "Administratoraktionen"
-    UC5["Tische verwalten"]
-    UC6["Verfügbarkeiten einsehen"]
+    UC5["Tische verwalten (3)"]
+    UC6["Verfügbarkeiten einsehen (3)"]
   end
 
   Kunde["Kunde"] --> UC1
@@ -140,6 +140,7 @@ graph TD
   Admin --> UC5
   Admin --> UC6
 ```
+3 wird dieses und 4 nächstes Semester gemacht.
 - Tischreservierung: Der Benutzer wählt einen verfügbaren Tisch und eine Zeit aus und reserviert diesen.
 - Tischverwaltung: Administratoren können Tische erstellen, bearbeiten und deren Verfügbarkeit einsehen.
 - Stornierung von Reservierungen: Benutzer können bestehende Reservierungen stornieren.
