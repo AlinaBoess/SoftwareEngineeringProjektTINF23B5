@@ -108,6 +108,3 @@ Aktuell wurden noch keine externen Komponenten gekauft.
 ## 4. Unterstützende Informationen
 Weitere Anhänge oder Diagramme werden hier hinzugefügt, um das Verständnis zu erleichtern.
 
----
-
-Damit hast du eine übersichtliche und gut strukturierte Fassung des SRS-Dokuments im Markdown-Format. Wenn du Anpassungen oder Ergänzungen brauchst, stehe ich dir zur Verfügung!
