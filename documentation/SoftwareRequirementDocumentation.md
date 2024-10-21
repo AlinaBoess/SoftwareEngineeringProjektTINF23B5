@@ -206,7 +206,7 @@ Bis Juni möchten wir die folgenden Administratorfunktionen implementieren:
 Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer sich in das Restaurantbuchungssystem einloggt, um auf die Funktionen des Systems zugreifen zu können. Der Benutzer gibt seine Anmeldedaten ein und erhält bei erfolgreicher Anmeldung Zugriff auf seine Reservierungen und weitere Funktionen.
 
 - **GUI Mockup**  
-(Hier Mockup einfügen, das das Anmeldeformular zeigt, einschließlich Felder für Nutzername und Passwort.)
+![Alt-Text](GUI-Mockup-login.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -245,7 +245,7 @@ sequenceDiagram
 Dieser Use Case beschreibt den Vorgang, bei dem ein neuer Benutzer ein Konto im Restaurantbuchungssystem erstellt. Der Benutzer gibt persönliche Informationen wie Name, E-Mail und Passwort ein, um ein neues Benutzerprofil anzulegen und Zugang zu den Funktionen des Systems zu erhalten.
 
 - **GUI Mockup**  
-(Hier Mockup einfügen, das das Registrierungsformular zeigt, einschließlich der erforderlichen Felder.)
+![Alt-Text](GUI-Mockup-register.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -284,7 +284,7 @@ sequenceDiagram
 Benutzer können einen verfügbaren Tisch für ein gewünschtes Datum und eine Uhrzeit reservieren. Dieser Vorgang beinhaltet die Auswahl des gewünschten Tisches sowie die Eingabe von persönlichen Informationen für die Reservierung.
 
 - **GUI Mockup**  
-(Hier Mockup einfügen, das den Reservierungsprozess zeigt, z. B. die Auswahl eines Datums, einer Uhrzeit und des gewünschten Tisches.)
+![Alt-Text](GUI Mockup.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -323,7 +323,7 @@ sequenceDiagram
 Nach erfolgreicher Reservierung erhält der Benutzer eine Bestätigung seiner Reservierung in Form eines Pop-ups. Dieses Pop-up enthält wichtige Informationen wie das Datum, die Uhrzeit, den reservierten Tisch und eventuelle spezielle Anmerkungen.
 
 - **GUI Mockup**  
-(Hier Mockup einfügen, das das Pop-up mit der Reservierungsbestätigung zeigt.)
+![Alt-Text](GUI-Mockup-notification.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -356,7 +356,7 @@ sequenceDiagram
 Benutzer haben die Möglichkeit, ihre Reservierungen zu stornieren, falls erforderlich. Dieser Vorgang ermöglicht es den Benutzern, ihre Buchungen zu ändern, wenn sich ihre Pläne ändern.
 
 - **GUI Mockup**  
-(Hier ein Mockup einfügen, das die Stornierungsoption in der Benutzeroberfläche zeigt, z. B. eine Schaltfläche „Reservierung stornieren“ in der Reservierungsübersicht.)
+![Alt-Text](GUI-Mockup-table.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -389,9 +389,6 @@ sequenceDiagram
 
 - **Beschreibung**  
 Benutzer können nach ihrem Restaurantbesuch Feedback zu ihrer Reservierung und dem Gesamterlebnis geben. Dieses Feedback hilft dem Restaurant, den Service zu verbessern und auf die Wünsche der Gäste einzugehen.
-
-- **GUI Mockup**  
-(Hier ein Mockup einfügen, das das Feedbackformular zeigt, z. B. ein Feld für die Eingabe von Kommentaren und eine Bewertungsoption.)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -427,7 +424,7 @@ sequenceDiagram
 Benutzer können alle ihre bisherigen und zukünftigen Reservierungen einsehen und verwalten. Dies ermöglicht es ihnen, Reservierungen zu überprüfen, Änderungen vorzunehmen oder Stornierungen vorzunehmen.
 
 - **GUI Mockup**  
-(Hier ein Mockup einfügen, das die Übersicht der Reservierungen zeigt, einschließlich der Optionen zum Bearbeiten oder Stornieren.)
+![Alt-Text](GUI-Mockup-table.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -460,7 +457,7 @@ sequenceDiagram
 Administratoren können sich in das System einloggen, um Zugriff auf ihre Verwaltungsfunktionen zu erhalten. Dies ermöglicht es ihnen, Reservierungen zu verwalten und wichtige Systeminformationen einzusehen.
 
 - **GUI Mockup**  
-(Hier ein Mockup des Anmeldeformulars für Administratoren einfügen, das Felder für Benutzernamen und Passwort enthält.)
+![Alt-Text](GUI-Mockup-login.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -496,9 +493,6 @@ sequenceDiagram
 
 - **Beschreibung**  
 Administratoren können die Tische im System verwalten, einschließlich der Anpassung von Verfügbarkeiten, Einstellungen und der Zuweisung von Tischen zu bestimmten Reservierungen. Dies ermöglicht eine effiziente Organisation der Tischressourcen im Restaurant.
-
-- **GUI Mockup**  
-(Hier ein Mockup der Benutzeroberfläche zur Tischverwaltung einfügen, das Optionen zur Anzeige, Bearbeitung und Verwaltung von Tischen zeigt.)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -536,9 +530,6 @@ sequenceDiagram
 - **Beschreibung**  
 Administratoren können eine umfassende Übersicht über alle Reservierungen im System einsehen. Diese Funktion ermöglicht es ihnen, die aktuelle Auslastung des Restaurants zu überwachen und gegebenenfalls Anpassungen vorzunehmen.
 
-- **GUI Mockup**  
-(Hier ein Mockup der Benutzeroberfläche zur Reservierungsübersicht einfügen, das die verschiedenen Reservierungen und deren Details zeigt.)
-
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
 sequenceDiagram
@@ -570,9 +561,6 @@ sequenceDiagram
 
 - **Beschreibung**  
 Administratoren können das Feedback der Benutzer einsehen, analysieren und darauf reagieren. Diese Funktion ermöglicht es ihnen, die Benutzererfahrung zu verbessern und etwaige Probleme zeitnah zu adressieren.
-
-- **GUI Mockup**  
-(Hier ein Mockup der Benutzeroberfläche zur Anzeige von Benutzerfeedback einfügen, das die verschiedenen Rückmeldungen und deren Status zeigt.)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -609,7 +597,7 @@ sequenceDiagram
 - **Beschreibung**  
 Die Benutzeroberfläche muss intuitiv und benutzerfreundlich gestaltet sein, um eine einfache Navigation und Nutzung des Systems zu ermöglichen.  
 - **GUI Mockup**  
-(Hier würdest du ein Mockup der Hauptbenutzeroberfläche einfügen.)  
+![Alt-Text](GUI-Mockup.png)
 - **Spezielle Anforderungen**  
     - Die Schriftgröße sollte anpassbar sein, um die Lesbarkeit zu verbessern.  
     - Die Anwendung muss auf verschiedenen Bildschirmgrößen (PC, Tablet, Smartphone) responsiv sein.  
