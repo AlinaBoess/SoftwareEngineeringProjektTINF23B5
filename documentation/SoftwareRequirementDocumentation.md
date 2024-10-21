@@ -160,8 +160,8 @@ Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer einen Tisch im Rest
 - **Ablauf von Events (Sequenzdiagramm)**
 ```mermaid
 sequenceDiagram
-    Teilnehmer Benutzer
-    Teilnehmer System
+    participant Benutzer
+    participant System
     Benutzer ->> System: Tisch auswählen
     System ->> System: Verfügbarkeit prüfen
     System ->> Benutzer: Verfügbare Zeiten anzeigen
@@ -191,8 +191,8 @@ Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer eine bestehende Tis
 - **Ablauf von Events (Sequenzdiagramm)**
 ```mermaid
 sequenceDiagram
-    Teilnehmer Benutzer
-    Teilnehmer System
+    participant Benutzer
+    participant System
     Benutzer ->> System: Reservierung auswählen
     System ->> Benutzer: Reservierungsdetails anzeigen
     Benutzer ->> System: Stornierung bestätigen
@@ -220,8 +220,8 @@ Dieser Use Case beschreibt den Prozess, bei dem ein neuer Benutzer ein Konto im 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
 sequenceDiagram
-    Teilnehmer Benutzer
-    Teilnehmer System
+    participant Benutzer
+    participant System
     Benutzer ->> System: Registrierungsformular ausfüllen
     System ->> System: Eingaben validieren
     System ->> System: Benutzerkonto erstellen
@@ -246,8 +246,8 @@ Dieser Use Case beschreibt den Prozess, bei dem ein Benutzer nach einer Reservie
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
 sequenceDiagram
-    Teilnehmer Benutzer
-    Teilnehmer System
+    participant Benutzer
+    participant System
     Benutzer ->> System: Feedback-Formular ausfüllen
     System ->> System: Eingaben validieren
     System ->> System: Feedback speichern
@@ -273,8 +273,8 @@ Dieser Use Case beschreibt den Prozess, bei dem Administratoren Tische im System
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
 sequenceDiagram
-    Teilnehmer Administrator
-    Teilnehmer System
+    participant Administrator
+    participant System
     Administrator ->> System: Tisch hinzufügen/bearbeiten/löschen
     System ->> System: Eingaben validieren
     System ->> System: Änderungen speichern
@@ -299,8 +299,8 @@ Dieser Use Case beschreibt den Vorgang, bei dem Benutzer und Administratoren die
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
 sequenceDiagram
-    Teilnehmer Benutzer
-    Teilnehmer System
+    participant Benutzer
+    participant System
     Benutzer ->> System: Verfügbarkeiten anfragen
     System ->> System: Daten abrufen
     System ->> Benutzer: Verfügbare Tische anzeigen
