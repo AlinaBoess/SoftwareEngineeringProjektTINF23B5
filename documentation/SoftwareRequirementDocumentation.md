@@ -75,6 +75,70 @@ Diese Struktur soll sicherstellen, dass alle Aspekte des Restaurant Buchungssyst
 
 ## 2. Gesamtbeschreibung  
 
+### 2.1 Produktperspektive
+Das Restaurant-Buchungssystem ist eine Webanwendung, die als eigenständiges System entwickelt wird. Es ersetzt bisher manuelle oder telefonisch durchgeführte Buchungen durch ein automatisiertes Online-System. Dies verbessert die Effizienz und Benutzerfreundlichkeit, indem es den Benutzern ermöglicht, Reservierungen unabhängig von der Verfügbarkeit des Personals zu verwalten.
+
+Das System ist in die bereits bestehende IT-Infrastruktur des Restaurants integrierbar und arbeitet auf Servern, die die Datenbank und die Webanwendung hosten. Benutzer greifen über Webbrowser auf das System zu. Die Anwendung ist modular aufgebaut, sodass zukünftige Erweiterungen, wie etwa die Integration eines Zahlungssystems, möglich sind.
+
+### 2.2 Produktfunktionen
+Das System umfasst folgende Kernfunktionen:
+- **Tischverwaltung:** Administratoren können Tische erstellen, konfigurieren und deren Verfügbarkeit anzeigen. Diese Funktion bietet eine Übersicht über den Restaurantgrundriss und zeigt, welche Tische verfügbar oder reserviert sind.
+- **Reservierungssystem:** Benutzer können verfügbare Tische und Zeitfenster einsehen und Reservierungen vornehmen. Dazu gehört auch die Möglichkeit, bestehende Reservierungen zu stornieren oder zu ändern.
+- **Benutzersystem:** Sowohl Benutzer als auch Administratoren müssen ein Konto erstellen, um auf das System zuzugreifen. Benutzerinformationen werden in einer Datenbank gespeichert, um die Reservierungen mit spezifischen Benutzern zu verknüpfen.
+- **Feedbacksystem:** Nach einer Reservierung können Benutzer Feedback zur Reservierung und ihrer Erfahrung im Restaurant abgeben.
+
+### 2.3 Benutzermerkmale
+Es gibt zwei Hauptakteure, die das System nutzen:
+- **Benutzer (Kunden):** Sie sind die primären Nutzer des Systems. Sie erwarten eine einfache und intuitive Möglichkeit, Tische zu reservieren, zu stornieren und ihre Reservierungen zu verwalten. Benutzer benötigen minimale technische Kenntnisse, da die Anwendung benutzerfreundlich gestaltet ist. Sie müssen ein Konto erstellen, um Reservierungen zu tätigen.
+- **Administratoren (Restaurantmitarbeiter):** Administratoren verwalten Tische und sehen Reservierungen ein. Sie haben zusätzliche Berechtigungen, um Tische hinzuzufügen, Zeitfenster zu ändern und überbuchte Zeiten zu verwalten. Sie benötigen grundlegende Kenntnisse der Anwendung und Zugriff auf das Backend der Webanwendung.
+
+### 2.4 Einschränkungen
+- **Technische Einschränkungen:** Das System muss in einer Webumgebung laufen und wird in C#, ASP.NET, HTML, JavaScript/TypeScript und CSS entwickelt. Eine SQL-Datenbank wird zur Speicherung der Daten verwendet. Es gibt Einschränkungen hinsichtlich der Serverkapazitäten und der Netzwerklatenz, die die Performance beeinflussen können.
+- **Sicherheitsanforderungen:** Da persönliche Daten und Reservierungen verarbeitet werden, müssen Datenschutzrichtlinien wie die DSGVO eingehalten werden. Besonders die Speicherung von Benutzerdaten muss den gängigen Sicherheitsstandards entsprechen.
+- **Systemverfügbarkeit:** Das System muss nahezu rund um die Uhr verfügbar sein, um Kunden die Möglichkeit zu geben, jederzeit Reservierungen vorzunehmen. Wartungszeiten müssen minimal und im Voraus angekündigt werden.
+
+### 2.5 Annahmen und Abhängigkeiten
+- **Internetverbindung:** Es wird angenommen, dass Benutzer und Administratoren über eine stabile Internetverbindung verfügen, um die Webanwendung effektiv nutzen zu können.
+- **Server-Infrastruktur:** Die Anwendung setzt eine stabile Serverumgebung voraus, um eine hohe Verfügbarkeit und eine reibungslose Performance sicherzustellen.
+- **Hardware-Abhängigkeiten:** Es wird davon ausgegangen, dass sowohl die Benutzer als auch die Administratoren über Endgeräte (PCs, Tablets, Smartphones) verfügen, die einen modernen Webbrowser unterstützen.
+- **Zukunftssicherheit:** Das System sollte so entwickelt werden, dass es in Zukunft leicht um zusätzliche Funktionen erweitert werden kann, z. B. die Integration eines Zahlungssystems oder einer mobilen App.
+
+### 2.6 Anforderungen -Teilmengen
+Das System umfasst verschiedene Teilmengen von Anforderungen:
+- **Kernanforderungen:** Diese betreffen die grundlegenden Funktionen wie die Reservierung und die Verwaltung von Tischen.
+- **Erweiterte Anforderungen:** Dazu gehören Funktionen wie Feedback, Benachrichtigungen und mögliche zukünftige Erweiterungen.
+- **Sicherheitsanforderungen:** Diese betreffen den Schutz der Benutzerdaten und die Einhaltung von Datenschutzrichtlinien.
+  
+### 2.7 Use Case Diagramm
+```mermaid
+graph TD
+  subgraph "Benutzeraktionen"
+    UC1["Tisch reservieren"]
+    UC2["Reservierung stornieren"]
+    UC3["Feedback abgeben"]
+    UC4["Konto erstellen"]
+  end
+
+  subgraph "Administratoraktionen"
+    UC5["Tische verwalten"]
+    UC6["Verfügbarkeiten einsehen"]
+  end
+
+  Kunde["Kunde"] --> UC1
+  Kunde --> UC2
+  Kunde --> UC3
+  Kunde --> UC4
+
+  Admin["Administrator"] --> UC4
+  Admin --> UC5
+  Admin --> UC6
+```
+- Tischreservierung: Der Benutzer wählt einen verfügbaren Tisch und eine Zeit aus und reserviert diesen.
+- Tischverwaltung: Administratoren können Tische erstellen, bearbeiten und deren Verfügbarkeit einsehen.
+- Stornierung von Reservierungen: Benutzer können bestehende Reservierungen stornieren.
+- Feedback abgeben: Nach einer Reservierung können Benutzer Feedback zu ihrer Erfahrung geben.
+- Kontoerstellung: Sowohl Benutzer als auch Administratoren müssen ein Konto erstellen, um das System zu nutzen.
+
 ## 3. Spezifische Anforderungen  
 ### 3.1 Funktionalität  
 ### 3.2 Benutzbarkeit  
