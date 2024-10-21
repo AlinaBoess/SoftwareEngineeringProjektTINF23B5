@@ -119,33 +119,42 @@ Das System umfasst verschiedene Teilmengen von Anforderungen:
 ### 2.7 Use Case Diagramm
 ```mermaid
 graph TD
-  subgraph "Benutzeraktionen"
-    UC1["Tisch reservieren (3)"]
-    UC2["Reservierung stornieren (3)"]
-    UC3["Feedback abgeben (4)"]
-    UC4["Konto erstellen (3)"]
-  end
+    subgraph Benutzer 3
+        A[Anmelden] --> B[Verfügbare Reservierungen anzeigen]
+        B --> C[Tisch reservieren]
+        C --> D[Reservierungsbestätigung]
+        B --> E[Reservierung stornieren]
+        B --> F[Reservierungsübersicht]
+        F --> G[Feedback abgeben]
+    end
 
-  subgraph "Administratoraktionen"
-    UC5["Tische verwalten (3)"]
-    UC6["Verfügbarkeiten einsehen (3)"]
-  end
-
-  Kunde["Kunde"] --> UC1
-  Kunde --> UC2
-  Kunde --> UC3
-  Kunde --> UC4
-
-  Admin["Administrator"] --> UC4
-  Admin --> UC5
-  Admin --> UC6
+    subgraph Administrator 4
+        H[Anmelden] --> I[Reservierungen einsehen]
+        I --> J[Tischverwaltung]
+    end
 ```
-3 wird dieses und 4 nächstes Semester gemacht.
-- Tischreservierung: Der Benutzer wählt einen verfügbaren Tisch und eine Zeit aus und reserviert diesen.
-- Tischverwaltung: Administratoren können Tische erstellen, bearbeiten und deren Verfügbarkeit einsehen.
-- Stornierung von Reservierungen: Benutzer können bestehende Reservierungen stornieren.
-- Feedback abgeben: Nach einer Reservierung können Benutzer Feedback zu ihrer Erfahrung geben.
-- Kontoerstellung: Sowohl Benutzer als auch Administratoren müssen ein Konto erstellen, um das System zu nutzen.
+#### Funktionen für Benutzer (3. Semester)
+1. **Anmelden:**  
+   Der Benutzer gibt seine Zugangsdaten ein, um auf das System zuzugreifen.
+2. **Verfügbare Reservierungen anzeigen:**  
+   Der Benutzer kann die aktuell verfügbaren Tische und Zeitfenster im Restaurant einsehen.
+3. **Tisch reservieren:**  
+   Der Benutzer wählt einen Tisch und ein Zeitfenster aus, um eine Reservierung vorzunehmen.
+4. **Reservierungsbestätigung:**  
+   Nach erfolgreicher Reservierung erhält der Benutzer eine Bestätigung über die Reservierung, meist in Form eines Pop-ups oder einer E-Mail.
+5. **Reservierung stornieren:**  
+   Der Benutzer hat die Möglichkeit, eine bereits getätigte Reservierung zu stornieren.
+6. **Reservierungsübersicht:**  
+   Der Benutzer kann eine Übersicht über all seine aktuellen und vergangenen Reservierungen abrufen.
+7. **Feedback abgeben:**  
+   Nach dem Restaurantbesuch kann der Benutzer Feedback zur Qualität des Services und der Erfahrung abgeben.
+#### Funktionen für Administrator (4. Semester)
+1. **Anmelden:**  
+   Der Administrator gibt seine Zugangsdaten ein, um auf das Verwaltungssystem zuzugreifen.
+2. **Reservierungen einsehen:**  
+   Der Administrator hat Zugriff auf alle Reservierungen, die von Benutzern vorgenommen wurden, und kann diese einsehen und verwalten.
+3. **Tischverwaltung:**  
+   Der Administrator kann Tische erstellen, konfigurieren und deren Verfügbarkeit verwalten, um sicherzustellen, dass die Reservierungen reibungslos funktionieren.
 
 ## 3. Spezifische Anforderungen  
 
