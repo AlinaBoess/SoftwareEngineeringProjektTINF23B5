@@ -26,27 +26,13 @@
 ## 1. Einführung  
 
 ### 1.1 Zweck  
-Der Zweck dieser Software Requirements Specification (SRS) ist es, eine klare und umfassende Beschreibung der Anforderungen für das Restaurant-Buchungssystem bereitzustellen. Diese Spezifikation soll die folgenden Ziele erreichen:
-- Beschreibung des Systems: Das SRS beschreibt das externe Verhalten des Buchungssystems, einschließlich der Benutzerinteraktionen und der zu erwartenden Systemreaktionen. Es soll den Stakeholdern helfen, ein klares Verständnis darüber zu bekommen, wie das System funktionieren wird.
-- Funktionale Anforderungen: Die SRS enthält detaillierte funktionale Anforderungen, die die spezifischen Funktionen und Dienstleistungen beschreiben, die das System bereitstellen muss, um die Bedürfnisse der Benutzer und des Restaurantbetriebs zu erfüllen. Dazu gehören unter anderem die Erstellung, Änderung und Stornierung von Reservierungen sowie die Verwaltung von Tischen und Zeiten.
-- Nicht-funktionale Anforderungen: Neben den funktionalen Anforderungen werden auch nicht-funktionale Anforderungen behandelt. Diese umfassen Leistungsanforderungen (z. B. Antwortzeiten), Zuverlässigkeit, Sicherheit, Benutzbarkeit und andere Qualitätsmerkmale, die das Benutzererlebnis und die Systemleistung beeinflussen.
-- Designbeschränkungen: Die SRS identifiziert Designbeschränkungen und Einschränkungen, die sich aus der technologischen Umgebung, den gesetzlichen Vorgaben oder den betrieblichen Gegebenheiten des Restaurants ergeben können.
-- Komplette und umfassende Beschreibung: Diese Spezifikation zielt darauf ab, alle Faktoren zu berücksichtigen, die für eine vollständige und umfassende Beschreibung der Anforderungen an die Software erforderlich sind. Sie dient als Grundlage für die Entwicklung, das Testen und die Implementierung des Systems sowie für die Schulung der Benutzer.
-Diese SRS soll somit als Referenzdokument für alle Beteiligten dienen und sicherstellen, dass alle Anforderungen an das Restaurant-Buchungssystem klar und verständlich festgehalten sind.
+Der Zweck dieser Software Requirements Specification (SRS) ist es, eine klare und umfassende Beschreibung der Anforderungen für das Restaurant-Buchungssystem bereitzustellen. Sie beschreibt das externe Verhalten des Systems und gibt sowohl funktionale als auch nicht-funktionale Anforderungen vor. Die SRS dient als zentrale Referenz für alle Beteiligten und stellt sicher, dass die Anforderungen an die Software klar und nachvollziehbar dokumentiert sind.
 
 ### 1.2 Umfang  
-Das Projekt wird als Webanwendung entwickelt, die eine Interaktion zwischen Benutzern (Kunden) und Restaurantmitarbeitern (Administratoren) ermöglicht.
-- Akteure
-   - Benutzer: Kunden, die Reservierungen vornehmen.
-   - Administratoren: Restaurantmitarbeiter, die Tische verwalten und Reservierungen einsehen.
-
-- Geplante Teilsysteme
-   - Tischverwaltung: Administratoren können Tische erstellen und die verfügbaren Reservierungen einsehen.
-   - Tischplan und Verfügbarkeitsanzeige: Benutzer können einen interaktiven Tischplan einsehen und einen gewünschten Zeitblock wählen.
-   - Reservierungssystem: Benutzer können Tische reservieren, erhalten eine Bestätigung und können Reservierungen stornieren.
-   - Feedbacksystem: Benutzer haben die Möglichkeit, Feedback zu ihren Erfahrungen abzugeben.
-   - Benutzersystem: Erstellung von Konten für Benutzer und Administratoren.
-- Technische Umsetzung: Die Webanwendung wird in C#, ASP.NET, HTML, JavaScript/TypeScript und CSS entwickelt und nutzt eine SQL-Datenbank.
+Das Restaurant-Buchungssystem wird als Webanwendung entwickelt. Diese Anwendung ermöglicht Benutzern (Kunden), Reservierungen vorzunehmen, und Administratoren (Restaurantmitarbeitern), Tische und Reservierungen zu verwalten.
+- Benutzer (Kunden): Können verfügbare Tische einsehen, Reservierungen vornehmen, stornieren und Feedback hinterlassen.
+- Administratoren: Verwalten die Tische, sehen Reservierungen ein und bearbeiten sie.
+Das System wird mit C#, ASP.NET, HTML, JavaScript/TypeScript und CSS umgesetzt und verwendet eine SQL-Datenbank zur Speicherung der Daten.
 
 ### 1.3 Definitionen, Akronyme und Abkürzungen  
 - **SRS (Software Requirements Specification)**: Ein Dokument, das die Anforderungen an eine Softwareanwendung beschreibt.
