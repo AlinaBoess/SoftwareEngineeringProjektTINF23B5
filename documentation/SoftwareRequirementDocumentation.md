@@ -206,7 +206,7 @@ Bis Juni möchten wir die folgenden Administratorfunktionen implementieren:
 Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer sich in das Restaurantbuchungssystem einloggt, um auf die Funktionen des Systems zugreifen zu können. Der Benutzer gibt seine Anmeldedaten ein und erhält bei erfolgreicher Anmeldung Zugriff auf seine Reservierungen und weitere Funktionen.
 
 - **GUI Mockup**  
-(Hier würdest du ein Mockup einfügen, das das Anmeldeformular zeigt, einschließlich Felder für E-Mail und Passwort.)
+(Hier Mockup einfügen, das das Anmeldeformular zeigt, einschließlich Felder für Nutzername und Passwort.)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -236,7 +236,373 @@ sequenceDiagram
 - **Aufwandsschätzung / Story Points**  
     - Story Points: 5  
         - Frontend: 2 Punkte  
-        - Backend: 3 Punkte (Datenüberprüfung, Fehlerbehandlung)  
+        - Backend: 3 Punkte (Datenüberprüfung, Fehlerbehandlung)
+
+
+#### 3.1.2 Konto erstellen
+
+- **Beschreibung**  
+Dieser Use Case beschreibt den Vorgang, bei dem ein neuer Benutzer ein Konto im Restaurantbuchungssystem erstellt. Der Benutzer gibt persönliche Informationen wie Name, E-Mail und Passwort ein, um ein neues Benutzerprofil anzulegen und Zugang zu den Funktionen des Systems zu erhalten.
+
+- **GUI Mockup**  
+(Hier Mockup einfügen, das das Registrierungsformular zeigt, einschließlich der erforderlichen Felder.)
+
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    participant Benutzer
+    participant System
+    Benutzer ->> System: Registrierungsdaten eingeben
+    System ->> System: Datenvalidierung durchführen
+    alt Erfolgreiche Registrierung
+        System ->> System: Konto erstellen
+        System ->> Benutzer: Bestätigung anzeigen
+    else Fehlgeschlagene Registrierung
+        System ->> Benutzer: Fehlermeldung anzeigen
+    end
+```
+
+- **Vorbedingungen**  
+    - Der Benutzer darf noch kein Konto im System haben.
+
+- **Nachbedingungen**  
+    - Der Benutzer hat erfolgreich ein Konto erstellt und kann sich mit seinen Anmeldedaten einloggen.
+    - Eine Bestätigungs-E-Mail wird an die angegebene E-Mail-Adresse gesendet.
+
+- **Spezielle Anforderungen**  
+    - Die Passwortsicherheit muss gewährleistet sein (z. B. Mindestlänge, Groß- und Kleinbuchstaben, Sonderzeichen).
+    - Alle Daten müssen sicher über HTTPS übertragen werden.
+
+- **Aufwandsschätzung / Story Points**  
+    - Story Points: 8  
+        - Frontend: 3 Punkte  
+        - Backend: 5 Punkte (Datenvalidierung, Kontoerstellung, E-Mail-Bestätigung)  
+
+#### 3.1.3 Tisch reservieren
+
+- **Beschreibung**  
+Benutzer können einen verfügbaren Tisch für ein gewünschtes Datum und eine Uhrzeit reservieren. Dieser Vorgang beinhaltet die Auswahl des gewünschten Tisches sowie die Eingabe von persönlichen Informationen für die Reservierung.
+
+- **GUI Mockup**  
+(Hier Mockup einfügen, das den Reservierungsprozess zeigt, z. B. die Auswahl eines Datums, einer Uhrzeit und des gewünschten Tisches.)
+
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    participant Benutzer
+    participant System
+    Benutzer ->> System: Verfügbare Tische anzeigen
+    System ->> System: Verfügbarkeit prüfen
+    System ->> Benutzer: Verfügbare Tische und Zeiten anzeigen
+    Benutzer ->> System: Tisch und Zeit auswählen
+    System ->> System: Reservierung speichern
+    System ->> Benutzer: Bestätigung anzeigen
+```
+
+- **Vorbedingungen**  
+    - Der Benutzer muss ein Konto erstellt und sich eingeloggt haben.
+    - Es muss mindestens ein Tisch im Restaurant für das gewünschte Datum und die Uhrzeit verfügbar sein.
+
+- **Nachbedingungen**  
+    - Die Reservierung ist erfolgreich in der Datenbank gespeichert.
+    - Der Benutzer erhält eine Bestätigung der Reservierung per E-Mail oder im System.
+
+- **Spezielle Anforderungen**  
+    - Die Reservierungsbestätigung sollte innerhalb von 5 Sekunden angezeigt werden.
+    - Das System muss sicherstellen, dass es keine Doppelbuchungen gibt.
+
+- **Aufwandsschätzung / Story Points**  
+    - Story Points: 8  
+        - Frontend: 3 Punkte  
+        - Backend: 5 Punkte (Verfügbarkeit prüfen, Reservierung speichern, Doppelbuchung verhindern)
+
+
+#### 3.1.4 Reservierungsbestätigung
+
+- **Beschreibung**  
+Nach erfolgreicher Reservierung erhält der Benutzer eine Bestätigung seiner Reservierung in Form eines Pop-ups. Dieses Pop-up enthält wichtige Informationen wie das Datum, die Uhrzeit, den reservierten Tisch und eventuelle spezielle Anmerkungen.
+
+- **GUI Mockup**  
+(Hier Mockup einfügen, das das Pop-up mit der Reservierungsbestätigung zeigt.)
+
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    participant Benutzer
+    participant System
+    Benutzer ->> System: Reservierung durchführen
+    System ->> System: Reservierung speichern
+    System ->> Benutzer: Pop-up mit Bestätigung anzeigen
+```
+
+- **Vorbedingungen**  
+    - Der Benutzer muss eine Reservierung erfolgreich durchgeführt haben.
+
+- **Nachbedingungen**  
+    - Der Benutzer erhält eine Bestätigung in Form eines Pop-ups, das alle relevanten Details der Reservierung enthält.
+
+- **Spezielle Anforderungen**  
+    - Das Pop-up sollte innerhalb von 5 Sekunden nach der Reservierung angezeigt werden.
+    - Das Pop-up muss einfach zu schließen sein, um eine klare Benutzererfahrung zu gewährleisten.
+
+- **Aufwandsschätzung / Story Points**  
+    - Story Points: 5  
+        - Frontend: 2 Punkte  
+        - Backend: 3 Punkte (Bestätigung generieren und anzeigen)  
+
+#### 3.1.5 Reservierung stornieren
+
+- **Beschreibung**  
+Benutzer haben die Möglichkeit, ihre Reservierungen zu stornieren, falls erforderlich. Dieser Vorgang ermöglicht es den Benutzern, ihre Buchungen zu ändern, wenn sich ihre Pläne ändern.
+
+- **GUI Mockup**  
+(Hier ein Mockup einfügen, das die Stornierungsoption in der Benutzeroberfläche zeigt, z. B. eine Schaltfläche „Reservierung stornieren“ in der Reservierungsübersicht.)
+
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    participant Benutzer
+    participant System
+    Benutzer ->> System: Reservierung auswählen
+    Benutzer ->> System: Stornierungsanfrage senden
+    System ->> System: Reservierung löschen
+    System ->> Benutzer: Pop-up mit Stornierungsbestätigung anzeigen
+```
+
+- **Vorbedingungen**  
+    - Der Benutzer muss über eine aktive Reservierung verfügen, die storniert werden kann.
+
+- **Nachbedingungen**  
+    - Die Reservierung wird erfolgreich aus der Datenbank gelöscht.
+    - Der Benutzer erhält eine Bestätigung der Stornierung in Form eines Pop-ups.
+
+- **Spezielle Anforderungen**  
+    - Das Pop-up mit der Stornierungsbestätigung sollte innerhalb von 5 Sekunden nach der Stornierungsanfrage angezeigt werden.
+    - Das System muss sicherstellen, dass nur aktive Reservierungen storniert werden können.
+
+- **Aufwandsschätzung / Story Points**  
+    - Story Points: 5  
+        - Frontend: 2 Punkte  
+        - Backend: 3 Punkte (Reservierung löschen und Bestätigung generieren)
+
+#### 3.1.6 Feedback geben
+
+- **Beschreibung**  
+Benutzer können nach ihrem Restaurantbesuch Feedback zu ihrer Reservierung und dem Gesamterlebnis geben. Dieses Feedback hilft dem Restaurant, den Service zu verbessern und auf die Wünsche der Gäste einzugehen.
+
+- **GUI Mockup**  
+(Hier ein Mockup einfügen, das das Feedbackformular zeigt, z. B. ein Feld für die Eingabe von Kommentaren und eine Bewertungsoption.)
+
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    participant Benutzer
+    participant System
+    Benutzer ->> System: Feedback-Formular öffnen
+    Benutzer ->> System: Kommentar und Bewertung eingeben
+    Benutzer ->> System: Feedback absenden
+    System ->> System: Feedback speichern
+    System ->> Benutzer: Pop-up mit Bestätigung anzeigen
+```
+
+- **Vorbedingungen**  
+    - Der Benutzer muss über eine abgeschlossene Reservierung im System verfügen, um Feedback abgeben zu können.
+
+- **Nachbedingungen**  
+    - Das Feedback wird erfolgreich in der Datenbank gespeichert.
+    - Der Benutzer erhält eine Bestätigung seines Feedbacks in Form eines Pop-ups.
+
+- **Spezielle Anforderungen**  
+    - Das Pop-up mit der Bestätigung sollte innerhalb von 5 Sekunden nach dem Absenden des Feedbacks angezeigt werden.
+    - Das System muss sicherstellen, dass die Eingaben validiert werden, um Spam oder unangemessene Inhalte zu vermeiden.
+
+- **Aufwandsschätzung / Story Points**  
+    - Story Points: 8  
+        - Frontend: 3 Punkte  
+        - Backend: 5 Punkte (Feedback speichern, Validierung)
+
+#### 3.1.7 Reservierungen einsehen
+
+- **Beschreibung**  
+Benutzer können alle ihre bisherigen und zukünftigen Reservierungen einsehen und verwalten. Dies ermöglicht es ihnen, Reservierungen zu überprüfen, Änderungen vorzunehmen oder Stornierungen vorzunehmen.
+
+- **GUI Mockup**  
+(Hier ein Mockup einfügen, das die Übersicht der Reservierungen zeigt, einschließlich der Optionen zum Bearbeiten oder Stornieren.)
+
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    participant Benutzer
+    participant System
+    Benutzer ->> System: Reservierungen einsehen
+    System ->> System: Reservierungen abrufen
+    System ->> Benutzer: Übersicht der Reservierungen anzeigen
+```
+
+- **Vorbedingungen**  
+    - Der Benutzer muss angemeldet sein, um auf seine Reservierungen zugreifen zu können.
+
+- **Nachbedingungen**  
+    - Der Benutzer erhält eine vollständige Übersicht über alle Reservierungen, einschließlich Datum, Uhrzeit, Tisch und Status.
+
+- **Spezielle Anforderungen**  
+    - Die Übersicht der Reservierungen sollte innerhalb von 3 Sekunden geladen werden.
+    - Der Benutzer sollte die Möglichkeit haben, jede Reservierung direkt aus der Übersicht zu bearbeiten oder zu stornieren.
+
+- **Aufwandsschätzung / Story Points**  
+    - Story Points: 5  
+        - Frontend: 2 Punkte  
+        - Backend: 3 Punkte (Reservierungen abrufen)
+
+#### 3.1.8 Anmelden
+
+- **Beschreibung**  
+Administratoren können sich in das System einloggen, um Zugriff auf ihre Verwaltungsfunktionen zu erhalten. Dies ermöglicht es ihnen, Reservierungen zu verwalten und wichtige Systeminformationen einzusehen.
+
+- **GUI Mockup**  
+(Hier ein Mockup des Anmeldeformulars für Administratoren einfügen, das Felder für Benutzernamen und Passwort enthält.)
+
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    participant Administrator
+    participant System
+    Administrator ->> System: Anmeldedaten eingeben
+    System ->> System: Anmeldedaten validieren
+    alt Erfolgreiche Anmeldung
+        System ->> Administrator: Zugriff auf Verwaltungsfunktionen gewähren
+    else Fehlgeschlagene Anmeldung
+        System ->> Administrator: Fehlermeldung anzeigen
+    end
+```
+
+- **Vorbedingungen**  
+    - Der Administrator muss über ein gültiges Konto im System verfügen.
+
+- **Nachbedingungen**  
+    - Bei erfolgreicher Anmeldung hat der Administrator Zugriff auf die Verwaltungsoberfläche.
+    - Bei fehlerhaften Anmeldedaten wird eine Fehlermeldung angezeigt.
+
+- **Spezielle Anforderungen**  
+    - Die Anmeldedaten sollten innerhalb von 2 Sekunden validiert werden.
+    - Bei drei aufeinanderfolgenden fehlgeschlagenen Anmeldeversuchen sollte der Zugang für 15 Minuten gesperrt werden.
+
+- **Aufwandsschätzung / Story Points**  
+    - Story Points: 3  
+        - Frontend: 1 Punkt  
+        - Backend: 2 Punkte (Anmeldedaten validieren)
+
+#### 3.1.9 Tischverwaltung
+
+- **Beschreibung**  
+Administratoren können die Tische im System verwalten, einschließlich der Anpassung von Verfügbarkeiten, Einstellungen und der Zuweisung von Tischen zu bestimmten Reservierungen. Dies ermöglicht eine effiziente Organisation der Tischressourcen im Restaurant.
+
+- **GUI Mockup**  
+(Hier ein Mockup der Benutzeroberfläche zur Tischverwaltung einfügen, das Optionen zur Anzeige, Bearbeitung und Verwaltung von Tischen zeigt.)
+
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    participant Administrator
+    participant System
+    Administrator ->> System: Tische anzeigen
+    System ->> Administrator: Liste der Tische anzeigen
+    Administrator ->> System: Tisch auswählen
+    Administrator ->> System: Verfügbarkeit ändern
+    System ->> System: Änderungen speichern
+    System ->> Administrator: Bestätigung der Änderungen anzeigen
+```
+
+- **Vorbedingungen**  
+    - Der Administrator muss angemeldet sein.
+    - Es müssen Tische im System vorhanden sein.
+
+- **Nachbedingungen**  
+    - Änderungen an der Tischverfügbarkeit und den Einstellungen sind erfolgreich in der Datenbank gespeichert.
+    - Der Administrator erhält eine Bestätigung über die erfolgten Änderungen.
+
+- **Spezielle Anforderungen**  
+    - Änderungen an der Tischverfügbarkeit sollten innerhalb von 3 Sekunden gespeichert werden.
+    - Das System muss sicherstellen, dass keine Konflikte bei der Zuweisung von Tischen auftreten.
+
+- **Aufwandsschätzung / Story Points**  
+    - Story Points: 5  
+        - Frontend: 2 Punkte  
+        - Backend: 3 Punkte (Änderungen speichern, Konflikte prüfen)
+
+
+#### 3.1.10 Reservierungsübersicht
+
+- **Beschreibung**  
+Administratoren können eine umfassende Übersicht über alle Reservierungen im System einsehen. Diese Funktion ermöglicht es ihnen, die aktuelle Auslastung des Restaurants zu überwachen und gegebenenfalls Anpassungen vorzunehmen.
+
+- **GUI Mockup**  
+(Hier ein Mockup der Benutzeroberfläche zur Reservierungsübersicht einfügen, das die verschiedenen Reservierungen und deren Details zeigt.)
+
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    participant Administrator
+    participant System
+    Administrator ->> System: Reservierungsübersicht anfordern
+    System ->> System: Daten abrufen
+    System ->> Administrator: Reservierungsübersicht anzeigen
+```
+
+- **Vorbedingungen**  
+    - Der Administrator muss angemeldet sein.
+    - Es müssen Reservierungen im System vorhanden sein.
+
+- **Nachbedingungen**  
+    - Die Übersicht über alle Reservierungen wird erfolgreich angezeigt.
+    - Der Administrator erhält Informationen zu Reservierungen, einschließlich Datum, Uhrzeit, Tisch und Benutzerinformationen.
+
+- **Spezielle Anforderungen**  
+    - Die Reservierungsübersicht sollte innerhalb von 3 Sekunden geladen werden.
+    - Die Übersicht muss eine Filter- und Sortierfunktion bieten, um Reservierungen nach verschiedenen Kriterien anzuzeigen (z. B. Datum, Tisch).
+
+- **Aufwandsschätzung / Story Points**  
+    - Story Points: 5  
+        - Frontend: 2 Punkte  
+        - Backend: 3 Punkte (Daten abrufen, Filter- und Sortierfunktionen implementieren)
+
+#### 3.1.11 Feedback abgeben
+
+- **Beschreibung**  
+Administratoren können das Feedback der Benutzer einsehen, analysieren und darauf reagieren. Diese Funktion ermöglicht es ihnen, die Benutzererfahrung zu verbessern und etwaige Probleme zeitnah zu adressieren.
+
+- **GUI Mockup**  
+(Hier ein Mockup der Benutzeroberfläche zur Anzeige von Benutzerfeedback einfügen, das die verschiedenen Rückmeldungen und deren Status zeigt.)
+
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    participant Administrator
+    participant System
+    Administrator ->> System: Feedbackübersicht anfordern
+    System ->> System: Feedbackdaten abrufen
+    System ->> Administrator: Feedbackübersicht anzeigen
+    Administrator ->> System: Feedbackantwort eingeben
+    System ->> Administrator: Bestätigung der Antwort anzeigen
+```
+
+- **Vorbedingungen**  
+    - Der Administrator muss angemeldet sein.
+    - Es muss mindestens ein Feedback von Benutzern im System vorhanden sein.
+
+- **Nachbedingungen**  
+    - Das Feedback wird erfolgreich angezeigt.
+    - Der Administrator kann auf das Feedback reagieren, und die Antwort wird im System gespeichert.
+
+- **Spezielle Anforderungen**  
+    - Die Feedbackübersicht sollte innerhalb von 4 Sekunden geladen werden.
+    - Administratoren sollten die Möglichkeit haben, auf spezifisches Feedback direkt zu antworten.
+    - Es muss eine Historie der Antworten auf Benutzerfeedback geführt werden.
+
+- **Aufwandsschätzung / Story Points**  
+    - Story Points: 8  
+        - Frontend: 3 Punkte  
+        - Backend: 5 Punkte (Feedbackdaten abrufen, Antworten speichern)
 
 ### 3.2 Benutzbarkeit  
 #### 3.2.1 Benutzeroberfläche (UI)
