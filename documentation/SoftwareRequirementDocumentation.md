@@ -83,9 +83,9 @@ Diese Struktur soll sicherstellen, dass alle Aspekte des Restaurant Buchungssyst
 ## 2. Gesamtbeschreibung  
 
 ### 2.1 Produktperspektive
-Das Restaurant-Buchungssystem ist eine Webanwendung, die als eigenständiges System entwickelt wird. Es ersetzt bisher manuelle oder telefonisch durchgeführte Buchungen durch ein automatisiertes Online-System. Dies verbessert die Effizienz und Benutzerfreundlichkeit, indem es den Benutzern ermöglicht, Reservierungen unabhängig von der Verfügbarkeit des Personals zu verwalten.
+Das Restaurant-Buchungssystem ist eine Webanwendung, die als eigenständiges System entwickelt wird, wobei auf die Effizienz und Benutzerfreundlichkeit besonderen Wert gelegt wird, indem den Benutzern ermöglicht wird, Reservierungen unabhängig von der Verfügbarkeit des Personals zu verwalten.
 
-Das System ist in die bereits bestehende IT-Infrastruktur des Restaurants integrierbar und arbeitet auf Servern, die die Datenbank und die Webanwendung hosten. Benutzer greifen über Webbrowser auf das System zu. Die Anwendung ist modular aufgebaut, sodass zukünftige Erweiterungen, wie etwa die Integration eines Zahlungssystems, möglich sind.
+Das System ist in eine eventuell bereits bestehende IT-Infrastruktur des Restaurants integrierbar und arbeitet auf Servern, die die Datenbank und die Webanwendung hosten. Benutzer greifen über Webbrowser auf das System zu. Die Anwendung ist modular aufgebaut, sodass zukünftige Erweiterungen, wie etwa die Integration eines Zahlungssystems, möglich sind.
 
 ### 2.2 Produktfunktionen
 Das System umfasst folgende Kernfunktionen:
@@ -261,8 +261,8 @@ sequenceDiagram
 - **Spezielle Anforderungen**  
     Eingaben müssen validiert werden.  
 - **Aufwandsschätzung / Story Points**  
-    Story Points: 3  
-        Frontend: 1 Punkt  
+    Story Points: 4  
+        Frontend: 2 Punkt  
         Backend: 2 Punkte (Feedback speichern)  
 
 #### 3.1.5 Tische verwalten
@@ -287,9 +287,9 @@ sequenceDiagram
 - **Spezielle Anforderungen**  
     Eingaben müssen validiert werden (z.B. Tischgröße, Kapazität).  
 - **Aufwandsschätzung / Story Points**  
-    Story Points: 6  
+    Story Points: 7  
         Frontend: 2 Punkte  
-        Backend: 4 Punkte (Tischverwaltung, Datenbankoperationen)  
+        Backend: 5 Punkte (Tischverwaltung, Datenbankoperationen)  
 
 #### 3.1.6 Verfügbarkeiten einsehen
 - **Beschreibung**  
