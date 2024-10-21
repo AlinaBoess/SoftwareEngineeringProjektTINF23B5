@@ -36,22 +36,25 @@
 Der Zweck dieser Software Requirements Specification (SRS) ist es, eine klare und umfassende Beschreibung der Anforderungen für das Restaurant-Buchungssystem bereitzustellen. Sie beschreibt das externe Verhalten des Systems und gibt sowohl funktionale als auch nicht-funktionale Anforderungen vor. Die SRS dient als zentrale Referenz für alle Beteiligten und stellt sicher, dass die Anforderungen an die Software klar und nachvollziehbar dokumentiert sind.
 
 ### 1.2 Umfang  
-Das Restaurant-Buchungssystem wird als Webanwendung entwickelt. Diese Anwendung ermöglicht Benutzern (Kunden), Reservierungen vorzunehmen, und Administratoren (Restaurantmitarbeitern), Tische und Reservierungen zu verwalten.
-- Benutzer (Kunden): Können verfügbare Tische einsehen, Reservierungen vornehmen, stornieren und Feedback hinterlassen.
-- Administratoren: Verwalten die Tische, sehen Reservierungen ein und bearbeiten sie.
-Das System wird mit C#, ASP.NET, HTML, JavaScript/TypeScript und CSS umgesetzt und verwendet eine SQL-Datenbank zur Speicherung der Daten.
+Das Restaurant-Buchungssystem wird als Webanwendung entwickelt, die es sowohl Benutzern (Kunden) als auch Administratoren (Restaurantmitarbeitern) ermöglicht, effektiv zu interagieren.
+- Benutzer (Kunden): Haben die Möglichkeit, verfügbare Tische einzusehen, Reservierungen vorzunehmen, bestehende Reservierungen zu stornieren und Feedback zu hinterlassen.
+- Administratoren (Restaurantmitarbeiter): Sind dafür verantwortlich, die Tische zu verwalten, Reservierungen einzusehen und gegebenenfalls zu bearbeiten.
+
+Das System wird unter Verwendung der Technologien C#, ASP.NET, HTML, JavaScript/TypeScript und CSS entwickelt und nutzt eine SQL-Datenbank zur Speicherung und Verwaltung der Daten.
+
+Zusätzlich wird die Anwendung sowohl auf Desktop- als auch auf mobilen Browsern zugänglich sein, um eine breite Benutzerbasis zu unterstützen.
 
 ### 1.3 Definitionen, Akronyme und Abkürzungen  
-- **SRS (Software Requirements Specification)**: Ein Dokument, das die Anforderungen an eine Softwareanwendung beschreibt.
-- **Benutzer**: Eine Person, die die Webanwendung verwendet, um Reservierungen vorzunehmen und Informationen über verfügbare Tische abzurufen.
-- **Administrator**: Ein Mitarbeiter des Restaurants, der das System verwaltet, Tische erstellt und Reservierungen einsehen kann.
-- **Tischplan**: Eine grafische Darstellung der verfügbaren Tische in einem Restaurant, die Benutzern zeigt, welche Tische frei oder reserviert sind.
-- **Reservierung**: Der Vorgang, bei dem ein Benutzer einen Tisch für einen bestimmten Zeitpunkt reserviert, um sicherzustellen, dass der Tisch zur gewünschten Zeit verfügbar ist.
+- **SRS (Software Requirements Specification)**: Ein Dokument, das die Anforderungen an eine Softwareanwendung beschreibt, einschließlich funktionaler und nicht-funktionaler Anforderungen.
+- **Benutzer**: Eine Person, die die Webanwendung nutzt, um Reservierungen vorzunehmen und Informationen über verfügbare Tische abzurufen.
+- **Administrator**: Ein Mitarbeiter des Restaurants, der für die Verwaltung des Systems verantwortlich ist, einschließlich der Erstellung von Tischen und der Einsichtnahme sowie Bearbeitung von Reservierungen.
+- **Tischplan**: Eine grafische Darstellung der verfügbaren Tische in einem Restaurant, die anzeigt, welche Tische frei oder reserviert sind.
+- **Reservierung**: Der Prozess, durch den ein Benutzer einen Tisch für einen bestimmten Zeitpunkt reserviert, um sicherzustellen, dass der Tisch zur gewünschten Zeit verfügbar ist.
 - **SQL (Structured Query Language)**: Eine standardisierte Programmiersprache zur Verwaltung und Abfrage von Daten in relationalen Datenbanken.
-- **ASP.NET**: Ein Framework von Microsoft zur Entwicklung von Webanwendungen und Webdiensten.
-- **HTML (Hypertext Markup Language)**: Eine Markup-Sprache zur Strukturierung und Darstellung von Inhalten im Web.
-- **CSS (Cascading Style Sheets)**: Eine Stylesheet-Sprache zur Gestaltung von HTML-Inhalten, die das Aussehen und Layout von Webseiten definiert.
-- **JavaScript/TypeScript**: Programmiersprachen, die verwendet werden, um interaktive und dynamische Inhalte auf Webseiten zu erstellen.
+- **ASP.NET**: Ein von Microsoft entwickeltes Framework zur Erstellung von Webanwendungen und Webdiensten.
+- **HTML (Hypertext Markup Language)**: Eine Markup-Sprache zur Strukturierung und Präsentation von Inhalten im Web.
+- **CSS (Cascading Style Sheets)**: Eine Stylesheet-Sprache, die das Aussehen und Layout von HTML-Inhalten definiert.
+- **JavaScript/TypeScript**: Programmiersprachen, die verwendet werden, um interaktive und dynamische Inhalte auf Webseiten zu erstellen. TypeScript ist eine von Microsoft entwickelte Obermenge von JavaScript, die statische Typisierung bietet.
 
 ### 1.4 Referenzen  
 Die folgende Liste enthält alle Dokumente und Quellen, auf die im Rahmen dieser Software Requirements Specification (SRS) verwiesen wird:
@@ -78,6 +81,7 @@ Die SRS ist in die folgenden Hauptabschnitte gegliedert:
 2. **Gesamtbeschreibung**: Hier werden die allgemeine Funktionsweise des Systems, die Hauptakteure und deren Interaktionen mit dem System erläutert. Auch werden die wichtigsten Features und Teilsysteme des Restaurant Buchungssystems vorgestellt.
 3. **Spezifische Anforderungen**: In diesem Abschnitt werden die detaillierten funktionalen und nicht-funktionalen Anforderungen an das System aufgeführt. Dazu gehören unter anderem Anforderungen an die Benutzeroberfläche, Datenverwaltung, Sicherheitsanforderungen und Performance.
 4. **Unterstützende Informationen**: Hier werden zusätzliche Informationen bereitgestellt, die für das Verständnis der SRS relevant sein könnten, einschließlich Glossar, Abkürzungen und andere nützliche Hinweise.
+   
 Diese Struktur soll sicherstellen, dass alle Aspekte des Restaurant Buchungssystems klar und umfassend dokumentiert sind, um eine effektive Entwicklung und Implementierung der Software zu ermöglichen.
 
 ## 2. Gesamtbeschreibung  
@@ -92,29 +96,29 @@ Das System umfasst folgende Kernfunktionen:
 - **Tischverwaltung:** Administratoren können Tische erstellen, konfigurieren und deren Verfügbarkeit anzeigen. Diese Funktion bietet eine Übersicht über den Restaurantgrundriss und zeigt, welche Tische verfügbar oder reserviert sind.
 - **Reservierungssystem:** Benutzer können verfügbare Tische und Zeitfenster einsehen und Reservierungen vornehmen. Dazu gehört auch die Möglichkeit, bestehende Reservierungen zu stornieren oder zu ändern.
 - **Benutzersystem:** Sowohl Benutzer als auch Administratoren müssen ein Konto erstellen, um auf das System zuzugreifen. Benutzerinformationen werden in einer Datenbank gespeichert, um die Reservierungen mit spezifischen Benutzern zu verknüpfen.
-- **Feedbacksystem:** Nach einer Reservierung können Benutzer Feedback zur Reservierung und ihrer Erfahrung im Restaurant abgeben.
+- **Feedbacksystem:** Nach einer Reservierung können Benutzer Feedback zur Reservierung und ihrer Erfahrung im Restaurant abgeben. Dieses Feedback wird genutzt, um den Service kontinuierlich zu verbessern und auf die Bedürfnisse der Benutzer einzugehen.
 
 ### 2.3 Benutzermerkmale
 Es gibt zwei Hauptakteure, die das System nutzen:
-- **Benutzer (Kunden):** Sie sind die primären Nutzer des Systems. Sie erwarten eine einfache und intuitive Möglichkeit, Tische zu reservieren, zu stornieren und ihre Reservierungen zu verwalten. Benutzer benötigen minimale technische Kenntnisse, da die Anwendung benutzerfreundlich gestaltet ist. Sie müssen ein Konto erstellen, um Reservierungen zu tätigen.
-- **Administratoren (Restaurantmitarbeiter):** Administratoren verwalten Tische und sehen Reservierungen ein. Sie haben zusätzliche Berechtigungen, um Tische hinzuzufügen, Zeitfenster zu ändern und überbuchte Zeiten zu verwalten. Sie benötigen grundlegende Kenntnisse der Anwendung und Zugriff auf das Backend der Webanwendung.
+- **Benutzer (Kunden):**  Sie sind die primären Nutzer des Systems und erwarten eine einfache, intuitive Möglichkeit, Tische zu reservieren, zu stornieren und ihre Reservierungen zu verwalten. Die Anwendung ist so gestaltet, dass sie benutzerfreundlich ist, sodass die Benutzer nur minimale technische Kenntnisse benötigen. Um Reservierungen vorzunehmen, müssen die Benutzer ein Konto erstellen.
+- **Administratoren (Restaurantmitarbeiter):** Administratoren sind für die Verwaltung der Tische und die Einsichtnahme in Reservierungen verantwortlich. Sie verfügen über zusätzliche Berechtigungen, um Tische hinzuzufügen, Zeitfenster zu ändern und überbuchte Zeiten zu verwalten. Administratoren benötigen grundlegende Kenntnisse der Anwendung sowie Zugriff auf das Backend der Webanwendung, um ihre Aufgaben effizient ausführen zu können.
 
 ### 2.4 Einschränkungen
-- **Technische Einschränkungen:** Das System muss in einer Webumgebung laufen und wird in C#, ASP.NET, HTML, JavaScript/TypeScript und CSS entwickelt. Eine SQL-Datenbank wird zur Speicherung der Daten verwendet. Es gibt Einschränkungen hinsichtlich der Serverkapazitäten und der Netzwerklatenz, die die Performance beeinflussen können.
-- **Sicherheitsanforderungen:** Da persönliche Daten und Reservierungen verarbeitet werden, müssen Datenschutzrichtlinien wie die DSGVO eingehalten werden. Besonders die Speicherung von Benutzerdaten muss den gängigen Sicherheitsstandards entsprechen.
-- **Systemverfügbarkeit:** Das System muss nahezu rund um die Uhr verfügbar sein, um Kunden die Möglichkeit zu geben, jederzeit Reservierungen vorzunehmen. Wartungszeiten müssen minimal und im Voraus angekündigt werden.
+- **Technische Einschränkungen:** Das System wird als Webanwendung entwickelt und basiert auf Technologien wie C#, ASP.NET, HTML, JavaScript/TypeScript und CSS. Die Daten werden in einer SQL-Datenbank gespeichert. Es bestehen Einschränkungen hinsichtlich der Serverkapazitäten und Netzwerklatenz, die die Performance des Systems beeinträchtigen können.
+- **Sicherheitsanforderungen:** Bei der Verarbeitung persönlicher Daten und Reservierungen müssen strenge Datenschutzrichtlinien, insbesondere die Datenschutz-Grundverordnung (DSGVO), beachtet werden. Die Speicherung und Verarbeitung von Benutzerdaten muss den aktuellen Sicherheitsstandards entsprechen, um die Vertraulichkeit und Integrität der Informationen zu gewährleisten.
+- **Systemverfügbarkeit:** Das System sollte nahezu rund um die Uhr verfügbar sein, um Kunden die Möglichkeit zu geben, jederzeit Reservierungen vorzunehmen. Geplante Wartungszeiten müssen minimiert und rechtzeitig im Voraus angekündigt werden, um die Benutzererfahrung nicht zu beeinträchtigen.
 
 ### 2.5 Annahmen und Abhängigkeiten
 - **Internetverbindung:** Es wird angenommen, dass Benutzer und Administratoren über eine stabile Internetverbindung verfügen, um die Webanwendung effektiv nutzen zu können.
 - **Server-Infrastruktur:** Die Anwendung setzt eine stabile Serverumgebung voraus, um eine hohe Verfügbarkeit und eine reibungslose Performance sicherzustellen.
 - **Hardware-Abhängigkeiten:** Es wird davon ausgegangen, dass sowohl die Benutzer als auch die Administratoren über Endgeräte (PCs, Tablets, Smartphones) verfügen, die einen modernen Webbrowser unterstützen.
-- **Zukunftssicherheit:** Das System sollte so entwickelt werden, dass es in Zukunft leicht um zusätzliche Funktionen erweitert werden kann, z. B. die Integration eines Zahlungssystems oder einer mobilen App.
+- **Zukunftssicherheit:** Das System soll so konzipiert werden, dass es einfach um zusätzliche Funktionen erweitert werden kann, beispielsweise durch die Integration eines Zahlungssystems oder die Entwicklung einer mobilen App.
 
 ### 2.6 Anforderungen der Teilmengen
 Das System umfasst verschiedene Teilmengen von Anforderungen:
-- **Kernanforderungen:** Diese betreffen die grundlegenden Funktionen wie die Reservierung und die Verwaltung von Tischen.
-- **Erweiterte Anforderungen:** Dazu gehören Funktionen wie Feedback, Benachrichtigungen und mögliche zukünftige Erweiterungen.
-- **Sicherheitsanforderungen:** Diese betreffen den Schutz der Benutzerdaten und die Einhaltung von Datenschutzrichtlinien.
+- **Kernanforderungen:** Diese betreffen die grundlegenden Funktionen des Systems, insbesondere die Reservierung von Tischen und die Verwaltung der Tischverfügbarkeit. Diese Funktionen sind essenziell für die Benutzererfahrung.
+- **Erweiterte Anforderungen:** Dazu gehören zusätzliche Features wie das Feedbacksystem, Benachrichtigungen für Benutzer und Administratoren sowie die Möglichkeit zukünftiger Erweiterungen, um die Funktionalität des Systems zu verbessern.
+- **Sicherheitsanforderungen:** Diese Anforderungen sind entscheidend für den Schutz der Benutzerdaten. Sie umfassen die Einhaltung von Datenschutzrichtlinien wie der DSGVO sowie Maßnahmen zur Sicherstellung der Datensicherheit.
   
 ### 2.7 Use Case Diagramm
 ```mermaid
@@ -336,12 +340,7 @@ Die Benutzeroberfläche muss intuitiv und benutzerfreundlich gestaltet sein, um 
     - Die Anwendung muss auf verschiedenen Bildschirmgrößen (PC, Tablet, Smartphone) responsiv sein.  
 #### 3.2.2 Benutzerführung
 - **Beschreibung**  
-Das System soll den Benutzer durch den Reservierungsprozess führen, um sicherzustellen, dass alle erforderlichen Schritte leicht verständlich sind.  
-- **GUI Mockup**  
-(Hier würdest du ein Mockup der Benutzerführung einfügen, z. B. Schritt-für-Schritt-Anleitungen.)  
-- **Spezielle Anforderungen**  
-    - Es sollten Tooltips und Hilfetexte bereitgestellt werden, um Benutzeranfragen zu beantworten.  
-    - Eine „Hilfe“-Schaltfläche sollte auf jeder Seite vorhanden sein, die auf häufige Fragen verweist.  
+Das System soll den Benutzer durch den Reservierungsprozess führen, um sicherzustellen, dass alle erforderlichen Schritte leicht verständlich sind.   
 #### 3.2.3 Fehlermeldungen
 - **Beschreibung**  
 Das System muss klare und hilfreiche Fehlermeldungen bereitstellen, wenn Benutzer fehlerhafte Eingaben machen oder wenn Probleme auftreten.  
@@ -350,22 +349,15 @@ Das System muss klare und hilfreiche Fehlermeldungen bereitstellen, wenn Benutze
     - Fehlermeldungen sollten Vorschläge zur Behebung des Problems enthalten, z. B. „Bitte überprüfen Sie, ob das Datum in der Zukunft liegt.“  
 #### 3.2.4 Zugänglichkeit
 - **Beschreibung**  
-Das System soll den WCAG-Richtlinien (Web Content Accessibility Guidelines) entsprechen, um sicherzustellen, dass es für alle Benutzer, einschließlich Menschen mit Behinderungen, zugänglich ist.  
+Das System soll größtenteils den WCAG-Richtlinien (Web Content Accessibility Guidelines) entsprechen, um sicherzustellen, dass es für alle Benutzer, einschließlich Menschen mit Behinderungen, zugänglich ist.  
 - **Spezielle Anforderungen**  
     - Alle Bilder und Grafiken müssen alternative Texte (Alt-Text) haben, um die Zugänglichkeit für Screenreader zu gewährleisten.  
-    - Die Anwendung muss mit Tastaturkürzeln navigierbar sein, um die Bedienung ohne Maus zu ermöglichen.  
 #### 3.2.5 Benutzerfeedback
 - **Beschreibung**  
 Das System soll eine Möglichkeit bieten, dass Benutzer Feedback zur Benutzeroberfläche und Benutzererfahrung geben können.  
 - **Spezielle Anforderungen**  
     - Es sollte eine Feedback-Schaltfläche geben, die ein einfaches Formular zur Eingabe von Anregungen oder Beschwerden öffnet.  
-    - Benutzer sollten nach der Nutzung des Systems (z. B. nach einer Reservierung) zu Feedback aufgefordert werden.  
-#### 3.2.6 Schulungsmaterialien
-- **Beschreibung**  
-Das System muss Schulungsmaterialien bereitstellen, um Benutzern zu helfen, die Funktionen des Systems zu verstehen und effektiv zu nutzen.  
-- **Spezielle Anforderungen**  
-    - Es sollten Video-Tutorials und schriftliche Anleitungen bereitgestellt werden.  
-    - Schulungsmaterialien müssen in einem leicht zugänglichen Bereich der Anwendung zu finden sein.  
+    - Benutzer sollten nach der Nutzung des Systems (z. B. nach einer Reservierung) zu Feedback aufgefordert werden. 
 
 ### 3.3 Zuverlässigkeit  
 #### 3.3.1 Verfügbarkeit
@@ -493,10 +485,7 @@ Die folgenden Entwicklungswerkzeuge sind für die Erstellung der Anwendung vorge
 Das System muss eine **Client-Server-Architektur** verwenden, bei der der Server die Geschäftslogik und die Datenbankverwaltung übernimmt, während der Client (Browser) die Benutzeroberfläche darstellt. Diese Architektur soll sicherstellen, dass die Anwendung skalierbar und wartbar ist.  
 
 #### 3.6.5 Verwendung von gekauften Komponenten
-- **Beschreibung**  
-Für die Implementierung von Funktionalitäten sollten folgende gekaufte Komponenten verwendet werden:  
-  - **Drittanbieter-Bibliotheken**: Für spezifische Funktionen wie E-Mail-Benachrichtigungen und Zahlungsabwicklung, die von anerkannten Anbietern stammen.  
-  - **Frontend-Frameworks**: Wie z.B. **Bootstrap** für ein responsives Design und eine einheitliche Benutzeroberfläche.  
+- Es sollen keine gekauften Komponenten verwendet werden. Alles wird selbst erstellt. 
 
 #### 3.6.6 Datenbankmanagementsystem
 - **Beschreibung**  
