@@ -149,6 +149,37 @@ graph TD
 
 ## 3. Spezifische Anforderungen  
 ### 3.1 Funktionalität  
+#### 3.1.1 Tisch reservieren
+- **Beschreibung**
+Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer einen Tisch im Restaurant für ein bestimmtes Datum und eine bestimmte Uhrzeit reserviert.  
+-**GUI Mockup**
+(Hier würdest du ein Mockup einfügen, das den Reservierungsprozess zeigt, z.B. Auswahl eines Datums, Uhrzeit und Tischauswahl.)
+- **Ablauf von Events (Sequenzdiagramm)**
+```mermaid
+sequenceDiagram
+    Teilnehmer Benutzer
+    Teilnehmer System
+    Benutzer ->> System: Tisch auswählen
+    System ->> System: Verfügbarkeit prüfen
+    System ->> Benutzer: Verfügbare Zeiten anzeigen
+    Benutzer ->> System: Zeit und Datum auswählen
+    System ->> System: Reservierung speichern
+    System ->> Benutzer: Bestätigung anzeigen
+```
+- **Vorbedingungen**
+    Der Benutzer muss ein Konto erstellt und sich eingeloggt haben.
+    Es muss mindestens ein Tisch im Restaurant verfügbar sein.
+- **Nachbedingungen**
+    Die Reservierung ist erfolgreich in der Datenbank gespeichert.
+    Der Benutzer erhält eine Bestätigung per E-Mail oder im System.
+- **Spezielle Anforderungen**
+      Die Reservierungsbestätigung sollte innerhalb von 5 Sekunden angezeigt werden.
+     Das System muss sicherstellen, dass es keine Doppelbuchungen gibt.
+- **Aufwandsschätzung / Story Points**
+    Story Points: 8
+        Frontend: 3 Punkte
+        Backend: 5 Punkte (Verfügbarkeit prüfen, Reservierung speichern, Doppelbuchung verhindern)
+
 ### 3.2 Benutzbarkeit  
 ### 3.3 Zuverlässigkeit  
 ### 3.4 Leistung  
