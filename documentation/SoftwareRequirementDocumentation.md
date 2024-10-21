@@ -148,8 +148,11 @@ graph TD
 - Kontoerstellung: Sowohl Benutzer als auch Administratoren müssen ein Konto erstellen, um das System zu nutzen.
 
 ## 3. Spezifische Anforderungen  
+
 ### 3.1 Funktionalität  
+
 #### 3.1.1 Tisch reservieren
+
 - **Beschreibung**
 Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer einen Tisch im Restaurant für ein bestimmtes Datum und eine bestimmte Uhrzeit reserviert.  
 -**GUI Mockup**
@@ -179,6 +182,145 @@ sequenceDiagram
     Story Points: 8
         Frontend: 3 Punkte
         Backend: 5 Punkte (Verfügbarkeit prüfen, Reservierung speichern, Doppelbuchung verhindern)
+
+#### 3.1.1 Reservierung stornieren
+- **Beschreibung**
+Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer eine bestehende Tischreservierung stornieren kann. 
+-**GUI Mockup**
+(Hier würdest du ein Mockup einfügen, das die Möglichkeit zur Stornierung anzeigt, z.B. eine Liste der bestehenden Reservierungen mit einer „Stornieren“-Schaltfläche.)
+- **Ablauf von Events (Sequenzdiagramm)**
+```mermaid
+sequenceDiagram
+    Teilnehmer Benutzer
+    Teilnehmer System
+    Benutzer ->> System: Reservierung auswählen
+    System ->> Benutzer: Reservierungsdetails anzeigen
+    Benutzer ->> System: Stornierung bestätigen
+    System ->> System: Reservierung aus Datenbank entfernen
+    System ->> Benutzer: Stornierungsbestätigung anzeigen
+```
+- **Vorbedingungen**
+    Der Benutzer muss ein Konto erstellt und sich eingeloggt haben.
+   Eine bestehende Reservierung muss vorliegen.
+- **Nachbedingungen**
+    Die Reservierung ist erfolgreich aus der Datenbank entfernt.
+   Der Tisch ist wieder als verfügbar markiert.
+- **Spezielle Anforderungen**
+      DDie Stornierungsbestätigung sollte innerhalb von 3 Sekunden angezeigt werden.
+- **Aufwandsschätzung / Story Points**
+    Story Points: 5
+     Frontend: 2 Punkte
+     Backend: 3 Punkte (Reservierung löschen, Verfügbarkeiten aktualisieren)verhindern)
+
+#### 3.1.3 Konto erstellen
+- **Beschreibung**  
+Dieser Use Case beschreibt den Prozess, bei dem ein neuer Benutzer ein Konto im System erstellt, um Reservierungen vornehmen zu können.  
+- **GUI Mockup**  
+(Hier würdest du ein Mockup einfügen, das das Registrierungsformular zeigt, in dem der Benutzer seine Daten eingibt.)  
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    Teilnehmer Benutzer
+    Teilnehmer System
+    Benutzer ->> System: Registrierungsformular ausfüllen
+    System ->> System: Eingaben validieren
+    System ->> System: Benutzerkonto erstellen
+    System ->> Benutzer: Bestätigung anzeigen
+```
+- **Vorbedingungen**  
+    Der Benutzer darf kein bestehendes Konto haben.  
+- **Nachbedingungen**  
+    Das Benutzerkonto ist erfolgreich in der Datenbank gespeichert.  
+- **Spezielle Anforderungen**  
+    Eingaben müssen validiert werden (z.B. E-Mail-Format, Passwortstärke).  
+- **Aufwandsschätzung / Story Points**  
+    Story Points: 5  
+        Frontend: 2 Punkte  
+        Backend: 3 Punkte (Datenbankeintrag, Validierung)  
+
+#### 3.1.4 Feedback abgeben
+- **Beschreibung**  
+Dieser Use Case beschreibt den Prozess, bei dem ein Benutzer nach einer Reservierung Feedback zur Erfahrung im Restaurant abgeben kann.  
+- **GUI Mockup**  
+(Hier würdest du ein Mockup einfügen, das ein Feedback-Formular zeigt.)  
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    Teilnehmer Benutzer
+    Teilnehmer System
+    Benutzer ->> System: Feedback-Formular ausfüllen
+    System ->> System: Eingaben validieren
+    System ->> System: Feedback speichern
+    System ->> Benutzer: Bestätigung anzeigen
+```
+- **Vorbedingungen**  
+    Der Benutzer muss ein Konto erstellt und sich eingeloggt haben.  
+    Der Benutzer muss eine Reservierung vorgenommen haben, um Feedback zu geben.  
+- **Nachbedingungen**  
+    Das Feedback ist erfolgreich in der Datenbank gespeichert.  
+- **Spezielle Anforderungen**  
+    Eingaben müssen validiert werden.  
+- **Aufwandsschätzung / Story Points**  
+    Story Points: 3  
+        Frontend: 1 Punkt  
+        Backend: 2 Punkte (Feedback speichern)  
+
+#### 3.1.5 Tische verwalten
+- **Beschreibung**  
+Dieser Use Case beschreibt den Prozess, bei dem Administratoren Tische im System hinzufügen, bearbeiten oder löschen können.  
+- **GUI Mockup**  
+(Hier würdest du ein Mockup einfügen, das die Verwaltungsoberfläche für Tische zeigt.)  
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    Teilnehmer Administrator
+    Teilnehmer System
+    Administrator ->> System: Tisch hinzufügen/bearbeiten/löschen
+    System ->> System: Eingaben validieren
+    System ->> System: Änderungen speichern
+    System ->> Administrator: Bestätigung anzeigen
+```
+- **Vorbedingungen**  
+    Der Administrator muss ein Konto erstellt und sich eingeloggt haben.  
+- **Nachbedingungen**  
+    Die Änderungen sind erfolgreich in der Datenbank gespeichert.  
+- **Spezielle Anforderungen**  
+    Eingaben müssen validiert werden (z.B. Tischgröße, Kapazität).  
+- **Aufwandsschätzung / Story Points**  
+    Story Points: 6  
+        Frontend: 2 Punkte  
+        Backend: 4 Punkte (Tischverwaltung, Datenbankoperationen)  
+
+#### 3.1.6 Verfügbarkeiten einsehen
+- **Beschreibung**  
+Dieser Use Case beschreibt den Vorgang, bei dem Benutzer und Administratoren die verfügbaren Tische und deren Reservierungen einsehen können.  
+- **GUI Mockup**  
+(Hier würdest du ein Mockup einfügen, das eine Übersicht der verfügbaren Tische zeigt.)  
+- **Ablauf von Events (Sequenzdiagramm)**  
+```mermaid
+sequenceDiagram
+    Teilnehmer Benutzer
+    Teilnehmer System
+    Benutzer ->> System: Verfügbarkeiten anfragen
+    System ->> System: Daten abrufen
+    System ->> Benutzer: Verfügbare Tische anzeigen
+```
+- **Vorbedingungen**  
+    Der Benutzer muss kein Konto haben, um die Verfügbarkeiten einzusehen.  
+- **Nachbedingungen**  
+    Die verfügbaren Tische werden dem Benutzer angezeigt.  
+- **Spezielle Anforderungen**  
+    Die Abfrage sollte in weniger als 3 Sekunden erfolgen.  
+- **Aufwandsschätzung / Story Points**  
+    Story Points: 4  
+        Frontend: 2 Punkte  
+        Backend: 2 Punkte (Daten abrufen)  
+
+
+
+
+
+
 
 ### 3.2 Benutzbarkeit  
 ### 3.3 Zuverlässigkeit  
