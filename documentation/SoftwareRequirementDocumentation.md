@@ -8,6 +8,13 @@
    1.4 [Referenzen](#14-referenzen)  
    1.5 [Überblick](#15-überblick)  
 2. [Gesamtbeschreibung](#2-gesamtbeschreibung)  
+   2.1 [Produktperspektive](#21-produktperspektive)  
+   2.2 [Produktfunktionen](#22-produktfunktionen)  
+   2.3 [Benutzermerkmale](#23-benutzermerkmale)  
+   2.4 [Einschränkungen](#24-einschränkungen)  
+   2.5 [Annahmen und Abhängigkeiten](#25-annahmen-und-abhängigkeiten)  
+   2.6 [Anforderungen der Teilmengen](#26-anforderungen-der-teilmengen)  
+   2.7 [Use Case Diagramm](#27-use-case-diagramm)  
 3. [Spezifische Anforderungen](#3-spezifische-anforderungen)  
    3.1 [Funktionalität](#31-funktionalität)  
    3.2 [Benutzbarkeit](#32-benutzbarkeit)  
@@ -103,7 +110,7 @@ Es gibt zwei Hauptakteure, die das System nutzen:
 - **Hardware-Abhängigkeiten:** Es wird davon ausgegangen, dass sowohl die Benutzer als auch die Administratoren über Endgeräte (PCs, Tablets, Smartphones) verfügen, die einen modernen Webbrowser unterstützen.
 - **Zukunftssicherheit:** Das System sollte so entwickelt werden, dass es in Zukunft leicht um zusätzliche Funktionen erweitert werden kann, z. B. die Integration eines Zahlungssystems oder einer mobilen App.
 
-### 2.6 Anforderungen -Teilmengen
+### 2.6 Anforderungen der Teilmengen
 Das System umfasst verschiedene Teilmengen von Anforderungen:
 - **Kernanforderungen:** Diese betreffen die grundlegenden Funktionen wie die Reservierung und die Verwaltung von Tischen.
 - **Erweiterte Anforderungen:** Dazu gehören Funktionen wie Feedback, Benachrichtigungen und mögliche zukünftige Erweiterungen.
