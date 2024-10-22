@@ -1,13 +1,13 @@
 ```mermaid
 ---
-title: Reservierung einsehen
+title: Tischreservierung einsehen
 ---
 stateDiagram
-    state if_state <<choice>>
-    [*] --> TischAnklicken: start
-    TischAnklicken --> LeseRechtePrüfen
-    LeseRechtePrüfen --> if_state
-    if_state --> TischInfoAnzeigen: Nutzer hat Leseberechtigung
-    if_state --> InfoAnzeigen: Nutzer hat keine Leseberechtigung
-    TischInfoAnzeigen --> [*]: Name, Email anzeigen
-    InfoAnzeigen --> [*]: Tisch ist reserviert
+    state Entscheidung <<choice>>
+    [*] --> TischAnklicken: Start
+    BelegtenTischAnklicken --> LeseRechtePrüfen: Tisch ausgewählt
+    LeseRechtePrüfen --> Entscheidung: Lese-Rechte prüfen
+    Entscheidung --> TischInfoAnzeigen: Leseberechtigung vorhanden
+    Entscheidung --> InfoAnzeigen: Keine Leseberechtigung
+    TischInfoAnzeigen --> [*]: Name und E-Mail anzeigen
+    InfoAnzeigen --> [*]: Tisch ist reserviert, keine weiteren Details
