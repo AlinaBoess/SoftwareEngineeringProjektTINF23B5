@@ -1,6 +1,6 @@
 ```mermaid
 ---
-title: Zustandsdiagramm Anmeldevorgang Webseite
+title: Anmeldevorgang Webseite
 ---
 stateDiagram
     [*] --> EingabeAnmeldedaten: Start
