@@ -4,7 +4,7 @@ title: Tischreservierung einsehen
 ---
 stateDiagram
     state Entscheidung <<choice>>
-    [*] --> TischAnklicken: Start
+    [*] --> BelegtenTischAnklicken: Start
     BelegtenTischAnklicken --> LeseRechtePrüfen: Tisch ausgewählt
     LeseRechtePrüfen --> Entscheidung: Lese-Rechte prüfen
     Entscheidung --> TischInfoAnzeigen: Leseberechtigung vorhanden
