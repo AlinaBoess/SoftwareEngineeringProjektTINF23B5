@@ -192,7 +192,7 @@ Bis Juni möchten wir die folgenden Administratorfunktionen implementieren:
 Dieser Use Case beschreibt den Vorgang, bei dem ein Benutzer sich in das Restaurantbuchungssystem einloggt, um auf die Funktionen des Systems zugreifen zu können. Der Benutzer gibt seine Anmeldedaten ein und erhält bei erfolgreicher Anmeldung Zugriff auf seine Reservierungen und weitere Funktionen.
 
 - **GUI Mockup**  
-![Alt-Text](GUI-Mockup-login.png)
+![LoginMockup](../SRS/Bilder/GUI-Mockup-login.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -231,7 +231,7 @@ sequenceDiagram
 Dieser Use Case beschreibt den Vorgang, bei dem ein neuer Benutzer ein Konto im Restaurantbuchungssystem erstellt. Der Benutzer gibt persönliche Informationen wie Name, E-Mail und Passwort ein, um ein neues Benutzerprofil anzulegen und Zugang zu den Funktionen des Systems zu erhalten.
 
 - **GUI Mockup**  
-![Alt-Text](GUI-Mockup-register.png)
+![RegisterMockup](../SRS/Bilder/GUI-Mockup-register.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -270,7 +270,7 @@ sequenceDiagram
 Benutzer können einen verfügbaren Tisch für ein gewünschtes Datum und eine Uhrzeit reservieren. Dieser Vorgang beinhaltet die Auswahl des gewünschten Tisches sowie die Eingabe von persönlichen Informationen für die Reservierung.
 
 - **GUI Mockup**  
-![Alt-Text](GUI Mockup.png)
+![GUI-Mockup](../SRS/Bilder/GUI Mockup.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -309,7 +309,7 @@ sequenceDiagram
 Nach erfolgreicher Reservierung erhält der Benutzer eine Bestätigung seiner Reservierung in Form eines Pop-ups. Dieses Pop-up enthält wichtige Informationen wie das Datum, die Uhrzeit, den reservierten Tisch und eventuelle spezielle Anmerkungen.
 
 - **GUI Mockup**  
-![Alt-Text](GUI-Mockup-notification.png)
+![NotificationMockup](../SRS/Bilder/GUI-Mockup-notification.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -342,7 +342,7 @@ sequenceDiagram
 Benutzer haben die Möglichkeit, ihre Reservierungen zu stornieren, falls erforderlich. Dieser Vorgang ermöglicht es den Benutzern, ihre Buchungen zu ändern, wenn sich ihre Pläne ändern.
 
 - **GUI Mockup**  
-![Alt-Text](GUI-Mockup-table.png)
+![MockupTable](../SRS/Bilder/GUI-Mockup-table.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -410,7 +410,7 @@ sequenceDiagram
 Benutzer können alle ihre bisherigen und zukünftigen Reservierungen einsehen und verwalten. Dies ermöglicht es ihnen, Reservierungen zu überprüfen, Änderungen vorzunehmen oder Stornierungen vorzunehmen.
 
 - **GUI Mockup**  
-![Alt-Text](GUI-Mockup-table.png)
+![TableMockup](../SRS/Bilder/GUI-Mockup-table.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -443,7 +443,7 @@ sequenceDiagram
 Administratoren können sich in das System einloggen, um Zugriff auf ihre Verwaltungsfunktionen zu erhalten. Dies ermöglicht es ihnen, Reservierungen zu verwalten und wichtige Systeminformationen einzusehen.
 
 - **GUI Mockup**  
-![Alt-Text](GUI-Mockup-login.png)
+![LoginMockup](../SRS/Bilder/GUI-Mockup-login.png)
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
