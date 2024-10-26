@@ -121,7 +121,7 @@ Das System umfasst verschiedene Teilmengen von Anforderungen:
 - **Sicherheitsanforderungen:** Diese Anforderungen sind entscheidend für den Schutz der Benutzerdaten. Sie umfassen die Einhaltung von Datenschutzrichtlinien wie der DSGVO sowie Maßnahmen zur Sicherstellung der Datensicherheit.
   
 ### 2.7 Use Case Diagramm
-![Use Case Diagramm](../Bilder/UseCaseDiagramm.png)
+![Use Case Diagramm](../SRS/Bilder/UseCaseDiagramm.png)
 
 #### Funktionen für Benutzer (3. Semester)
 1. **Anmelden:**  
