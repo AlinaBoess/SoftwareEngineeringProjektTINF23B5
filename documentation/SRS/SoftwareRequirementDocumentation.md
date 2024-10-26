@@ -583,7 +583,7 @@ sequenceDiagram
 - **Beschreibung**  
 Die Benutzeroberfläche muss intuitiv und benutzerfreundlich gestaltet sein, um eine einfache Navigation und Nutzung des Systems zu ermöglichen.  
 - **GUI Mockup**  
-![Alt-Text](GUI-Mockup.png)
+![GuiMockup](../SRS/Bilder/GUI-Mockup.png)
 - **Spezielle Anforderungen**  
     - Die Schriftgröße sollte anpassbar sein, um die Lesbarkeit zu verbessern.  
     - Die Anwendung muss auf verschiedenen Bildschirmgrößen (PC, Tablet, Smartphone) responsiv sein.  
