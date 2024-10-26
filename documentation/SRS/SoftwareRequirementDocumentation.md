@@ -121,22 +121,8 @@ Das System umfasst verschiedene Teilmengen von Anforderungen:
 - **Sicherheitsanforderungen:** Diese Anforderungen sind entscheidend für den Schutz der Benutzerdaten. Sie umfassen die Einhaltung von Datenschutzrichtlinien wie der DSGVO sowie Maßnahmen zur Sicherstellung der Datensicherheit.
   
 ### 2.7 Use Case Diagramm
-```mermaid
-graph TD
-    subgraph Benutzer 3
-        A[Anmelden] --> B[Verfügbare Reservierungen anzeigen]
-        B --> C[Tisch reservieren]
-        C --> D[Reservierungsbestätigung]
-        B --> E[Reservierung stornieren]
-        B --> F[Reservierungsübersicht]
-        F --> G[Feedback abgeben]
-    end
+![Use Case Diagramm](../Bilder/UseCaseDiagramm.png)
 
-    subgraph Administrator 4
-        H[Anmelden] --> I[Reservierungen einsehen]
-        I --> J[Tischverwaltung]
-    end
-```
 #### Funktionen für Benutzer (3. Semester)
 1. **Anmelden:**  
    Der Benutzer gibt seine Zugangsdaten ein, um auf das System zuzugreifen.
