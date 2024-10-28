@@ -32,11 +32,11 @@ Des Weiteren haben wir ein [UCRS](../documentation/SRS/UCRS.md) erstellt, welche
 
 ## Software Requirement Specification (SRS)
 
-Unser im letzten Blog-Post vorgestelltes [SRS](../documentation/SoftwareRequirementDocumentation.md) könnt ihr euch ebenfalls gerne nochmals anschauen.
+Unser im letzten Blog-Post vorgestelltes [SRS](../documentation/SRS/SoftwareRequirementDocumentation.md) könnt ihr euch ebenfalls gerne nochmals anschauen.
 
 
 
-## sonstige Aufgaben
+## Sonstige Aufgaben
 Ansonsten haben wir uns noch hiermit beschäftigt:
 - Weiterführende Strukturierung unseres GitHub Repositorys
 - Detailliertere Organisation des Projektes in unserem Jira
