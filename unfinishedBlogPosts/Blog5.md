@@ -15,9 +15,9 @@ Hier seht ihr die ersten Einblicke in unsere Benutzeroberfläche und die Registr
 
 Die Entwicklung der Funktion wurde wie folgt aufgeteilt:
 
-- **XXX und XXX (Backend)**: Entwicklung der Registrierungsmethoden und Authentifizierung sowie die Implementierung einer Speicherung für Benutzerinformationen.
-- **XXX und XXX (Frontend)**: Gestaltung und Umsetzung der Registrierungs- und Anmeldeformulare sowie die Benutzerführung.
-- **XXX (Integration und Tests)**: Zusammenführung von Frontend und Backend, Debugging und End-to-End-Tests, um sicherzustellen, dass die Registrierung und Anmeldung fehlerfrei funktionieren.
+- **Lukas und Alex (Backend)**: Entwicklung der Registrierungsmethoden und Authentifizierung sowie die Implementierung einer Speicherung für Benutzerinformationen.
+- **Alina und Yahya (Frontend)**: Gestaltung und Umsetzung der Registrierungs- und Anmeldeformulare sowie die Benutzerführung.
+- **Moumen (Datnebanken)**: ...
 
 ### Technische Herausforderungen und Erkenntnisse
 
