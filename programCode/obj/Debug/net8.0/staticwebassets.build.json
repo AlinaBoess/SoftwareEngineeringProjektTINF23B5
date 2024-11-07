@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "5WVTcoZjMul5vmxOK9ldTQp3hQi87RLvoLwvfWN8GcA=",
+  "Source": "RestaurantReservierung",
+  "BasePath": "_content/RestaurantReservierung",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
