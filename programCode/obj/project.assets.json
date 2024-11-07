@@ -428,19 +428,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\unlqvt\\.nuget\\packages\\": {}
+    "C:\\Users\\alexf\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\RestaurantReservierung.csproj",
+      "projectUniqueName": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
       "projectName": "RestaurantReservierung",
-      "projectPath": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\RestaurantReservierung.csproj",
-      "packagesPath": "C:\\Users\\unlqvt\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\obj\\",
+      "projectPath": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
+      "packagesPath": "C:\\Users\\alexf\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\unlqvt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\alexf\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

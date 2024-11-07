@@ -132,6 +132,7 @@ namespace RestaurantReservierung
     public enum TableAttributes
     {
         ROUND = 0,
-        SQUARE = 1
+        SQUARE = 1,
+        STANDING = 2,
     }
 }
