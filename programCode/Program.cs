@@ -17,6 +17,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); // To Use HTML and other static thiings.
 
 app.UseAuthorization();
 

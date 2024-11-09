@@ -434,11 +434,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alina\\RiderProjects\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
+      "projectUniqueName": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
       "projectName": "RestaurantReservierung",
-      "projectPath": "C:\\Users\\alina\\RiderProjects\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
+      "projectPath": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
       "packagesPath": "C:\\Users\\alina\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alina\\RiderProjects\\SoftwareEngineeringProjektTINF23B5\\programCode\\obj\\",
+      "outputPath": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
