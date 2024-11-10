@@ -14,14 +14,14 @@ async function fetchData(e) {
 
             const table = document.createElement("table");
             const headerRow = document.createElement("tr");
-            headerRow.innerHTML = '<th>Table ID</th><th>Seats</th><th>Attributes</th>';
+            headerRow.innerHTML = '<th>Restaurant</th><th>Adresse</th><th>Raum</th><th>Tisch</th><th>Plaetze</th>';
             table.appendChild(headerRow);
 
             data.forEach(restaurant => {
                 restaurant.rooms.forEach(room => {
                     room.tables.forEach(tableData => {
                         const row = document.createElement("tr");
-                        row.innerHTML = `<td>${tableData.id}</td><td>${tableData.seats}</td><td>${tableData.attributes}</td>`;
+                        row.innerHTML = `<td>${restaurant.name}</td><td>${restaurant.address}</td><td>${room.roomNumber}</td><td>${tableData.tableID}</td><td>${tableData.chairs}</td>`;
                         table.appendChild(row);
                     });
                 });
