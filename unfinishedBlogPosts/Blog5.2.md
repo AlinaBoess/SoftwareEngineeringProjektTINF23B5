@@ -9,9 +9,9 @@ In dieser Woche haben wir die **API-Schnittstellen** mit ASP.NET erstellt und mi
 
 Natürlich handelt es sich hierbei um eine erste Demo, die noch nicht endgültig ist. Es werden sich noch viele Dinge ändern und verbessern, aber die Grundfunktionalität steht bereits. Hier seht ihr die ersten Einblicke:
 
-* **Screenshot 1**: Übersicht der geladenen Restaurants mit Adressen und Tischen.
-* **Screenshot 2**: Detailansicht eines bestimmten Restaurants und seiner verfügbaren Tische.
-
+* **Screenshot 1**: Erste Übersicht.
+* **Screenshot 2**: Übersicht der geladenen Restaurants mit Adressen und Tischen.
+  
 ### Zusammenfassung der Entwicklung
 
 Die Entwicklung der Demo-Webanwendung und der API-Schnittstellen wurde wie folgt aufgeteilt:
