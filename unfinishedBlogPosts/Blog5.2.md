@@ -1,4 +1,4 @@
-ˋˋˋmermaid
+
 # Fünfter Blogeintrag - Fortschritt der letzten Woche
 
 Schön, dass ihr es wieder zu uns geschafft habt :) In dieser Woche konnten wir einige bedeutende Fortschritte in unserem Projekt machen. Besonders stolz sind wir darauf, die erste Demo unserer Webanwendung präsentiert zu haben und mit der Datenbankstruktur einen wichtigen Schritt in der Entwicklung getan zu haben.
