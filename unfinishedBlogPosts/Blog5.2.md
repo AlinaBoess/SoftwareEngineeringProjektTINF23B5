@@ -7,7 +7,7 @@ Schön, dass ihr es wieder zu uns geschafft habt :) In dieser Woche konnten wir 
 
 In dieser Woche haben wir die **API-Schnittstellen** mit ASP.NET erstellt und miteinander verknüpft. Dadurch konnten wir eine erste Demo-Webanwendung entwickeln, die es ermöglicht, nach dem Betätigen eines Buttons eine Tabelle mit den aktuellen Daten der Restaurants zu laden. In dieser Tabelle sind die jeweiligen Adressen und die Tische mit den zugehörigen Plätzen sichtbar.
 
-Natürlich handelt es sich hierbei um eine erste Demo, die noch nicht endgültig ist. Es werden sich noch viele Dinge ändern und verbessern, aber die Grundfunktionalität steht bereits. Hier seht ihr die ersten Einblicke:
+Natürlich handelt es sich hierbei um eine erste Demo, die noch nicht endgültig ist. Es werden sich noch einige Dinge ändern, aber hier seht ihr die ersten Einblicke:
 
 * **Screenshot 1**: Erste Übersicht.
   <img width="941" alt="SE erste Demo - Tische laden" src="https://github.com/user-attachments/assets/7c487a9d-1140-4294-a04a-8cdeff540bd5">
