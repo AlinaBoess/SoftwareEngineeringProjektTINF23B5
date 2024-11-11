@@ -10,8 +10,11 @@ In dieser Woche haben wir die **API-Schnittstellen** mit ASP.NET erstellt und mi
 Natürlich handelt es sich hierbei um eine erste Demo, die noch nicht endgültig ist. Es werden sich noch viele Dinge ändern und verbessern, aber die Grundfunktionalität steht bereits. Hier seht ihr die ersten Einblicke:
 
 * **Screenshot 1**: Erste Übersicht.
+  <img width="941" alt="SE erste Demo - Tische laden" src="https://github.com/user-attachments/assets/7c487a9d-1140-4294-a04a-8cdeff540bd5">
+
 * **Screenshot 2**: Übersicht der geladenen Restaurants mit Adressen und Tischen.
-  
+  <img width="932" alt="SE erste Demo - Tabelle mit Tischen" src="https://github.com/user-attachments/assets/5df11df4-1823-43a0-b9d6-167405ea9cc9">
+
 ### Zusammenfassung der Entwicklung
 
 Die Entwicklung der Demo-Webanwendung und der API-Schnittstellen wurde wie folgt aufgeteilt:
@@ -25,9 +28,6 @@ Die Entwicklung der Demo-Webanwendung und der API-Schnittstellen wurde wie folgt
 Während der Entwicklung sind wir auf einige technische Herausforderungen gestoßen:
 
 - **Integration der API mit der Frontend-Oberfläche**: Es war eine Herausforderung, die Daten korrekt zwischen der Backend-API und dem Frontend auszutauschen und anzuzeigen.
-- **Optimierung der Ladegeschwindigkeit**: Da die Daten in Echtzeit abgerufen werden, mussten wir sicherstellen, dass die Webanwendung auch bei größeren Datenmengen schnell reagiert.
-
-Diese Erfahrungen haben uns geholfen, das Zusammenspiel von Frontend, Backend und der Datenbank besser zu verstehen und uns auf die kommenden Entwicklungsphasen vorzubereiten.
 
 ## Datenbankstruktur
 
