@@ -428,24 +428,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\alina\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\unlqvt\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
+      "projectUniqueName": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\RestaurantReservierung.csproj",
       "projectName": "RestaurantReservierung",
-      "projectPath": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
-      "packagesPath": "C:\\Users\\alina\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\obj\\",
+      "projectPath": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\RestaurantReservierung.csproj",
+      "packagesPath": "C:\\Users\\unlqvt\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\alina\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\unlqvt\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
