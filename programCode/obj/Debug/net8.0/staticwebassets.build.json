@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "+9VTacPVnJ7Z//bUaQ3PRf6HVxxLaEgcPYziN1NNIjA=",
+  "Hash": "YxglVV88ryjg+PylScCvNAedzYmzNeo5qtOTgA+sCe8=",
   "Source": "RestaurantReservierung",
   "BasePath": "_content/RestaurantReservierung",
   "Mode": "Default",
@@ -10,7 +10,7 @@
     {
       "Name": "RestaurantReservierung\\wwwroot",
       "Source": "RestaurantReservierung",
-      "ContentRoot": "C:\\Users\\alina\\source\\repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
       "BasePath": "_content/RestaurantReservierung",
       "Pattern": "**"
     }
@@ -20,7 +20,7 @@
       "Identity": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\index.html",
       "SourceId": "RestaurantReservierung",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\alina\\source\\repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
       "BasePath": "_content/RestaurantReservierung",
       "RelativePath": "index.html",
       "AssetKind": "All",
@@ -39,7 +39,7 @@
       "Identity": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\scripts.js",
       "SourceId": "RestaurantReservierung",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\alina\\source\\repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
       "BasePath": "_content/RestaurantReservierung",
       "RelativePath": "scripts.js",
       "AssetKind": "All",
@@ -58,7 +58,7 @@
       "Identity": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\styles.css",
       "SourceId": "RestaurantReservierung",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\alina\\source\\repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
       "BasePath": "_content/RestaurantReservierung",
       "RelativePath": "styles.css",
       "AssetKind": "All",
