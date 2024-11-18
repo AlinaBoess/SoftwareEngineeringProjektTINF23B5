@@ -401,3 +401,9 @@ FodyWeavers.xsd
 
 #visual Studio
 *.vsidx
+
+# Ignoriere Build-Dateien
+programCode/obj/
+*.cache
+*.AssemblyInfo.cs
+*.editorconfig
