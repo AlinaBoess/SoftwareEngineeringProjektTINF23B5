@@ -1,20 +1,23 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservierung.Services;
 using System.Collections.Immutable;
 
 namespace RestaurantReservierung.Controllers
 {
+    [Authorize]  
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationController : ControllerBase
     {
-        ReservationSystem reservationSystem;
+        private readonly ReservationSystem _reservationSystem;
        
 
-        public ReservationController()
+        public ReservationController(ReservationSystem reservationSystem)
         {
             // Initialisiere das ReservationSystem im Konstruktor
-            reservationSystem = new ReservationSystem();
+            _reservationSystem = reservationSystem;
             
         }
 
@@ -52,11 +55,11 @@ namespace RestaurantReservierung.Controllers
             roomList.Add(new Room(200, tableList2));
 
 
-            reservationSystem.AddRestaurant(new Restaurant("DHBW Kantine", "da bei Ardenauer Ring", new RestaurantOwner("Markus", "Strand", "markus.strand@dhbw-karlsruhe.de", "1234"), roomList));
-            reservationSystem.AddRestaurant(new Restaurant("Mid Dönerladen neben DHBW", "nähe Kindergarten", new RestaurantOwner("Habibi", "Hammud", "hamud.habibi@mail.de", "adfsadf"), roomList2));     
-            reservationSystem.AddRestaurant(new Restaurant("Mr. Meal", "Gegenüber von KFC", new RestaurantOwner("MR", "Meal", "mr.meal@dönerladen.de", "ppp"), roomList3));
+            _reservationSystem.AddRestaurant(new Restaurant("DHBW Kantine", "da bei Ardenauer Ring", new RestaurantOwner("Markus", "Strand", "markus.strand@dhbw-karlsruhe.de", "1234"), roomList));
+            _reservationSystem.AddRestaurant(new Restaurant("Mid Dönerladen neben DHBW", "nähe Kindergarten", new RestaurantOwner("Habibi", "Hammud", "hamud.habibi@mail.de", "adfsadf"), roomList2));     
+            _reservationSystem.AddRestaurant(new Restaurant("Mr. Meal", "Gegenüber von KFC", new RestaurantOwner("MR", "Meal", "mr.meal@dönerladen.de", "ppp"), roomList3));
 
-            return Ok(reservationSystem.Restaurants);
+            return Ok(_reservationSystem.Restaurants);
         }
     }
 }
