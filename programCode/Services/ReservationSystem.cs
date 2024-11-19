@@ -1,4 +1,4 @@
-﻿namespace RestaurantReservierung
+﻿namespace RestaurantReservierung.Services
 {
     public class ReservationSystem
     {

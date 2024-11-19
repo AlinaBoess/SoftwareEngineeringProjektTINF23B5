@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj": {}
+    "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj": {
+    "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
+        "projectUniqueName": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
         "projectName": "RestaurantReservierung",
-        "projectPath": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
-        "packagesPath": "C:\\Users\\alina\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alina\\Source\\Repos\\AlinaBoess\\SoftwareEngineeringProjektTINF23B5\\programCode\\obj\\",
+        "projectPath": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\RestaurantReservierung.csproj",
+        "packagesPath": "C:\\Users\\alexf\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\alina\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\alexf\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -50,9 +46,17 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.4.0, )"
+              "version": "[7.0.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.2.1, )"
             }
           },
           "imports": [

@@ -99,3 +99,12 @@ C:\Users\alina\Source\Repos\AlinaBoess\SoftwareEngineeringProjektTINF23B5\progra
 C:\Users\alina\Source\Repos\AlinaBoess\SoftwareEngineeringProjektTINF23B5\programCode\obj\Debug\net8.0\RestaurantReservierung.pdb
 C:\Users\alina\Source\Repos\AlinaBoess\SoftwareEngineeringProjektTINF23B5\programCode\obj\Debug\net8.0\RestaurantReservierung.genruntimeconfig.cache
 C:\Users\alina\Source\Repos\AlinaBoess\SoftwareEngineeringProjektTINF23B5\programCode\obj\Debug\net8.0\ref\RestaurantReservierung.dll
+C:\Users\alexf\Source\Repos\SoftwareEngineeringProjektTINF23B5\programCode\bin\Debug\net8.0\RestaurantReservierung.staticwebassets.runtime.json
+C:\Users\alexf\Source\Repos\SoftwareEngineeringProjektTINF23B5\programCode\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\alexf\Source\Repos\SoftwareEngineeringProjektTINF23B5\programCode\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\alexf\Source\Repos\SoftwareEngineeringProjektTINF23B5\programCode\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\alexf\Source\Repos\SoftwareEngineeringProjektTINF23B5\programCode\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\alexf\Source\Repos\SoftwareEngineeringProjektTINF23B5\programCode\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\alexf\Source\Repos\SoftwareEngineeringProjektTINF23B5\programCode\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\alexf\Source\Repos\SoftwareEngineeringProjektTINF23B5\programCode\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\alexf\Source\Repos\SoftwareEngineeringProjektTINF23B5\programCode\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

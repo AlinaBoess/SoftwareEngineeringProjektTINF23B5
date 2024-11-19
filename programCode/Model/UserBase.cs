@@ -12,6 +12,7 @@ namespace RestaurantReservierung
         string lastName;
         string email;
         string passwordHash;
+        string password;
 
 
         /// <summary>
@@ -22,6 +23,7 @@ namespace RestaurantReservierung
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
+            this.password = password;
 
             //get raw bytes of password string
             byte[] raw = System.Text.Encoding.UTF8.GetBytes(password);
@@ -33,26 +35,7 @@ namespace RestaurantReservierung
             this.passwordHash = Convert.ToHexString(result).ToLower();
         }
 
-        /// <summary>
-        /// Checks if the provided password matches the password of the current User object.
-        /// Call this when processing login attempts.
-        /// </summary>
-        public bool isCorrectPassword(string password)
-        {
-            //get raw bytes of password string
-            byte[] raw = System.Text.Encoding.UTF8.GetBytes(password);
-
-            //hash password using SHA256
-            byte[] result = System.Security.Cryptography.SHA256.HashData(raw);
-
-            //construct string of hashed password for easier matching
-            string providedPasswordHash = Convert.ToHexString(result).ToLower();
-
-            //Note: Strings are primitive data types in C#, therefore the '==' operator will compare the
-            //actual values in them against each other, instead of the references of the two string objects
-            return providedPasswordHash == passwordHash;
-        }
-
+        
 
         public string FirstName
         {
@@ -77,5 +60,13 @@ namespace RestaurantReservierung
             get { return passwordHash; }
             set { passwordHash = value; }
         }
+
+        public string Password
+        {
+            get { return password; }
+            set { password = value; }
+        }
+
+
     }
 }
