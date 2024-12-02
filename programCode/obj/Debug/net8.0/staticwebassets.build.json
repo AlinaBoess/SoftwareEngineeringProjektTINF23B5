@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "h6gOsk0Al2n3w3FnkeMlFA5khh1GN+tIMjaaWlu1hTM=",
+  "Hash": "z5yHrjoxbvQmjoy/+eqLFNvHjIvmpEHDJHaBuG349vk=",
   "Source": "RestaurantReservierung",
   "BasePath": "_content/RestaurantReservierung",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "RestaurantReservierung\\wwwroot",
       "Source": "RestaurantReservierung",
-      "ContentRoot": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\",
       "BasePath": "_content/RestaurantReservierung",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\index.html",
+      "Identity": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\index.html",
       "SourceId": "RestaurantReservierung",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\",
       "BasePath": "_content/RestaurantReservierung",
       "RelativePath": "index.html",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\index.html"
     },
     {
-      "Identity": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\login.html",
+      "Identity": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\login.html",
       "SourceId": "RestaurantReservierung",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\",
       "BasePath": "_content/RestaurantReservierung",
       "RelativePath": "login.html",
       "AssetKind": "All",
@@ -55,10 +55,10 @@
       "OriginalItemSpec": "wwwroot\\login.html"
     },
     {
-      "Identity": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\login.js",
+      "Identity": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\login.js",
       "SourceId": "RestaurantReservierung",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\",
       "BasePath": "_content/RestaurantReservierung",
       "RelativePath": "login.js",
       "AssetKind": "All",
@@ -74,10 +74,10 @@
       "OriginalItemSpec": "wwwroot\\login.js"
     },
     {
-      "Identity": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\scripts.js",
+      "Identity": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\scripts.js",
       "SourceId": "RestaurantReservierung",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\",
       "BasePath": "_content/RestaurantReservierung",
       "RelativePath": "scripts.js",
       "AssetKind": "All",
@@ -93,10 +93,10 @@
       "OriginalItemSpec": "wwwroot\\scripts.js"
     },
     {
-      "Identity": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\styles.css",
+      "Identity": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\styles.css",
       "SourceId": "RestaurantReservierung",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\alexf\\Source\\Repos\\SoftwareEngineeringProjektTINF23B5\\programCode\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\unlqvt\\Desktop\\unlqvt\\.Lukas\\.Karlsruhe\\.Kurse\\Software Engineering\\cs project\\RestaurantReservierung\\programCode\\wwwroot\\",
       "BasePath": "_content/RestaurantReservierung",
       "RelativePath": "styles.css",
       "AssetKind": "All",
