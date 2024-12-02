@@ -51,7 +51,7 @@ Beschreibt die gewählte Darstellungsform der Softwarearchitektur (z. B. MVC, MV
 ## 3. Ziele und Einschränkungen der Architektur
 Definiert die architektonischen Hauptziele, Anforderungen und Beschränkungen, z. B. in Bezug auf Sicherheit, Skalierbarkeit, Portabilität oder die Nutzung bestehender Technologien.
 
-# Architektonische Ziele
+### Architektonische Ziele
 
 Die Softwareanforderungen und -ziele:
 
@@ -61,7 +61,7 @@ Die Softwareanforderungen und -ziele:
 - **Portabilität**: Sicherstellung, dass die Webanwendung auf verschiedenen Geräten (Desktop, Tablet, Smartphone) einwandfrei funktioniert.
 - **Verfügbarkeit**: Gewährleistung einer Systemverfügbarkeit von mindestens 99,5 %, auch bei hohen Nutzerzahlen.
 
-# Einschränkungen
+### Einschränkungen
 
 Die spezielle Bedingungen und Beschränkungen, die sich auf das Design und die Implementierung auswirken:
 
