@@ -300,3 +300,22 @@ Sicherheit
 Das geplante Feedback-System und das klare Design der Benutzeroberfläche zielen darauf ab, die Benutzerfreundlichkeit zu verbessern. Der Datenschutz wird zwar nicht explizit erwähnt, aber die Verwendung moderner Frameworks lässt vermuten, dass das Projekt den sicheren Umgang mit Benutzerdaten effektiv einbeziehen kann.
 
 Diese Merkmale stehen im Einklang mit dem Ansatz unseres Teams zur iterativen Entwicklung und heben besonders die Adaptierbarkeit, Sicherheit und Effizienz des bestehenden Systems durch dessen Lebenszyklus hervor.
+
+# Architektonische Ziele
+
+Die Softwareanforderungen und -ziele:
+
+- **Sicherheit**: Schutz sensibler Benutzer- und Reservierungsdaten vor unbefugtem Zugriff.
+- **Datenschutz**: Einhaltung von Datenschutzrichtlinien, um Benutzerdaten vertraulich und sicher zu behandeln.
+- **Wiederverwendbarkeit**: Modularer Aufbau der Architektur, um zukünftige Erweiterungen wie Zahlungsintegrationen zu ermöglichen.
+- **Portabilität**: Sicherstellung, dass die Webanwendung auf verschiedenen Geräten (Desktop, Tablet, Smartphone) einwandfrei funktioniert.
+- **Verfügbarkeit**: Gewährleistung einer Systemverfügbarkeit von mindestens 99,5 %, auch bei hohen Nutzerzahlen.
+
+# Einschränkungen
+
+Die spezielle Bedingungen und Beschränkungen, die sich auf das Design und die Implementierung auswirken:
+
+- **Entwicklungstools**: Nutzung von Visual Studio, ASP.NET Core und SQL-Datenbanken als feste technologische Grundlage.
+- **Teamstruktur und Zeitplan**: Umsetzung des Projekts durch ein kleines Entwicklerteam mit einem engen Zeitrahmen und begrenzten Ressourcen.
+- **Legacy Code**: Integration bestehender Komponenten und Anpassung an neue Anforderungen.
+- **Verteilung**: Sicherstellung einer effizienten Datenverteilung zwischen Frontend und Backend.
