@@ -35,8 +35,9 @@ Das Komponentendiagramm zeigt die wichtigsten Bestandteile des **Restaurant-Tisc
 ---
 
 ## Komponentendiagramm in Mermaid
-```mermaid
+![Komponentendiagramm](https://github.com/user-attachments/assets/86d87b2a-62b0-49a5-b4c2-6f8776575214)
 
+```mermaid
 graph LR
     Frontend["Frontend\n(Web Interface)"] --> API["API\n(Restful Endpoints)"]
     API --> Backend["Backend\n(Server Logik)"]
