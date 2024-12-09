@@ -2,21 +2,27 @@
 <html lang="de">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login und Anmeldung</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="login.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" />
 </head>
-<body>
-    <h2>Login</h2>
-    <form id="loginForm">
-        <label for="email">Email</label>
-        <input type="email" id="email" />
-        <br />
-        <label for=" password">Passwort</label>
-        <input type="password" id="password" />
-        <br />
-        <button id="supmitLogin" type="submit">Login</button>
-    </form>
-    <button id="newAccount">Noch keinen Account? Klicke hier um einen zu erstellen!</button>
+<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%;">
+        <h2 class="text-center">Login</h2>
+        <form id="loginForm">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="Geben Sie Ihre Email ein" required />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Passwort</label>
+                <input type="password" id="password" class="form-control" placeholder="Passwort eingeben" required />
+            </div>
+            <button id="submitLogin" type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+        <button id="newAccount" class="btn btn-link mt-3 w-100">Noch keinen Account? Klicke hier um einen zu erstellen!</button>
+    </div>
     <script src="login.js"></script>
 </body>
 </html>

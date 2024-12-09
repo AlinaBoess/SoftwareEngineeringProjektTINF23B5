@@ -20,8 +20,10 @@ async function fetchData(e) {
             console.log(data);
 
             const table = document.createElement("table");
-            const headerRow = document.createElement("tr");
-            headerRow.innerHTML = '<th>Restaurant</th><th>Adresse</th><th>Raum</th><th>Tisch</th><th>Plaetze</th>';
+            table.setAttribute("class", "table table-bordered table-striped");
+            const headerRow = document.createElement("thead");
+            headerRow.setAttribute("class", "table-dark")
+            headerRow.innerHTML = '<tr><th>Restaurant</th><th>Adresse</th><th>Raum</th><th>Tisch</th><th>Plaetze</th></tr>';
             table.appendChild(headerRow);
 
             data.forEach(restaurant => {
