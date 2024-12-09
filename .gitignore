@@ -410,3 +410,6 @@ programCode/obj/
 
 
 *.dgspec.json
+
+RestaurantReservierung.dll
+RestaurantReservierung.exe
