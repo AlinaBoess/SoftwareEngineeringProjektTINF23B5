@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(c =>
 {
+    // allows Swagger API documentation
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     // Sicherheit mit JWT-Token einrichten
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -80,4 +84,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseStaticFiles
+    ();
 app.Run();

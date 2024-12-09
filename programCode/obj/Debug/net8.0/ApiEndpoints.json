@@ -70,5 +70,47 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "RestaurantReservierung.Controllers.UserController",
+    "Method": "DeleteCurrentUser",
+    "RelativePath": "api/User",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RestaurantReservierung.Controllers.UserController",
+    "Method": "CreateUser",
+    "RelativePath": "api/User",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "RestaurantReservierung.User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RestaurantReservierung.Controllers.UserController",
+    "Method": "DeleteById",
+    "RelativePath": "api/User/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]
