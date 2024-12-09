@@ -36,6 +36,19 @@ namespace RestaurantReservierung.Services
             return true;
         }
 
+        public UserBase getUserById(int id)
+        {
+            if(_users.Count <= id)
+            {
+                return _users[id];
+            }
+            else
+            {
+                return null;
+            }
+            
+            
+        }
 
         public bool ValidateUser(string email, string password, out UserBase user)
         {
@@ -64,6 +77,11 @@ namespace RestaurantReservierung.Services
             //Note: Strings are primitive data types in C#, therefore the '==' operator will compare the
             //actual values in them against each other, instead of the references of the two string objects
             return providedPasswordHash == user.PasswordHash;
+        }
+
+        public bool deleteUser(UserBase user)
+        {
+            return _users.Remove(user);
         }
         
     }

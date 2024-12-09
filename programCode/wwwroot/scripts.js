@@ -5,7 +5,14 @@ async function fetchData(e) {
     
     const divTableList = document.getElementById("tableList");
     try {
-        const apiResponse = await fetch('/api/reservation');
+        const token = localStorage.getItem('token');
+        const apiResponse = await fetch('/api/reservation', {
+            method: 'GET', // GET-Request
+            headers: {
+                'Authorization': `Bearer ${token}`, // Bearer Token hinzufügen
+              
+            },
+        });
         const responseText = await apiResponse.text();
         
         try {
