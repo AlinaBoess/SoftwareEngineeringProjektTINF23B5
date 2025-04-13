@@ -1,11 +1,13 @@
-﻿namespace RestaurantReservierung.Services
+﻿using RestaurantReservierung.Models;
+
+namespace RestaurantReservierung.Services
 {
     public class ReservationSystem
     {
         //already initialized this way, therefore no extra constructor is needed
         List<Restaurant> restaurants = new List<Restaurant>();
-        List<UserBase> users = new List<UserBase>();
-        Admin admin;
+        List<User> users = new List<User>();
+       
 
 
         /// <summary>
@@ -37,7 +39,7 @@
         /// Adds a restaurant to the reservation system if it is not already contained.
         /// Returns true if successful.
         /// </summary>
-        public bool AddUser(UserBase user)
+        public bool AddUser(User user)
         {
             if (users == null || user == null || users.Contains(user))
                 return false;
@@ -50,7 +52,7 @@
         /// Removes a restaurant from the reservation system if it is contained.
         /// Returns true if successful.
         /// </summary>
-        public bool RemoveUser(UserBase user)
+        public bool RemoveUser(User user)
         {
             if (users == null || user == null)
                 return false;
@@ -67,7 +69,7 @@
             get { return restaurants; }
         }
 
-        public List<UserBase> Users
+        public List<User> Users
         {
             get { return users; }
         }

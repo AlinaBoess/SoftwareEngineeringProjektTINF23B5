@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
@@ -21,31 +22,51 @@ namespace RestaurantReservierung.Controllers
             _configuration = configuration;
         }
 
+
+        // registers a new user
         [HttpPost("register")]
-        public IActionResult Register([FromBody] User model)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
         {
-            var user = new User(model.FirstName, model.LastName, model.Email, model.Password);
+            var user = new User { 
+                FirstName = model.FirstName, 
+                LastName = model.LastName, 
+                Email = model.Email, 
+                Password = model.Password 
+            };
 
 
-            if (_userService.Register(user))
+            if (await _userService.RegisterAsync(user))
                 return Ok(new { message = "User registered successfully" });
 
             return BadRequest(new { message = "User already exists" });
         }
 
+        // logs a new user in and sets a oidc token
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            if (_userService.ValidateUser(model.Email, model.Password, out var user))
+            // validate input
+            if (!ModelState.IsValid)
             {
-                var token = GenerateJwtToken(user);
-                return Ok(new { token });
+                return BadRequest(new { message = "Invalid input" });
             }
 
-            return Unauthorized(new { message = "Invalid email or password" });
+            // validate user
+            User user = await _userService.ValidateUserAsync(model.Email, model.Password);
+
+            if (user == null)
+            {
+                return Unauthorized(new { message = "Invalid email or password" });
+            }
+
+            // generate jwt-token
+            var token = GenerateJwtToken(user);
+
+            return Ok(new { token });
         }
 
-        private string GenerateJwtToken(UserBase user)
+        // generates the authorizatin token
+        private string GenerateJwtToken(User user)
         {
             var authClaims = new List<Claim>
             {
@@ -53,13 +74,13 @@ namespace RestaurantReservierung.Controllers
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-            if (user is Admin)
+            if (user.Role == "ADMIN")
             {
-                authClaims.Add(new Claim(ClaimTypes.Role, "Admin"));
+                authClaims.Add(new Claim(ClaimTypes.Role, "ADMIN"));
             }
-            else if (user is RestaurantOwner)
+            else if (user.Role == "RESTAURANT_OWNER")
             {
-                authClaims.Add(new Claim(ClaimTypes.Role, "RestaurantOwner"));
+                authClaims.Add(new Claim(ClaimTypes.Role, "RESTAURANT_OWNER"));
             }
 
 
@@ -76,8 +97,19 @@ namespace RestaurantReservierung.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
+
+    // represents the login form in the frontend
     public class LoginModel
     {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    // represents the register input form in the frontend
+    public class RegisterModel
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }

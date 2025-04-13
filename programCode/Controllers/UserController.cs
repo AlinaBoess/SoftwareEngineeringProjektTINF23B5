@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -26,11 +27,11 @@ namespace RestaurantReservierung.Controllers
         /// Returns all Users that exist. Only Admins can use this Endpoint.
         /// </summary>
         /// <returns>All Users</returns>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "ADMIN")]
         [HttpGet]
-        public ActionResult<IEnumerable<User>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsersAsync()
         {
-            return Ok(_userService.GetAllUsers());
+            return Ok(await _userService.GetAllUsersAsync());
         }
 
         /// <summary>
@@ -38,10 +39,10 @@ namespace RestaurantReservierung.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Deletion Status</returns>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
-        public ActionResult DeleteById(int id) {
-            if (_userService.deleteUser(_userService.getUserById(id)))
+        public async Task<ActionResult> DeleteUserByIdAsync(int id) {
+            if (await _userService.DeleteUserAsync(await _userService.getUserByIdAsync(id)))
             {
                 return Ok(new {Message = "User deleted successfully"});
             }
@@ -56,25 +57,10 @@ namespace RestaurantReservierung.Controllers
         /// <returns>Deletion Status</returns>
         [Authorize]
         [HttpDelete]
-        public ActionResult DeleteCurrentUser()
+        public async Task<ActionResult> DeleteCurrentUser()
         {
-            var emailClaim = User.Claims.FirstOrDefault(c => c.Type == "email");
-            if (emailClaim != null)
-            {
-                if (_userService.deleteUser(_userService.GetUserByEmail(emailClaim.Value)))
-                {
-                    return Ok(new { Message = "User has been deleted successfully" });
-                }else {
-                    return BadRequest("User could not be deleted");
-                }
-                
-
-            }
-            else
-            {
-                return BadRequest(new {Message = "No User found to delete"});
-            }
-           
+            // TODO
+            return Ok();
         }
 
         /// <summary>
@@ -82,13 +68,37 @@ namespace RestaurantReservierung.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns>Deletion Status</returns>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         public ActionResult CreateUser([FromBody] User model)
         {
+            // TODO
             return Ok();
         }
 
+
+        /// <summary>
+        /// Updates the Role of an user. Only Admins can use this endpoint
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="newRole"></param>
+        /// <returns></returns>
+        [Route("Role")]
+        [Authorize(Roles = "ADMIN")]
+        [HttpPut]
+        public async Task<ActionResult> UpdateRole(string email, string newRole)
+        {
+            var user = await _userService.GetUserByEmailAsync(email);
+            if (user != null)
+            {
+                if(await _userService.UpdateRoleAsync(user, newRole))
+                {
+                    return Ok(new {Message = "Role has been updated successfully"});
+                }
+                return BadRequest(new { Message = "Role could not be updated!" });
+            }
+            return BadRequest(new { Message = "The user with the email " + email + " does not exist" });
+        }
     }
-   
+  
 }
