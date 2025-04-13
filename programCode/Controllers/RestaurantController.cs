@@ -24,18 +24,15 @@ namespace RestaurantReservierung.Controllers
         public async Task<IActionResult> createRestaurant([FromBody] CreateRestaurantModel restaurantModel)
         {
             var user = await _userService.GetLoggedInUser();
-            Console.WriteLine($"user: {user?.UserId}");
+ 
             var restaurant = new Restaurant
             {
                 Name = restaurantModel.Name,
                 Address = restaurantModel.Adress,
                 OpeningHours = restaurantModel.OpeningHours,
                 Website = restaurantModel.Website,
-                UserId = user.UserId
+                User = user
             };
-
-            Console.WriteLine($"UserId: {restaurant.UserId}");
-            Console.WriteLine($"User: {restaurant.User?.Email ?? "null"}");
 
 
             if (await _ownerService.AddRestaurant(restaurant))
