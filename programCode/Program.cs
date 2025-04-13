@@ -6,15 +6,28 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using RestaurantReservierung.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<UserService>();
-builder.Services.AddSingleton<ReservationSystem>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ReservationSystem>();
+builder.Services.AddScoped<RestaurantOwnerService>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen();  // Swagger API registreren
+
+builder.Services.AddHttpContextAccessor();
+
+
+// Datenban Kontext regestrieren 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(10, 11, 11)) 
+    ));
 
 builder.Services.AddSwaggerGen(c =>
 {

@@ -1,4 +1,6 @@
-﻿namespace RestaurantReservierung.Services
+﻿using RestaurantReservierung.Models;
+
+namespace RestaurantReservierung.Services
 {
     public class AdminService
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.Collections.Immutable;
 
@@ -21,12 +22,15 @@ namespace RestaurantReservierung.Controllers
             
         }
 
-
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult<IEnumerable<Restaurant>> GetAllRestaurants()
         {
 
-            List<Room> roomList = new List<Room>();
+            /*
             List<Table> tableList = new List<Table>();
 
             tableList.Add(new Table(12, TableAttributes.SQUARE, 1));
@@ -58,7 +62,7 @@ namespace RestaurantReservierung.Controllers
             _reservationSystem.AddRestaurant(new Restaurant("DHBW Kantine", "da bei Ardenauer Ring", new RestaurantOwner("Markus", "Strand", "markus.strand@dhbw-karlsruhe.de", "1234"), roomList));
             _reservationSystem.AddRestaurant(new Restaurant("Mid Dönerladen neben DHBW", "nähe Kindergarten", new RestaurantOwner("Habibi", "Hammud", "hamud.habibi@mail.de", "adfsadf"), roomList2));     
             _reservationSystem.AddRestaurant(new Restaurant("Mr. Meal", "Gegenüber von KFC", new RestaurantOwner("MR", "Meal", "mr.meal@dönerladen.de", "ppp"), roomList3));
-
+            */
             return Ok(_reservationSystem.Restaurants);
         }
     }

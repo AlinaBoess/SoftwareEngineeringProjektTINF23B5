@@ -1,16 +1,38 @@
-﻿namespace RestaurantReservierung
+﻿using RestaurantReservierung.Data;
+using RestaurantReservierung.Models;
+
+namespace RestaurantReservierung.Services
 {
-    public class RestaurantOwner : UserBase
+    public class RestaurantOwnerService
     {
-        List<Restaurant> ownedRestaurants = new List<Restaurant>();
+        private readonly AppDbContext _context;
 
-        //Ctor
-        public RestaurantOwner(string firstName, string lastName, string email, string password) : base(firstName, lastName, email, password)
+        public RestaurantOwnerService(AppDbContext context)
         {
-
+            _context = context;
         }
 
 
+        public async Task<bool> AddRestaurant(Restaurant restaurant)
+        {
+            try
+            {
+                if (restaurant != null)
+                {
+                    _context.Restaurants.Add(restaurant);
+                    if (await _context.SaveChangesAsync() > 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        /*
         /// <summary>
         /// Add room to list of rooms if it is not contained.
         /// Returns true if successful.
@@ -61,5 +83,6 @@
 
             return room.Tables.Remove(t);
         }
+        */
     }
 }
