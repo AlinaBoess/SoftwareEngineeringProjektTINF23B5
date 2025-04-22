@@ -14,12 +14,13 @@ namespace RestaurantReservierung.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserService _userService;
-        private readonly IConfiguration _configuration;
+        private readonly AuthService _authService;
 
-        public AuthController(UserService userService, IConfiguration configuration)
+        public AuthController(UserService userService, AuthService authService)
         {
             _userService = userService;
-            _configuration = configuration;
+            _authService = authService;
+
         }
 
 
@@ -27,11 +28,12 @@ namespace RestaurantReservierung.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
         {
-            var user = new User { 
-                FirstName = model.FirstName, 
-                LastName = model.LastName, 
-                Email = model.Email, 
-                Password = model.Password 
+            var user = new User
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Password = model.Password
             };
 
 
@@ -60,57 +62,27 @@ namespace RestaurantReservierung.Controllers
             }
 
             // generate jwt-token
-            var token = GenerateJwtToken(user);
+            var token = _authService.GenerateJwtToken(user);
 
             return Ok(new { token });
         }
 
-        // generates the authorizatin token
-        private string GenerateJwtToken(User user)
+
+
+        // represents the login form in the frontend
+        public class LoginModel
         {
-            var authClaims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-            if (user.Role == "ADMIN")
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, "ADMIN"));
-            }
-            else if (user.Role == "RESTAURANT_OWNER")
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, "RESTAURANT_OWNER"));
-            }
-
-
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                expires: DateTime.Now.AddHours(1),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            public string Email { get; set; }
+            public string Password { get; set; }
         }
-    }
 
-    // represents the login form in the frontend
-    public class LoginModel
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
-
-    // represents the register input form in the frontend
-    public class RegisterModel
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        // represents the register input form in the frontend
+        public class RegisterModel
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Email { get; set; }
+            public string Password { get; set; }
+        }
     }
 }
