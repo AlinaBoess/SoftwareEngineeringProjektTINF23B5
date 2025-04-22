@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ReservationSystem>();
 builder.Services.AddScoped<RestaurantOwnerService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();  // Swagger API registreren

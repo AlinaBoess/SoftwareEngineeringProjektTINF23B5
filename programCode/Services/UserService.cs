@@ -12,11 +12,13 @@ namespace RestaurantReservierung.Services
         private readonly AppDbContext _context;
         private readonly List<User> _users = new List<User>();
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AuthService _authService;
 
-        public UserService(AppDbContext context, IHttpContextAccessor httpContextAccessor = null)
+        public UserService(AppDbContext context, AuthService authService, IHttpContextAccessor httpContextAccessor = null)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _authService = authService;
         }
 
         // Alle Benutzer abrufen
@@ -43,7 +45,7 @@ namespace RestaurantReservierung.Services
             if (emailExists)
                 return false;
 
-            user.Password = HashPasswordForRegistration(user.Password);
+            user.Password = _authService.HashPasswordForRegistration(user.Password);
             // Benutzer hinzufügen und speichern
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -59,45 +61,12 @@ namespace RestaurantReservierung.Services
         public async Task<User> ValidateUserAsync(string email, string password)
         {
             var user = await GetUserByEmailAsync(email);
-            return (user != null && isCorrectPassword(password, user))? user : null;
+            return (user != null && _authService.IsCorrectPassword(password, user))? user : null;
         }
 
 
         
-        /// <summary>
-        /// Checks if the provided password matches the password of the current User object.
-        /// Call this when processing login attempts.
-        /// </summary>
-        public bool isCorrectPassword(string password, User user)
-        {
-            //get raw bytes of password string
-            byte[] raw = System.Text.Encoding.UTF8.GetBytes(password);
-
-            //hash password using SHA256
-            byte[] result = System.Security.Cryptography.SHA256.HashData(raw);
-
-            //construct string of hashed password for easier matching
-            string providedPasswordHash = Convert.ToHexString(result).ToLower();
-
-            //Note: Strings are primitive data types in C#, therefore the '==' operator will compare the
-            //actual values in them against each other, instead of the references of the two string objects
-            return providedPasswordHash == user.Password;
-        }
-
-        public string HashPasswordForRegistration(string password)
-        {
-            // Schritt 1: Konvertiere das Passwort in ein Byte-Array
-            byte[] rawPassword = System.Text.Encoding.UTF8.GetBytes(password);
-
-            // Schritt 2: Berechne den SHA-256-Hash des Passworts
-            byte[] hashBytes = System.Security.Cryptography.SHA256.HashData(rawPassword);
-
-            // Schritt 3: Konvertiere den Hash in eine Hexadezimalzeichenkette
-            string passwordHash = Convert.ToHexString(hashBytes).ToLower();
-
-            // Rückgabe des Hashs
-            return passwordHash;
-        }
+        
 
 
         public async Task<bool> DeleteUserAsync(User user)
