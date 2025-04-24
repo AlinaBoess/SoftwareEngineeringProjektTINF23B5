@@ -1,4 +1,6 @@
-﻿using RestaurantReservierung.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantReservierung.Controllers;
+using RestaurantReservierung.Data;
 using RestaurantReservierung.Models;
 
 namespace RestaurantReservierung.Services
@@ -13,10 +15,19 @@ namespace RestaurantReservierung.Services
         }
 
 
-        public async Task<bool> AddRestaurant(Restaurant restaurant)
+        public async Task<bool> AddRestaurant(RestaurantFormModel restaurantModel, User user)
         {
             try
             {
+                var restaurant = new Restaurant
+                {
+                    Name = restaurantModel.Name,
+                    Address = restaurantModel.Adress,
+                    OpeningHours = restaurantModel.OpeningHours,
+                    Website = restaurantModel.Website,
+                    User = user
+                };
+
                 if (restaurant != null)
                 {
                     _context.Restaurants.Add(restaurant);
@@ -30,6 +41,57 @@ namespace RestaurantReservierung.Services
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+
+        public async Task<bool> UpdateRestaurant(Restaurant restaurant, RestaurantFormModel restaurantModel)
+        {
+            restaurant.Name = restaurantModel.Name;
+            restaurant.Address = restaurantModel.Adress;
+            restaurant.OpeningHours = restaurantModel.OpeningHours;
+            restaurant.Website = restaurantModel.Website;
+
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<Restaurant> GetRestaurantById(int id)
+        {
+            var restuarunt = _context.Restaurants.FirstOrDefault(r => r.RestaurantId == id);
+            if (restuarunt != null)
+            {
+                return restuarunt;
+            }
+            return null;
+        }
+
+        public async Task<bool> DeleteRestaurant(Restaurant restaurant)
+        {
+            _context.Restaurants.Remove(restaurant);
+
+            if (await _context.SaveChangesAsync() > 0) {  
+                return true; 
+            }
+            return false;
+        }
+
+        public async Task<List<Restaurant>> GetManyRestaurants(int count = -1)
+        {
+            if(count >= 0)
+            {
+                return await _context.Restaurants
+                    .AsNoTracking()
+                    .Take(count)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.Restaurants
+                    .AsNoTracking()
+                    .ToListAsync();
             }
         }
         /*
