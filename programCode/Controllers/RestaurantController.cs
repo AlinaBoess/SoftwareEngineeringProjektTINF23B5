@@ -148,10 +148,10 @@ namespace RestaurantReservierung.Controllers
         }
 
         /// <summary>
-        /// Get Restaurants starting by x and ending by y
+        /// Get many Restaurants. If no Url-Parameters are added, the Endpoint will return all Restaurants. 
         /// </summary>
-        /// <param name="count"></param>
-        /// <param name="start"></param>
+        /// <param name="count">How many restaurants will be returned.</param>
+        /// <param name="start">Starting at:</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetManyRestaurants([FromQuery] int count = -1, [FromQuery] int start = 0)
