@@ -78,21 +78,23 @@ namespace RestaurantReservierung.Services
             return false;
         }
 
-        public async Task<List<Restaurant>> GetManyRestaurants(int count = -1)
+        public async Task<List<Restaurant>> GetManyRestaurants(int start = 0, int count = -1)
         {
             if(count >= 0)
             {
                 return await _context.Restaurants
-                    .AsNoTracking()
+                    .Skip(start)
                     .Take(count)
                     .ToListAsync();
             }
-            else
+            else 
             {
                 return await _context.Restaurants
-                    .AsNoTracking()
+                    .Skip(start)
                     .ToListAsync();
             }
+
+
         }
         /*
         /// <summary>
