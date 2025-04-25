@@ -116,7 +116,7 @@ namespace RestaurantReservierung.Controllers
             }
         }
 
-
+        /*
         /// <summary>
         /// Get Restaurants
         /// </summary>
@@ -128,6 +128,7 @@ namespace RestaurantReservierung.Controllers
 
             return Ok(restaurants);
         }
+        */
 
         /// <summary>
         /// Get one Restaurant by id
@@ -147,14 +148,15 @@ namespace RestaurantReservierung.Controllers
         }
 
         /// <summary>
-        /// get the First {count} restaurants.
+        /// Get Restaurants starting by x and ending by y
         /// </summary>
-        /// <param name="count">The first X</param>
-        /// <returns>A List of Restaurants</returns>
-        [HttpGet("many/{count}")]
-        public async Task<IActionResult> GetManyRestaurants(int count)
+        /// <param name="count"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetManyRestaurants([FromQuery] int count = -1, [FromQuery] int start = 0)
         {
-            var restaurants = await _ownerService.GetManyRestaurants(count);
+            var restaurants = await _ownerService.GetManyRestaurants(start, count);
 
             return Ok(restaurants);
         }
