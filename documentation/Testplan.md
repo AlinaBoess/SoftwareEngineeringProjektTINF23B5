@@ -299,3 +299,72 @@ Dabei werden mehrere Teilsysteme einer Lösung kombiniert getestet, wodurch sich
 |Erfolgskriterien       | Alle Integrationstests werden erfolgreich ausgeführt, wobei alle obig definierten Kernfunktionen suffizient abgedeckt sind.                               |
 |Besondere Kriterien   | Zur Vermeidung von residualen Elementen in der Produktivdatenbank nach dem Ausführen von Tests wird für diesen Testschritt eine In-Memory Datenbanklösung verwendet.
 
+## 6. Start- und Finalbedingungen 
+
+### 6.1 Test Plan
+
+~~#### 6.1.1 Test Plan Startbedingungen~~
+
+~~#### 6.1.2 Test Plan Endbedingungen~~
+
+## 7. Deliverables
+
+## 7.1 Test Evaluation Summaries
+
+Das Projekt umfasst zum jetzigen Zeitpunkt eine Reihe von Unit-Tests, Integrationstests und Frontend-Tests werden in Kürze folgen, welche jeweils manuell ausgeführt werden, bevor Änderungen in unserem Mono-Repo für Backend und Frontend publiziert werden.
+
+~~## 7.2 Reporting on Test Coverage~~
+
+~~## 7.3 Perceived Quality Reports~~
+
+## 7.4 Incident Logs
+
+Bestehen Fehler beim Buildvorgang, so wird diese Version nicht publiziert und das Team stimmt sich intern über das weitere Vorgehen ab, um diese Fehler zu beheben. Für diesen Zweck werder 
+
+
+## 8. Testing Workflow
+
+1) Lokale Tests in Visual Studio durch Ausführen von `dotnet test`
+
+## 9. Umgebung
+
+### 9.1 Systemanforderungen
+
+Die nachfolgende Tabelle stellt die Systemanforderungen dar, welche die Tests benötigen.
+
+| Resource              | Quantity | Name and Type                |
+|-----------------------|:--------:|------------------------------|
+| lokales Testsystem    |    1     | Laptop       |
+
+### 9.2 Base Software Elements in the Test Environment
+
+Nachfolgend enumerierte Softwarelösungen werden für das Testen benötigt:
+
+- Visual Studio 2022
+- NUnit 4.3
+- Selenium
+- Moq
+
+~~### 9.3 Produktivitäts- und Unterstützungstoolings~~
+
+## 10. Verantwortlichkeiten und Rollenverteilung
+
+### 10.1 Rollenverteilung
+
+| Rolle          | Person |  Anmerkungen |
+|---------------|:--------------:|----------------------------------------|
+| Test Manager | Alex, Yahya | Stellen Managementüberblicke zum Testverfahren, sowie den dabei verwendeten Technologien bereit. |
+| Test Designer | Alina, Lukas | Liefern die Implementation der verschiedenen Testtypen. |
+| Test System Administrator | Moumen | Stellt sicher, dass Tests gewartet und auf Systemänderungen angepasst werden zur Wahrung der Testabdeckung und damit der Softwarequalität. |
+
+<~~### 10.2 Staffing and Training Needs~~
+
+## 11. Iteration Milestones
+
+Wir möchten, dass unsere Tests schrittweise eine Quellcodeabdeckung von mindestens 70% des Backend-Quellcodes für Unit-Tests und mindestens für alle kritischen Systemfunktionen bei Integrationstests erreichen, worauf wir schrittweise und inkrementell hinarbeiten, um diese Meilensteine spätestens zum Abschluss des Projekts zu erreichen.
+
+## 12. Risiken, Abhängigkeiten, Annahmen, Einschränkungen 
+
+Unsere Risiken, Abhängigkeiten, Annahmen, Einschränkungen etc. haben wir euch bereits detailliert in unserer [Risikoevaluationstabelle](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/blob/main/documentation/RMMM_Risiken_Restaurantprojekt.xlsx) dargestellt.
+
+~~## 13. Management Process and Procedures~~
