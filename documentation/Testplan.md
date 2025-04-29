@@ -303,9 +303,9 @@ Dabei werden mehrere Teilsysteme einer Lösung kombiniert getestet, wodurch sich
 
 ### 6.1 Test Plan
 
-~~#### 6.1.1 Test Plan Startbedingungen~~
+#### ~~6.1.1 Test Plan Startbedingungen~~
 
-~~#### 6.1.2 Test Plan Endbedingungen~~
+#### ~~6.1.2 Test Plan Endbedingungen~~
 
 ## 7. Deliverables
 
@@ -313,9 +313,9 @@ Dabei werden mehrere Teilsysteme einer Lösung kombiniert getestet, wodurch sich
 
 Das Projekt umfasst zum jetzigen Zeitpunkt eine Reihe von Unit-Tests, Integrationstests und Frontend-Tests werden in Kürze folgen, welche jeweils manuell ausgeführt werden, bevor Änderungen in unserem Mono-Repo für Backend und Frontend publiziert werden.
 
-~~## 7.2 Reporting on Test Coverage~~
+## ~~7.2 Reporting on Test Coverage~~
 
-~~## 7.3 Perceived Quality Reports~~
+## ~~7.3 Perceived Quality Reports~~
 
 ## 7.4 Incident Logs
 
@@ -345,7 +345,7 @@ Nachfolgend enumerierte Softwarelösungen werden für das Testen benötigt:
 - Selenium
 - Moq
 
-~~### 9.3 Produktivitäts- und Unterstützungstoolings~~
+### ~~9.3 Produktivitäts- und Unterstützungstoolings~~
 
 ## 10. Verantwortlichkeiten und Rollenverteilung
 
@@ -357,7 +357,7 @@ Nachfolgend enumerierte Softwarelösungen werden für das Testen benötigt:
 | Test Designer | Alina, Lukas | Liefern die Implementation der verschiedenen Testtypen. |
 | Test System Administrator | Moumen | Stellt sicher, dass Tests gewartet und auf Systemänderungen angepasst werden zur Wahrung der Testabdeckung und damit der Softwarequalität. |
 
-<~~### 10.2 Staffing and Training Needs~~
+### ~~10.2 Staffing and Training Needs~~
 
 ## 11. Iteration Milestones
 
@@ -367,4 +367,4 @@ Wir möchten, dass unsere Tests schrittweise eine Quellcodeabdeckung von mindest
 
 Unsere Risiken, Abhängigkeiten, Annahmen, Einschränkungen etc. haben wir euch bereits detailliert in unserer [Risikoevaluationstabelle](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/blob/main/documentation/RMMM_Risiken_Restaurantprojekt.xlsx) dargestellt.
 
-~~## 13. Management Process and Procedures~~
+## ~~13. Management Process and Procedures~~
