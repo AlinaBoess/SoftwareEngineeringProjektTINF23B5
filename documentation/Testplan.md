@@ -257,283 +257,45 @@ In diesem Kapitel wird die Strategie zur Durchführung der geplanten Tests besch
 Für die Identifikation und Auswahl konkreter Testfälle werden folgende Quellen herangezogen:
 
 - **Use Cases und User Stories** aus dem Produkt-Backlog
-- **Nicht-funktionale Anforderungen** (z. B. aus Sicherheits-, Performance- oder Usability-Spezifikationen)
+- **Nicht-funktionale Anforderungen** (z.B. aus Sicherheits-, Performance- oder Usability-Spezifikationen)
 - **Bugreports und Change Requests** aus vorherigen Releases
 - **Erfahrung aus ähnlichen Projekten** (Heuristiken)
-- **Testideen-Kataloge** aus Fachliteratur (z. B. „Exploratory Testing Heuristics“ oder „Test Design Patterns“)
+- **Testideen-Kataloge** aus Fachliteratur (z.B. „Exploratory Testing Heuristics“ oder „Test Design Patterns“)
 
 ### 5.2 Testtechniken und -arten
 
-#### 5.2.1 Test der Daten- und Datenbankintegrität
-
-**Ziel:**  
-Datenbankprozesse unabhängig vom UI testen, um Datenintegrität und korrektes Verhalten sicherzustellen.
-
-**Technik:**  
-- Aufruf aller Datenbankfunktionen mit gültigen und ungültigen Eingaben
-- Überprüfung der Datenbank auf korrekte Speicherung oder Rückgabe der Daten
-
-**Orakel:**  
-- Direkter Datenbankvergleich (SQL-Assertions)
-- Validierung gegen Erwartungswerte
-- Logauswertung von DB-Ereignissen
-
-**Benötigte Werkzeuge:**  
-- SQL-Clients und -Skripte  
-- Datenbank-Monitoring-Tools  
-- Testautomatisierung (z. B. NUnit + SQLUnit)  
-- Daten-Generatoren und Backup-/Recovery-Tools
-
-**Erfolgskriterien:**  
-Alle zentralen Datenbankoperationen werden korrekt ausgeführt und fehlerhaftes Verhalten wird erkannt.
-
-**Besonderheiten:**  
-- Manuelle Eingriffe ggf. notwendig  
-- Kleinere Testdatenbanken zur besseren Nachverfolgbarkeit  
-- Zugriff auf DBMS-Entwicklungsumgebungen nötig
-
-#### 5.2.2 Funktionstest
-
-**Ziel:**  
-Prüfen von Use Cases, Geschäftsregeln und Funktionen über die UI anhand gültiger und ungültiger Daten.
-
-**Technik:**  
-- Ausführung von Funktionsflüssen gemäß Use Cases  
-- Überprüfung auf korrekte Resultate, Fehler- und Warnmeldungen
-
-**Orakel:**  
-- Erwartungswerte aus Anforderungen  
-- Visuelle Prüfung der Resultate (manuell oder per Screenshot-Vergleich)  
-- Validierung durch automatisierte UI-Tests (Selenium)
-
-**Benötigte Werkzeuge:**  
-- Selenium + NUnit  
-- Daten-Generatoren  
-- Testdaten-Vorlagen  
-- UI-Testskripte
-
-**Erfolgskriterien:**  
-Alle kritischen Use Cases und Geschäftsregeln funktionieren wie spezifiziert.
-
-**Besonderheiten:**  
-- Gute Testdatenabdeckung notwendig  
-- Fehlermeldungen müssen klar, eindeutig und verständlich sein
-
-#### 5.2.3 Geschäftszyklustests
-
-**Ziel:**  
-Simulation typischer Geschäftsprozesse über längere Zeiträume (z. B. 1 Jahr), inkl. wiederkehrender Ereignisse.
-
-**Technik:**  
-- Wiederholte Ausführung von Funktionstests unter Zeitbedingungen  
-- Simulation von periodischen Abläufen (z. B. Monatswechsel, Jahresabschlüsse)  
-- Test mit zeitabhängigen Daten (z. B. Gültigkeitszeiträume, Ablauffristen)
-
-**Orakel:**  
-- Validierte Ergebnisdaten  
-- Zeitliche Konsistenzprüfungen  
-- Abgleich mit Geschäftslogik
-
-**Benötigte Werkzeuge:**  
-- Zeitsteuerungstools (z. B. Cron-Simulation)  
-- Automatisierte Testumgebungen  
-- Datenaufbereitungstools
-
-**Erfolgskriterien:**  
-Alle relevanten Zyklen (täglich, monatlich, jährlich) können fehlerfrei durchlaufen werden.
-
-**Besonderheiten:**  
-- Datumssprünge müssen gezielt testbar gemacht werden  
-- Modell des typischen Geschäftsverlaufs ist Voraussetzung
-
-#### 5.2.4 Benutzeroberflächentest (UI-Test)
-
-**Ziel:**  
-Prüfung der UI auf korrekte Navigation, Interaktion und Einhaltung von Designstandards.
-
-**Technik:**  
-- Tests aller Fenster und Interaktionen (z. B. Tab-Reihenfolge, Buttons, Navigation)  
-- Überprüfung von Objektzuständen (z. B. Sichtbarkeit, Aktivität, Position)
-
-**Orakel:**  
-- Sichtprüfung durch Testpersonen  
-- Screenshot-Vergleiche mit Referenzzuständen  
-- Automatisierte UI-Tests (Selenium/WebDriver)
-
-**Benötigte Werkzeuge:**  
-- Selenium  
-- UI-Automation-Frameworks  
-- Screen-Capture-Tools
-
-**Erfolgskriterien:**  
-Jede relevante Oberfläche ist erreichbar, vollständig und funktioniert wie erwartet.
-
-**Besonderheiten:**  
-- Einige Custom-Controls erfordern individuelle Prüfmethoden  
-- Detaillierte UI-Standards erforderlich
-
-
-### 5.2.5 Performance-Profiling
-
-Performance-Profiling ist ein Leistungstest, bei dem Antwortzeiten, Transaktionsraten und andere zeitkritische Anforderungen gemessen und bewertet werden. Das Ziel des Performance-Profilings besteht darin, sicherzustellen, dass die Leistungsanforderungen erfüllt werden. Es wird implementiert und durchgeführt, um das Performance-Verhalten des Testobjekts in Abhängigkeit von Bedingungen wie Arbeitslast oder Hardware-Konfigurationen zu profilieren und zu optimieren.
-
-**Hinweis:** In der folgenden Tabelle beziehen sich Transaktionen auf „logische Geschäftstransaktionen“. Diese Transaktionen werden als spezifische Anwendungsfälle definiert, die ein Benutzer des Systems voraussichtlich mit dem Testobjekt ausführt, wie z. B. das Hinzufügen oder Ändern eines Vertrags.
-
-**Technikziel:**  
-Verhalten für definierte funktionale Transaktionen oder Geschäftsprozesse unter den folgenden Bedingungen ausüben, um das Zielverhalten und Anwendungsleistungsdaten zu beobachten und aufzuzeichnen:  
-- Normale, erwartete Arbeitslast  
-- Erwartete Worst-Case-Arbeitslast  
-
-**Technik:**  
-- Verwenden Sie Testverfahren, die für die Funktions- oder Geschäftszyklen-Tests entwickelt wurden.  
-- Ändern Sie die Datendateien, um die Anzahl der Transaktionen zu erhöhen oder die Skripte so zu modifizieren, dass die Anzahl der Iterationen pro Transaktion erhöht wird.  
-- Skripte sollten auf einem einzelnen Rechner ausgeführt werden (bestes Szenario zur Benchmarking eines einzelnen Benutzers mit einer Transaktion) und wiederholt mit mehreren Clients (virtuellen oder tatsächlichen) durchgeführt werden.  
-
-**Orakel:**  
-Um ein genaues Ergebnis des Tests zu beobachten, können verschiedene Strategien genutzt werden. Ein Orakel kombiniert Methoden der Beobachtung und Merkmale eines spezifischen Ergebnisses, das den Test als erfolgreich oder fehlgeschlagen kennzeichnet. Idealerweise sind Orakel selbstverifizierend, sodass automatisierte Tests eine erste Bewertung des Testergebnisses vornehmen können. Es muss jedoch darauf geachtet werden, die Risiken zu minimieren, die mit der automatisierten Bestimmung des Testergebnisses verbunden sind.
-
-**Erforderliche Werkzeuge:**  
-- Testskript-Automatisierungstool  
-- Ein Anwendungs-Performance-Profiling-Tool wie Rational Quantify  
-- Überwachungswerkzeuge zur Installation (z. B. für das Registrierungs-, Festplatten-, CPU- und Speicher-Management)  
-- Ressourcenbegrenzungstools, z. B. Canned Heat  
-
-**Erfolgskriterien:**  
-Der Test unterstützt das Testen von:  
-- Einer einzelnen Transaktion oder einem einzelnen Benutzer: Erfolgreiche Emulation des Transaktionsskripts ohne Fehler durch Testimplementierungsprobleme.  
-- Mehrere Transaktionen oder mehrere Benutzer: Erfolgreiche Emulation der Arbeitslast ohne Fehler durch Testimplementierungsprobleme.
-
-**Besondere Überlegungen:**  
-Ein umfassendes Performance-Testing schließt ein Hintergrund-Workload auf dem Server mit ein. Es gibt verschiedene Methoden, um dies zu erreichen, z. B.:  
-- „Transaktionen“ direkt an den Server senden, meistens in Form von Structured Query Language (SQL)-Anrufen.  
-- „Virtuelle“ Benutzerlast erstellen, um viele Clients zu simulieren, in der Regel mehrere Hundert. Dies wird üblicherweise mit Remote-Terminal-Emulationswerkzeugen durchgeführt. Diese Technik kann auch genutzt werden, um das Netzwerk mit „Verkehr“ zu belasten.  
-- Verwendung mehrerer physischer Clients, die jeweils Testskripte ausführen, um eine Last auf das System zu erzeugen.
-
-Performance-Tests sollten auf einem dedizierten Rechner oder zu einer festgelegten Zeit durchgeführt werden, um vollständige Kontrolle und genaue Messungen zu gewährleisten. Die für Performance-Tests verwendeten Datenbanken sollten entweder die tatsächliche Größe oder eine gleichwertige Skalierung aufweisen.
-
-
-### 5.2.6 Lasttest
-
-Ein Lasttest ist ein Leistungstest, bei dem das Testobjekt unterschiedlichen Arbeitslasten ausgesetzt wird, um die Leistungsmerkmale und Fähigkeiten des Systems zu messen und zu bewerten, damit es auch unter diesen unterschiedlichen Arbeitslasten ordnungsgemäß funktioniert. Das Ziel des Lasttests ist es, sicherzustellen, dass das System auch über die erwartete maximale Arbeitslast hinaus korrekt funktioniert. Außerdem bewertet der Lasttest die Leistungsmerkmale, wie Antwortzeiten, Transaktionsraten und andere zeitkritische Aspekte.
-
-**Technikziel:**  
-Führen Sie definierte Transaktionen oder Geschäftsprozesse unter variierenden Arbeitslastbedingungen aus, um das Zielverhalten und die Systemleistung zu beobachten und aufzuzeichnen.
-
-**Technik:**  
-- Verwenden Sie Transaktions-Testskripte, die für Funktions- oder Geschäftszyklen-Tests entwickelt wurden, jedoch ohne unnötige Interaktionen und Verzögerungen.  
-- Ändern Sie die Datendateien, um die Anzahl der Transaktionen zu erhöhen oder die Tests so zu modifizieren, dass jede Transaktion mehrfach ausgeführt wird.  
-- Arbeitslasten sollten z. B. tägliche, wöchentliche und monatliche Spitzenlasten umfassen.  
-- Arbeitslasten sollten sowohl Durchschnitts- als auch Spitzenlasten darstellen.  
-- Arbeitslasten sollten sowohl sofortige als auch anhaltende Spitzen umfassen.  
-- Die Arbeitslasten sollten unter verschiedenen Testumgebungs-Konfigurationen ausgeführt werden.
-
-**Orakel:**  
-Das Orakel kombiniert Elemente der Methode der Beobachtung und Merkmale spezifischer Ergebnisse, die eine wahrscheinliche Bestimmung des Erfolgs oder Misserfolgs angeben. Es ist ideal, wenn Orakel selbstverifizierend sind, sodass automatisierte Tests eine erste Bewertung des Testergebnisses durchführen können, allerdings müssen Risiken, die mit der automatisierten Bestimmung von Testergebnissen verbunden sind, berücksichtigt werden.
-
-**Erforderliche Werkzeuge:**  
-- Testskript-Automatisierungstool  
-- Transaktionslast-Steuerungs- und Planungswerkzeug  
-- Überwachungswerkzeuge zur Installation (z. B. Festplatten-, CPU-, Speicher-Management)  
-- Ressourcenbegrenzungstools (z. B. Canned Heat)  
-- Daten-Generierungswerkzeuge  
-
-**Erfolgskriterien:**  
-Der Test unterstützt das Testen von Arbeitslast-Emulation, wobei die erfolgreiche Emulation der Arbeitslast ohne Fehler durch Testimplementierungsprobleme sichergestellt wird.
-
-**Besondere Überlegungen:**  
-- Lasttests sollten auf einem dedizierten Rechner oder zu einem dedizierten Zeitpunkt durchgeführt werden, um vollständige Kontrolle und genaue Messungen zu gewährleisten.  
-- Die für Lasttests verwendeten Datenbanken sollten entweder die tatsächliche Größe oder eine gleichwertige Skalierung aufweisen.
-
-
-### 5.2.7 Stresstest
-
-Der Stresstest ist eine spezielle Art von Leistungstest, bei dem das System mit extrem hohen oder unvorhergesehenen Belastungen konfrontiert wird, um zu überprüfen, wie es auf ungewöhnliche Bedingungen reagiert. Das Ziel des Stresstests ist es, die Robustheit und Stabilität des Systems unter extremen Bedingungen zu prüfen und zu überprüfen, wie es sich bei einem Überschreiten der maximalen Kapazität verhält. Dies kann dazu beitragen, Schwachstellen im System zu identifizieren, die bei normalen Betriebsbedingungen möglicherweise nicht erkennbar sind.
-
-**Technikziel:**  
-Prüfung der maximalen Belastungsgrenze des Systems, um sicherzustellen, dass es unter extremen Bedingungen entweder stabil bleibt oder erwartungsgemäß auf eine Fehlerbehandlung umschaltet.
-
-**Technik:**  
-- Der Test simuliert Bedingungen, die das System an seine Kapazitätsgrenzen bringen. Dies kann durch die Erhöhung der Anzahl der gleichzeitigen Benutzer, Transaktionen oder Anfragen über die festgelegten Leistungsgrenzen hinaus erfolgen.  
-- Der Stresstest kann auch das Verharren in einem Zustand der extremen Belastung umfassen, um zu prüfen, ob das System reagiert und wiederhergestellt werden kann.  
-- Ein plötzlicher und unerwarteter Anstieg der Arbeitslast wird simuliert, um die Fähigkeit des Systems zu testen, mit plötzlichen Veränderungen oder Ausfällen umzugehen.
-
-**Orakel:**  
-Das Orakel sollte definierte Ergebnisse wie Systemabstürze, Leistungseinbußen oder Zeitüberschreitungen überwachen. Es hilft, die Belastbarkeit des Systems zu bewerten und mögliche Fehlerquellen zu identifizieren.
-
-**Erforderliche Werkzeuge:**  
-- Testskript-Automatisierungstool  
-- Lastgenerierungswerkzeuge (z. B. Apache JMeter oder LoadRunner)  
-- Ressourcenüberwachungswerkzeuge zur Messung von CPU-, Speicher- und Festplattenauslastung  
-- Logging-Tools zur Aufzeichnung von Systemereignissen und Fehlern  
-
-**Erfolgskriterien:**  
-- Das System sollte unter Stress entweder in den Wartungsmodus gehen, einen Fehlerbehandlungsmechanismus auslösen oder bestimmte Schwellenwerte überschreiten, ohne vollständig zu versagen.  
-- Es sollten geeignete Warnmeldungen und Logs erzeugt werden, die die Überwachung und Nachverfolgung von Fehlern ermöglichen.
-
-**Besondere Überlegungen:**  
-- Der Stresstest sollte so konzipiert werden, dass er keine dauerhaften Schäden am System verursacht, aber dennoch eine realistische Belastung darstellt.  
-- Die Tests müssen so gestaltet werden, dass sie unterschiedliche Fehlerbedingungen und Systemreaktionen wie Systemabstürze, Netzwerkprobleme oder Festplattenfehler simulieren.
-
-
-### 5.2.8 Skalierbarkeitstest
-
-Der Skalierbarkeitstest bewertet, wie gut das System mit einer zunehmenden Belastung oder einer Erhöhung der Systemressourcen umgehen kann. Es wird getestet, ob das System in der Lage ist, zusätzliche Anforderungen effizient zu verarbeiten, ohne dass es zu einer signifikanten Verschlechterung der Leistung kommt. Dieser Test hilft zu überprüfen, ob das System in der Lage ist, mit einer wachsenden Benutzerzahl oder steigenden Datenmengen mitzuhalten.
-
-**Technikziel:**  
-Prüfung, wie das System auf eine Zunahme der Belastung reagiert, und Überprüfung, ob es bei Skalierung weiterhin effizient und stabil bleibt.
-
-**Technik:**  
-- Erhöhung der Anzahl von Transaktionen, Anfragen oder Benutzern und Messung der Auswirkungen auf die Systemleistung.  
-- Die Skalierbarkeit kann sowohl horizontal (Hinzufügen zusätzlicher Maschinen oder Instanzen) als auch vertikal (Erhöhung der Kapazität eines einzelnen Systems durch mehr Ressourcen wie CPU, RAM oder Festplattenspeicher) getestet werden.  
-- Messen der Leistungsverschlechterung und der maximalen Systemkapazität in Bezug auf verschiedene Parameter wie Antwortzeiten, Verarbeitungsgeschwindigkeit und Transaktionsrate.
-
-**Orakel:**  
-Das Orakel für den Skalierbarkeitstest umfasst Leistungskennzahlen, die sicherstellen, dass das System bei Skalierung weiterhin die akzeptablen Antwortzeiten und Transaktionsraten beibehält. Wenn eine signifikante Leistungsverschlechterung oder Instabilität auftritt, sollte dies als Fehler gewertet werden.
-
-**Erforderliche Werkzeuge:**  
-- Testskript-Automatisierungstool  
-- Lastgenerierungs- und Überwachungstools  
-- Ressourcen-Management-Tools zur Messung der Nutzung von CPU, Arbeitsspeicher und Netzwerkkapazität  
-- Skalierungs-Tools zur Durchführung der Tests bei der horizontalen oder vertikalen Skalierung des Systems
-
-**Erfolgskriterien:**  
-- Das System sollte in der Lage sein, mit zunehmender Belastung ohne erhebliche Leistungsverschlechterung zu skalieren.  
-- Es sollte eine gewisse Steigerung der Kapazität ohne signifikante Fehlfunktionen oder Systemabstürze erfolgen.
-
-**Besondere Überlegungen:**  
-- Der Test sollte für verschiedene Szenarien durchgeführt werden, in denen unterschiedliche Arten von Skalierung angewendet werden. Dies hilft, die besten Skalierungsstrategien für die spezifischen Anforderungen des Systems zu ermitteln.  
-- Der Test sollte auch unter realistischen Bedingungen durchgeführt werden, die den tatsächlichen Einsatz des Systems widerspiegeln.
-
-
-
-### 5.2.9 Sicherheitstests
-
-Sicherheitstests überprüfen die Fähigkeit eines Systems, gegen Angriffe und unbefugte Zugriffe geschützt zu bleiben. Dabei wird geprüft, ob das System Schwachstellen aufweist, die potenziell ausgenutzt werden könnten, und ob Sicherheitsfunktionen wie Authentifizierung, Autorisierung und Verschlüsselung ordnungsgemäß funktionieren.
-
-**Technikziel:**  
-Sicherstellung, dass das System gegen gängige Sicherheitsbedrohungen wie unbefugten Zugriff, Datenlecks oder Missbrauch von Systemfunktionen geschützt ist.
-
-**Technik:**  
-- Durchführung von Penetrationstests, bei denen die Sicherheitslücken im System absichtlich ausgenutzt werden.  
-- Testen von Authentifizierungsmechanismen, um sicherzustellen, dass nur autorisierte Benutzer auf die Ressourcen zugreifen können.  
-- Überprüfung von Verschlüsselungstechnologien, um zu garantieren, dass Daten sicher übermittelt und gespeichert werden.  
-- Durchführung von Sicherheitsscans und Tests, um bekannte Sicherheitslücken oder Schwachstellen zu identifizieren.
-
-**Orakel:**  
-Die Sicherheits-Tests sollten auf bekannte Schwachstellen und Bedrohungen basieren. Wenn das System gegen diese Bedrohungen nicht geschützt ist, gilt der Test als fehlgeschlagen.
-
-**Erforderliche Werkzeuge:**  
-- Penetrationstests-Tools wie Burp Suite oder Nessus  
-- Sicherheitsüberwachungs- und Scanning-Tools  
-- Authentifizierungs- und Verschlüsselungstests  
-
-**Erfolgskriterien:**  
-- Das System sollte nicht anfällig für bekannte Angriffe sein und alle Sicherheitsfunktionen sollten ordnungsgemäß funktionieren.  
-- Alle Daten, die übertragen oder gespeichert werden, sollten sicher sein.
-
-**Besondere Überlegungen:**  
-- Es ist wichtig, dass Sicherheitslücken regelmäßig getestet werden, da neue Bedrohungen ständig auftreten.  
-- Sicherheitstests sollten regelmäßig in den Testprozess integriert werden, um die langfristige Integrität des Systems zu gewährleisten.
-
-
+#### 5.1.1 Unit Tests
+
+Unit testing ensures, that the tested sourcecode works as expected. Therefore small parts of the sourcecode are tested independently.
+
+|                       | Beschreibung                                                         |
+|-----------------------|---------------------------------------------------------------------|
+|Zielsetzung    | Sicherstellen, dass der implmentierte Quellcode wie erwartet funktioniert.                 |
+|Strategie              | Test-Klassen implementieren mit dem NUnit-Framework für C# ASP.NET   |
+|Benötigte Tools         | NUnit 4.3                   |
+|Erfolgskriterien       | Alle Tests werden erfolgreich ausgeführt. Die Testabdeckung liegt bei mindestens 70% für Backend-Quellcode.   |
+
+#### 5.1.2 UI-Tests
+
+UI-Tests dienen zur Validierung der Anwendung aus der Benutzerperspektive, womit das Ziel verfolgt wird, sicherzustellen, dass alle für Benutzer angebotenen Funktionalitäten korrekt funktionieren.
+
+|                       | Beschreibung                                                          |
+|-----------------------|----------------------------------------------------------------------|
+|Zielsetzung        | Automatisiert ausführbare UI-Tests mit Selenium. |
+|Strategie              | Erstellen von Testanweisungen durch das Erzeugen dedizierter .cs-Dateien unter der Verwendung der Selenium-Schnittstellen. |
+|Benötigte Tools        | NUnit, MvcTesting  |
+|Erfolgskriterien       | Alle UI-Tests werden erfolgreich ausgeführt. 
+
+#### 5.1.3 Integrations-Tests (API Tests)
+
+Ein zentraler Aspekt von Integrationstests stellt das Überprüfen zentraler APIs der Anwendung dar.
+Dabei werden mehrere Teilsysteme einer Lösung kombiniert getestet, wodurch sich komplexere Abläufe leicht simulieren lassen, ohne auf extensive Mocking-Strategien zurückfallen zu müssen.
+
+|                       | Beschreibung                                                          |
+|-----------------------|----------------------------------------------------------------------|
+|Zielsetzung    | Automatisiert ausführbare Integrationstests mit NUnit.                                |
+|Strategie              | Für jedes größere, für Basisfunktionalitäten des Reservierungssystems verantwortliche Prozesse (Starten des Backends, Erstellen von Reservierungen, ...) werden Integrationstests mit NUnit deklariert. |            |
+|Benötigte Tools         | NUnit                                   |
+|Erfolgskriterien       | Alle Integrationstests werden erfolgreich ausgeführt, wobei alle obig definierten Kernfunktionen suffizient abgedeckt sind.                               |
+|Besondere Kriterien   | Zur Vermeidung von residualen Elementen in der Produktivdatenbank nach dem Ausführen von Tests wird für diesen Testschritt eine In-Memory Datenbanklösung verwendet.
 
