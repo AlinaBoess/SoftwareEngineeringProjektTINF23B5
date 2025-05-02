@@ -26,10 +26,10 @@ builder.Services.AddHttpContextAccessor();
 
 // Datenban Kontext regestrieren 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
+        options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(10, 11, 11)) 
-    ));
+        new MySqlServerVersion(new Version(10, 11, 11))
+));
 
 builder.Services.AddSwaggerGen(c =>
 {

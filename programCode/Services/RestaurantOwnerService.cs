@@ -61,6 +61,7 @@ namespace RestaurantReservierung.Services
         public async Task<Restaurant> GetRestaurantById(int id)
         {
             var restuarunt = _context.Restaurants.FirstOrDefault(r => r.RestaurantId == id);
+            Console.WriteLine("" + restuarunt.User);
             if (restuarunt != null)
             {
                 return restuarunt;
@@ -85,12 +86,14 @@ namespace RestaurantReservierung.Services
                 return await _context.Restaurants
                     .Skip(start)
                     .Take(count)
+                    .Include(r => r.User)
                     .ToListAsync();
             }
             else 
             {
                 return await _context.Restaurants
                     .Skip(start)
+                    .Include(r => r.User)
                     .ToListAsync();
             }
 
