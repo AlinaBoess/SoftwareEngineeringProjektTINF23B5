@@ -22,7 +22,7 @@ namespace RestaurantReservierung.Services
         }
 
         // Alle Benutzer abrufen
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllUsersAsync()
         {
             return await _context.Users.ToListAsync();
         }
@@ -35,6 +35,11 @@ namespace RestaurantReservierung.Services
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        // Benutzer nach E-Mail suchen
+        public async Task<User> GetUserByIdAsync(int id)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
+        }
 
 
         // Benutzer registrieren

@@ -158,9 +158,9 @@ namespace RestaurantReservierung.Controllers
         [HttpGet]
         public async Task<IActionResult> GetManyRestaurants([FromQuery] int count = -1, [FromQuery] int start = 0)
         {
-            var restaurants = await _ownerService.GetManyRestaurants(start, count);
-            Console.WriteLine(restaurants[0].User);
-            return Ok(restaurants);
+            var restaurants = await _ownerService.GetManyRestaurants(start, count);    
+
+            return Ok(RestaurantDto.MapToDtos(restaurants));
         }
 
     }

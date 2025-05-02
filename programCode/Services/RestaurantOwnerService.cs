@@ -87,14 +87,12 @@ namespace RestaurantReservierung.Services
                 return await _context.Restaurants
                     .Skip(start)
                     .Take(count)
-                    .Include(r => r.User)
                     .ToListAsync();
             }
             else 
             {
                 return await _context.Restaurants
                     .Skip(start)
-                    .Include(r => r.User)
                     .ToListAsync();
             }
 

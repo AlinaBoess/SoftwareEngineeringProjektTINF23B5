@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.Json;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore.Storage.Json;
 using RestaurantReservierung.Models;
 
 namespace RestaurantReservierung.Dtos
@@ -22,31 +23,49 @@ namespace RestaurantReservierung.Dtos
         
         public static RestaurantDto MapToDto(Restaurant restaurant)
         {
+            if(restaurant != null) { 
             
-            return new RestaurantDto
-            {
-                RestaurantId = restaurant.RestaurantId,
-                Name = restaurant.Name,
-                Address = restaurant.Address,
-                OpeningHours = restaurant.OpeningHours,
-                Website = restaurant.Website,
-                Tables = restaurant.Tables?
-                    .Select(t => new TableDto
-                    {
-                        TableId = t.TableId,
-                        TableNr = t.TableNr,
-                        Capacity = t.Capacity,
-                        Area = t.Area
-
-                    }).ToList(),
-                
-                User = new UserDto
+                return new RestaurantDto
                 {
-                    UserId = restaurant.User.UserId,
-                    FirstName = restaurant.User.FirstName,
-                    LastName = restaurant.User.LastName,
-                }
-            };
+                    RestaurantId = restaurant.RestaurantId,
+                    Name = restaurant.Name,
+                    Address = restaurant.Address,
+                    OpeningHours = restaurant.OpeningHours,
+                    Website = restaurant.Website,
+                    Tables = restaurant.Tables?
+                        .Select(t => new TableDto
+                        {
+                            TableId = t.TableId,
+                            TableNr = t.TableNr,
+                            Capacity = t.Capacity,
+                            Area = t.Area
+
+                        }).ToList(),
+                
+                    User = new UserDto
+                    {
+                        UserId = restaurant.User.UserId,
+                        FirstName = restaurant.User.FirstName,
+                        LastName = restaurant.User.LastName,
+                    }
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static List<RestaurantDto> MapToDtos(List<Restaurant> restaurants)
+        {
+            var restaurantDtos = new List<RestaurantDto>();
+
+            foreach(var restaurant in restaurants)
+            {
+                restaurantDtos.Add(MapToDto(restaurant));
+            }
+
+            return restaurantDtos;
         }
         
     }

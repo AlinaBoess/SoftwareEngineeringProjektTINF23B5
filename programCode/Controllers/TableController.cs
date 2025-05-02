@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Services;
 
 namespace RestaurantReservierung.Controllers
@@ -55,9 +56,9 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("{restuarantId}")]
         public async Task<IActionResult> GetTables(int restuarantId)
         {
-            var tables = _tableService.GetAllTables(restuarantId);
+            var tables = await _tableService.GetAllTables(restuarantId);
 
-            return Ok(tables);
+            return Ok(TableDto.MapToDtos(tables));
         }
     }
 
