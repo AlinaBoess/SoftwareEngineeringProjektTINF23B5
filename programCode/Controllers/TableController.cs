@@ -21,6 +21,12 @@ namespace RestaurantReservierung.Controllers
             _ownerService = ownerService;
         }
 
+        /// <summary>
+        /// Create a table for a restaurant. The creator must be the restaurant owner or an admin.
+        /// </summary>
+        /// <param name="tableForm"></param>
+        /// <param name="restaurantId"></param>
+        /// <returns></returns>
         [Authorize(Roles = "RESTAURANT_OWNER,ADMIN")]
         [HttpPost("{restaurantId}")]
         public async Task<IActionResult> CreateTable([FromBody] TableFormModel tableForm, int restaurantId)
@@ -53,6 +59,11 @@ namespace RestaurantReservierung.Controllers
 
         }
 
+        /// <summary>
+        /// Get all tables for an restaurant.
+        /// </summary>
+        /// <param name="restuarantId"></param>
+        /// <returns></returns>
         [HttpGet("{restuarantId}")]
         public async Task<IActionResult> GetTables(int restuarantId)
         {

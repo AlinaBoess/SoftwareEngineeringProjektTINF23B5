@@ -41,5 +41,10 @@ namespace RestaurantReservierung.Services
                 .ToListAsync();
 
         }
+
+        public async Task<Table> GetTableById(int tableId)
+        {
+            return await _context.Tables.FirstOrDefaultAsync(t => t.TableId == tableId);
+        }
     }
 }

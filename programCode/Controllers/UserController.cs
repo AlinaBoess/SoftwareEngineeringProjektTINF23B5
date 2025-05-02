@@ -37,6 +37,11 @@ namespace RestaurantReservierung.Controllers
             return Ok(UserDto.MapToDtos(users));
         }
 
+        /// <summary>
+        /// Get a user by userId.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [Authorize(Roles = "ADMIN")]
         [HttpGet("{userId}")]
         public async Task<ActionResult> GetUserById(int userId)
