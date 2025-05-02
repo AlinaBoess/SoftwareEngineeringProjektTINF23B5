@@ -12,6 +12,9 @@ using RestaurantReservierung.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+/*
+    .AddJsonOptions(x =>
+        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve);*/
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ReservationSystem>();
 builder.Services.AddScoped<RestaurantOwnerService>();
@@ -26,7 +29,8 @@ builder.Services.AddHttpContextAccessor();
 
 // Datenban Kontext regestrieren 
 builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseMySql(
+        options.UseLazyLoadingProxies()
+        .UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(10, 11, 11))
 ));

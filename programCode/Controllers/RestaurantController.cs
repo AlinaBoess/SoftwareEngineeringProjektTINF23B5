@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.ComponentModel.DataAnnotations;
@@ -139,9 +140,10 @@ namespace RestaurantReservierung.Controllers
         public async Task<IActionResult> GetRestaurants(int id)
         {
             var restaurant = await _ownerService.GetRestaurantById(id);
-            if(restaurant != null)
+            var restaurantDto = RestaurantDto.MapToDto(restaurant);
+            if (restaurantDto != null)
             {
-                return Ok(restaurant);
+                return Ok(restaurantDto);
             }
             return NotFound(new { Message = "The Restaurant with the id " + id + " does not exist!" });
 

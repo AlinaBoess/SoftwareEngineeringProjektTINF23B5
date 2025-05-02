@@ -1,4 +1,5 @@
-﻿using RestaurantReservierung.Models;
+﻿using Microsoft.EntityFrameworkCore.Storage.Json;
+using RestaurantReservierung.Models;
 
 namespace RestaurantReservierung.Dtos
 {
@@ -14,12 +15,14 @@ namespace RestaurantReservierung.Dtos
 
         public string? Website { get; set; }
 
-        public virtual ICollection<Table> Tables { get; set; } = new List<Table>();
+        public virtual List<TableDto> Tables { get; set; } = new List<TableDto>();
 
-        public virtual User User { get; set; } = null!;
+        public virtual UserDto User { get; set; } = null!;
 
-        public RestaurantDto MapToDto(Restaurant restaurant)
+        
+        public static RestaurantDto MapToDto(Restaurant restaurant)
         {
+            
             return new RestaurantDto
             {
                 RestaurantId = restaurant.RestaurantId,
@@ -28,12 +31,23 @@ namespace RestaurantReservierung.Dtos
                 OpeningHours = restaurant.OpeningHours,
                 Website = restaurant.Website,
                 Tables = restaurant.Tables?
-                .Select(t => new TableDto
+                    .Select(t => new TableDto
+                    {
+                        TableId = t.TableId,
+                        TableNr = t.TableNr,
+                        Capacity = t.Capacity,
+                        Area = t.Area
+
+                    }).ToList(),
+                
+                User = new UserDto
                 {
-                    Id = t.Id,
-                    Seats = t.Seats
-                }).ToList(),
+                    UserId = restaurant.User.UserId,
+                    FirstName = restaurant.User.FirstName,
+                    LastName = restaurant.User.LastName,
+                }
             };
         }
+        
     }
 }

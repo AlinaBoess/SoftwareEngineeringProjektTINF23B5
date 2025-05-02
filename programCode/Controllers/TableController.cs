@@ -20,7 +20,7 @@ namespace RestaurantReservierung.Controllers
             _ownerService = ownerService;
         }
 
-        [Authorize(Roles = "ADMIN,RESTAURANT_OWNER")]
+        [Authorize(Roles = "RESTAURANT_OWNER,ADMIN")]
         [HttpPost("{restaurantId}")]
         public async Task<IActionResult> CreateTable([FromBody] TableFormModel tableForm, int restaurantId)
         {

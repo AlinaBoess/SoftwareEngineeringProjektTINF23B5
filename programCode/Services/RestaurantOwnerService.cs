@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservierung.Controllers;
 using RestaurantReservierung.Data;
+using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 
 namespace RestaurantReservierung.Services
@@ -60,11 +61,11 @@ namespace RestaurantReservierung.Services
 
         public async Task<Restaurant> GetRestaurantById(int id)
         {
-            var restuarunt = _context.Restaurants.FirstOrDefault(r => r.RestaurantId == id);
-            Console.WriteLine("" + restuarunt.User);
-            if (restuarunt != null)
+            var restaurant = await _context.Restaurants.FirstOrDefaultAsync(r => r.RestaurantId  == id);
+
+            if (restaurant != null)
             {
-                return restuarunt;
+                return restaurant;
             }
             return null;
         }
