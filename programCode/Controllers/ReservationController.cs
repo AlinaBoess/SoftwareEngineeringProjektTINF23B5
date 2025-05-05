@@ -54,18 +54,23 @@ namespace RestaurantReservierung.Controllers
 
             return BadRequest(new { Message = "Reservation was not successfull!" });
         }
-
+        
         /// <summary>
-        /// TODO
+        /// Get Reservations, filtered by query parameters.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        
+        [HttpGet] // TODO: Filtern Nutzerrechte, wer darf welche Reservierungen sehen.
         public async Task<ActionResult> GetAllReservations([FromQuery] ReservationReturnFormModel model)
         {
+            var user = await _userService.GetLoggedInUser();
+
             return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
         }
-    }
 
+
+    }
+    
     public class ReservationFormModel
     {
         public DateTime StartTime { get; set; }

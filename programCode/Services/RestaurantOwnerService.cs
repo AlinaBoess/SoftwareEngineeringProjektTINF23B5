@@ -108,6 +108,12 @@ namespace RestaurantReservierung.Services
 
 
         }
+
+        public async Task<List<Restaurant>> GetUserRestaurants(User user)
+        {
+            return await _context.Restaurants.Where(r => r.User == user).ToListAsync();
+        }
+
         /*
         /// <summary>
         /// Add room to list of rooms if it is not contained.

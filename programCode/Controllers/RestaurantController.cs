@@ -78,7 +78,6 @@ namespace RestaurantReservierung.Controllers
             {
                 return Unauthorized(new { Message = "You are not the owner of this Restaurant!"});
             }
-            
         }
 
         /// <summary>
@@ -162,6 +161,22 @@ namespace RestaurantReservierung.Controllers
 
             return Ok(RestaurantDto.MapToDtos(restaurants));
         }
+        
+        /// <summary>
+        /// Returns a list of the restaurants from a restaurant owner.
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "ADMIN,RESTAURANT_OWNER")]
+        [HttpGet("owner")]
+        public async Task<IActionResult> GetOnwerRestaurants()
+        {
+            var user = await _userService.GetLoggedInUser();
+
+            var restaurants = await _ownerService.GetUserRestaurants(user);
+
+            return Ok(RestaurantDto.MapToDtos(restaurants));
+        }
+        
 
     }
 
