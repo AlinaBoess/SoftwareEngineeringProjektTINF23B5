@@ -82,6 +82,7 @@ namespace RestaurantReservierung.Services
 
         public async Task<List<Restaurant>> GetManyRestaurants(int start = 0, int count = -1)
         {
+            /*
             if(count >= 0)
             {
                 return await _context.Restaurants
@@ -95,6 +96,15 @@ namespace RestaurantReservierung.Services
                     .Skip(start)
                     .ToListAsync();
             }
+            */
+            var query = _context.Restaurants.AsQueryable();         
+           
+            query = query.Skip(start);
+            if (count > 0)
+                query = query.Take(count);
+
+            return await query.ToListAsync();
+        
 
 
         }

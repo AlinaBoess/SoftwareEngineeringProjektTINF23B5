@@ -13,6 +13,8 @@ namespace RestaurantReservierung.Services
 
         private readonly AppDbContext _context;
 
+        public TimeSpan MinReservationTime { get; } = new TimeSpan(1,0,0);
+
         public ReservationSystem(AppDbContext context)
         {
             _context = context;
@@ -75,35 +77,70 @@ namespace RestaurantReservierung.Services
 
         public async Task<bool> Reserve(ReservationFormModel model, Table table, User user)
         {
-            var otherReservation = await _context.Reservations
+            
+            var reservation = new Reservation
+            {
+                User = user,
+                Table = table,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+
+            };
+            _context.Reservations.Add(reservation);
+            if (await _context.SaveChangesAsync() > 0) return true;
+            
+            return false;
+        }
+
+        public async Task<List<Reservation>> GetReservationsForTimeInterval(ReservationFormModel model, Table table)
+        {
+            var reservations = await _context.Reservations
                 .Where(r => r.TableId == table.TableId && (
                     (r.StartTime >= model.StartTime && r.StartTime <= model.EndTime) ||
                     (r.EndTime >= model.StartTime && r.EndTime <= model.EndTime) ||
                     (r.StartTime <= model.StartTime && r.EndTime >= model.EndTime)
                  )).ToListAsync();
 
-            Console.WriteLine("Other Restaurant: " + otherReservation.Count);
-
-            if(otherReservation.Count == 0)
-            {
-                var reservation = new Reservation
-                {
-                    User = user,
-                    Table = table,
-                    StartTime = model.StartTime,
-                    EndTime = model.EndTime,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-
-                };
-                _context.Reservations.Add(reservation);
-                if (await _context.SaveChangesAsync() > 0) return true;
-            }
-                
-
-            return false;
+            return reservations;
         }
 
+        public bool IsGreaterThenMinTimeInterval(ReservationFormModel model)
+        {
+            TimeSpan timestamp = model.EndTime - model.StartTime;
+            return (timestamp.CompareTo(MinReservationTime) >= 0);
+        
+        }
+           
+        public bool IsInPast(ReservationFormModel model)
+        {
+            return model.StartTime < DateTime.Now;
+        }
+
+        public async Task<List<Reservation>> GetReservations(ReservationReturnFormModel model)
+        {
+            var query = _context.Reservations.AsQueryable();
+
+            if(model.TableId.HasValue)
+                query = query.Where(r => r.TableId == model.TableId);
+            if(model.RestaurantId.HasValue)
+                query = query.Where(r => r.Table.RestaurantId == model.RestaurantId);
+            if(model.UserId.HasValue)
+                query = query.Where(r => r.UserId == model.UserId);
+            if(model.StartTime.HasValue)
+                query = query.Where(r => r.StartTime <= model.StartTime);
+            if (model.EndTime.HasValue)
+                query = query.Where(r => r.EndTime <= model.EndTime);
+            if (model.Start.HasValue)
+                query = query.Skip((int)model.Start);
+            if (model.Count.HasValue)
+                query = query.Take((int)model.Count);
+
+            var reservations = await query.ToListAsync();
+            return reservations;
+
+        }
         #region Getters / Setters
 
         public List<Restaurant> Restaurants
