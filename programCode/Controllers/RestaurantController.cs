@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.ComponentModel.DataAnnotations;
@@ -77,7 +78,6 @@ namespace RestaurantReservierung.Controllers
             {
                 return Unauthorized(new { Message = "You are not the owner of this Restaurant!"});
             }
-            
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace RestaurantReservierung.Controllers
         */
 
         /// <summary>
-        /// Get one Restaurant by id
+        /// Get one Restaurant by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>One Restaurant</returns>
@@ -139,9 +139,10 @@ namespace RestaurantReservierung.Controllers
         public async Task<IActionResult> GetRestaurants(int id)
         {
             var restaurant = await _ownerService.GetRestaurantById(id);
-            if(restaurant != null)
+            var restaurantDto = RestaurantDto.MapToDto(restaurant);
+            if (restaurantDto != null)
             {
-                return Ok(restaurant);
+                return Ok(restaurantDto);
             }
             return NotFound(new { Message = "The Restaurant with the id " + id + " does not exist!" });
 
@@ -156,10 +157,26 @@ namespace RestaurantReservierung.Controllers
         [HttpGet]
         public async Task<IActionResult> GetManyRestaurants([FromQuery] int count = -1, [FromQuery] int start = 0)
         {
-            var restaurants = await _ownerService.GetManyRestaurants(start, count);
+            var restaurants = await _ownerService.GetManyRestaurants(start, count);    
 
-            return Ok(restaurants);
+            return Ok(RestaurantDto.MapToDtos(restaurants));
         }
+        
+        /// <summary>
+        /// Returns a list of the restaurants from a restaurant owner.
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "ADMIN,RESTAURANT_OWNER")]
+        [HttpGet("owner")]
+        public async Task<IActionResult> GetOnwerRestaurants()
+        {
+            var user = await _userService.GetLoggedInUser();
+
+            var restaurants = await _ownerService.GetUserRestaurants(user);
+
+            return Ok(RestaurantDto.MapToDtos(restaurants));
+        }
+        
 
     }
 

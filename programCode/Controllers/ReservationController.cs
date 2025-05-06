@@ -1,69 +1,149 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.Collections.Immutable;
 
 namespace RestaurantReservierung.Controllers
 {
-    [Authorize]  
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationController : ControllerBase
     {
         private readonly ReservationSystem _reservationSystem;
-       
+        private readonly UserService _userService;
+        private readonly TableService _tableService;
+        private readonly RestaurantOwnerService _restaurantOwnerService;
 
-        public ReservationController(ReservationSystem reservationSystem)
+        public ReservationController(ReservationSystem reservationSystem, UserService userService, TableService tableService, RestaurantOwnerService restaurantOwnerService)
         {
             // Initialisiere das ReservationSystem im Konstruktor
             _reservationSystem = reservationSystem;
-            
+            _userService = userService;
+            _tableService = tableService;
+            _restaurantOwnerService = restaurantOwnerService;
         }
 
         /// <summary>
-        /// TODO
+        /// Make A Reservation for a table.
         /// </summary>
+        /// <param name="model"></param>
+        /// <param name="tableId"></param>
         /// <returns></returns>
-        [HttpGet]
-        public ActionResult<IEnumerable<Restaurant>> GetAllRestaurants()
+        [Authorize]
+        [HttpPost("{tableId}")]
+        public async Task<IActionResult> makeReservation([FromBody] ReservationFormModel model, int tableId)
         {
+            var user = await _userService.GetLoggedInUser();
 
-            /*
-            List<Table> tableList = new List<Table>();
-
-            tableList.Add(new Table(12, TableAttributes.SQUARE, 1));
-            tableList.Add(new Table(12, TableAttributes.SQUARE, 2));
-            tableList.Add(new Table(12, TableAttributes.SQUARE, 3));
-            tableList.Add(new Table(12, TableAttributes.SQUARE, 4));
-            tableList.Add(new Table(4, TableAttributes.ROUND, 5));
-            roomList.Add(new Room(100, tableList));
-           
-
-            List<Room> roomList2 = new List<Room>();
-            List<Table> tableList2 = new List<Table>();
-
-            tableList2.Add(new Table(4, TableAttributes.SQUARE, 1));
-            tableList2.Add(new Table(4, TableAttributes.SQUARE, 2));
-            roomList2.Add(new Room(100, tableList2));
-
-            List<Room> roomList3 = new List<Room>();
-            List<Table> tableList3 = new List<Table>();
-
-            tableList3.Add(new Table(8, TableAttributes.SQUARE, 1));
-            tableList3.Add(new Table(8, TableAttributes.SQUARE, 2));
-            tableList3.Add(new Table(4, TableAttributes.ROUND, 3));
-
-            roomList3.Add(new Room(100, tableList3));
-            roomList.Add(new Room(200, tableList2));
+            var table = await _tableService.GetTableById(tableId);
+            if (table == null)
+                return NotFound(new { Message = "The table does not exist." });
 
 
-            _reservationSystem.AddRestaurant(new Restaurant("DHBW Kantine", "da bei Ardenauer Ring", new RestaurantOwner("Markus", "Strand", "markus.strand@dhbw-karlsruhe.de", "1234"), roomList));
-            _reservationSystem.AddRestaurant(new Restaurant("Mid Dönerladen neben DHBW", "nähe Kindergarten", new RestaurantOwner("Habibi", "Hammud", "hamud.habibi@mail.de", "adfsadf"), roomList2));     
-            _reservationSystem.AddRestaurant(new Restaurant("Mr. Meal", "Gegenüber von KFC", new RestaurantOwner("MR", "Meal", "mr.meal@dönerladen.de", "ppp"), roomList3));
-            */
-            return Ok(_reservationSystem.Restaurants);
+            if (model.EndTime <= model.StartTime)
+                return BadRequest(new { Message = "Illegal time interval!" });
+
+            if (!_reservationSystem.IsGreaterThenMinTimeInterval(model))
+                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationSystem.MinReservationTime.ToString() + "." });
+
+            if (_reservationSystem.IsInPast(model))
+                return BadRequest(new { Message = "The given Time interval is in the past!" });
+
+            if ((await _reservationSystem.GetReservationsForTimeInterval(model, table)).Count > 0)
+                return BadRequest(new { Message = "There already exists a reservation in the given time interval!" });
+
+
+            if (await _reservationSystem.Reserve(model, table, user))
+                return Ok(new { Message = "The reservation was successfull!" });
+
+            return BadRequest(new { Message = "Reservation was not successfull!" });
         }
+
+        /// <summary>
+        /// Get all Reservations, filtered by query parameters. Only Admins can Access
+        /// </summary>
+        /// <returns>List of Rerservations</returns>
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet("All")] 
+        public async Task<ActionResult> GetAllReservations([FromQuery] ReservationReturnFormModel model)
+        {         
+            return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+        }
+
+        /// <summary>
+        /// Get all Reservations from the restaurants of a restaurant owner. The Data can be filtered by query parameters. Only RESTAURANT_OWNER can access.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>List of Reservations</returns>
+        [Authorize(Roles = "RESTAURANT_OWNER")]
+        [HttpGet("Owner")] 
+        public async Task<ActionResult> GetAllReservationsForOwner([FromQuery] ReservationReturnFormModel model)
+        {
+            var user = await _userService.GetLoggedInUser();
+
+            if (model.RestaurantId.HasValue)
+            {
+                if (await _restaurantOwnerService.OwnsRestaurant(user, (int)model.RestaurantId))
+                {
+                    return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+                }
+                else
+                {
+                    return Unauthorized(new { Message = "You are not the owner of the restaurant." });
+                }
+            }
+            else
+            {           
+                var restaurants = await _restaurantOwnerService.GetUserRestaurants(user);
+
+                return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservationsForRestaurants(restaurants, model)));
+
+            }
+        }
+
+        /// <summary>
+        /// Get All Reservations made from the user who is logged in. 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("User")]
+        public async Task<IActionResult> GetReservationsForUser([FromQuery] ReservationReturnFormModel model)
+        {
+            model.UserId = (await _userService.GetLoggedInUser()).UserId;
+
+            return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+        }
+
+
+    }
+    
+    public class ReservationFormModel
+    {
+        public DateTime StartTime { get; set; }
+
+        public DateTime EndTime { get; set; }
+
+    }
+
+    public class ReservationReturnFormModel
+    {
+        public DateTime? StartTime { get; set; }
+
+        public DateTime? EndTime { get; set; }
+
+        public int? TableId { get; set; }
+
+        public int? RestaurantId { get; set; }
+
+        public int? Start { get; set; }
+
+        public int? Count { get; set; }
+
+        public int? UserId { get; set; }
+
     }
 }

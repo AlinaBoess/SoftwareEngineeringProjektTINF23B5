@@ -22,12 +22,10 @@ namespace RestaurantReservierung.Services
         }
 
         // Alle Benutzer abrufen
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllUsersAsync()
         {
             return await _context.Users.ToListAsync();
         }
-
-
 
         // Benutzer nach E-Mail suchen
         public async Task<User> GetUserByEmailAsync(string email)
@@ -35,7 +33,11 @@ namespace RestaurantReservierung.Services
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-
+        // Benutzer nach E-Mail suchen
+        public async Task<User> GetUserByIdAsync(int id)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
+        }
 
         // Benutzer registrieren
         public async Task<bool> RegisterAsync(User user)
@@ -52,7 +54,6 @@ namespace RestaurantReservierung.Services
             return true;
         }
 
-
         public async Task<User> getUserByIdAsync(int id)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
@@ -63,11 +64,6 @@ namespace RestaurantReservierung.Services
             var user = await GetUserByEmailAsync(email);
             return (user != null && _authService.IsCorrectPassword(password, user))? user : null;
         }
-
-
-        
-        
-
 
         public async Task<bool> DeleteUserAsync(User user)
         {
