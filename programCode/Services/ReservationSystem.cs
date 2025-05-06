@@ -2,12 +2,15 @@
 using RestaurantReservierung.Controllers;
 using RestaurantReservierung.Data;
 using RestaurantReservierung.Models;
-using System.ComponentModel;
 
 namespace RestaurantReservierung.Services
 {
     public class ReservationSystem
     {
+        //already initialized this way, therefore no extra constructor is needed
+        List<Restaurant> restaurants = new List<Restaurant>();
+        List<User> users = new List<User>();
+
         private readonly AppDbContext _context;
 
         // The min Timespan how long a reservation needs to be.
@@ -77,10 +80,16 @@ namespace RestaurantReservierung.Services
                 query = query.Where(r => r.Table.RestaurantId == model.RestaurantId);
             if(model.UserId.HasValue)
                 query = query.Where(r => r.UserId == model.UserId);
-            if(model.StartTime.HasValue)
+            if (model.StartTime.HasValue && !model.EndTime.HasValue)
                 query = query.Where(r => r.StartTime >= model.StartTime);
-            if (model.EndTime.HasValue)
+            else if (model.EndTime.HasValue && !model.StartTime.HasValue)
                 query = query.Where(r => r.EndTime <= model.EndTime);
+            else if (model.StartTime.HasValue && model.EndTime.HasValue)
+                query = query.Where(r => (
+                    (r.StartTime >= model.StartTime && r.StartTime <= model.EndTime) ||
+                    (r.EndTime >= model.StartTime && r.EndTime <= model.EndTime) ||
+                    (r.StartTime <= model.StartTime && r.EndTime >= model.EndTime)
+                ));
             if (model.Start.HasValue)
                 query = query.Skip((int)model.Start);
             if (model.Count.HasValue)
@@ -101,6 +110,69 @@ namespace RestaurantReservierung.Services
                 reservations = [.. reservations, .. await GetReservations(model)];
             }
             return reservations;
+        }
+
+
+        /*********************************************
+         * 
+         * 
+         * AB HIER SIND DIE METHODEN VERALTET UND HABEN KEINE VERWENDUNG, SIE EXESTIEREN NUR DAMIT DIE UNIT TESTS KEINE COMPILE FHELER MACHEN
+         * 
+         * 
+         * *******************************************/
+
+
+
+
+
+        /// <summary>
+        /// Adds a restaurant to the reservation system if it is not already contained.
+        /// Returns true if successful.
+        /// </summary>
+        public bool AddRestaurant(Restaurant r)
+        {
+            if (restaurants == null || r == null || restaurants.Contains(r))
+                return false;
+
+            restaurants.Add(r);
+            return true;
+        }
+
+        /// <summary>
+        /// Removes a restaurant from the reservation system if it is contained.
+        /// Returns true if successful.
+        /// </summary>
+        public bool RemoveRestaurant(Restaurant r)
+        {
+            if (restaurants == null || r == null)
+                return false;
+
+            return restaurants.Remove(r);
+        }
+
+        /// <summary>
+        /// Adds a restaurant to the reservation system if it is not already contained.
+        /// Returns true if successful.
+        /// </summary>
+        public bool AddUser(User user)
+        {
+            if (users == null || user == null || users.Contains(user))
+                return false;
+
+            users.Add(user);
+            return true;
+        }
+
+        /// <summary>
+        /// Removes a restaurant from the reservation system if it is contained.
+        /// Returns true if successful.
+        /// </summary>
+        public bool RemoveUser(User user)
+        {
+            if (users == null || user == null)
+                return false;
+
+            return users.Remove(user);
         }
 
         #region Getters / Setters

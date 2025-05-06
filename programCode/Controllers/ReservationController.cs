@@ -63,7 +63,13 @@ namespace RestaurantReservierung.Controllers
         }
 
         /// <summary>
-        /// Get all Reservations, filtered by query parameters. Only Admins can Access
+        /// Get all Reservations, filtered by query parameters. Only Admins can Access.
+        /// 
+        /// Filtering behavior of startDate and endDate:
+        /// 1. Only `startDate` is set: Returns all reservations that start on or after the given `startDate`.
+        /// 2. Only `endDate` is set: Returns all reservations that end on or before the given `endDate`.
+        /// 3. Both `startDate` and `endDate` are set: Returns all reservations that overlap with the given date range.
+        ///
         /// </summary>
         /// <returns>List of Rerservations</returns>
         [Authorize(Roles = "ADMIN")]
@@ -74,7 +80,14 @@ namespace RestaurantReservierung.Controllers
         }
 
         /// <summary>
-        /// Get all Reservations from the restaurants of a restaurant owner. The Data can be filtered by query parameters. Only RESTAURANT_OWNER can access.
+        /// Retrieves all reservations for the restaurants owned by the authenticated restaurant owner.
+        /// Only users with the role RESTAURANT_OWNER can access this endpoint.
+        ///
+        /// Filtering behavior of startDate and endDate:
+        /// 1. Only `startDate` is set: Returns all reservations that start on or after the given `startDate`.
+        /// 2. Only `endDate` is set: Returns all reservations that end on or before the given `endDate`.
+        /// 3. Both `startDate` and `endDate` are set: Returns all reservations that overlap with the given date range.
+        ///
         /// </summary>
         /// <param name="model"></param>
         /// <returns>List of Reservations</returns>
@@ -106,6 +119,13 @@ namespace RestaurantReservierung.Controllers
 
         /// <summary>
         /// Get All Reservations made from the user who is logged in. 
+        /// 
+        ///
+        /// Filtering behavior of startDate and endDate:
+        /// 1. Only `startDate` is set: Returns all reservations that start on or after the given `startDate`.
+        /// 2. Only `endDate` is set: Returns all reservations that end on or before the given `endDate`.
+        /// 3. Both `startDate` and `endDate` are set: Returns all reservations that overlap with the given date range.
+        ///
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
