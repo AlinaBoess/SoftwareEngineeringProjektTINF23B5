@@ -27,5 +27,7 @@ Wir haben folgende Fortschritte in der Entwicklung unserer Anwendung gemacht:
 Wir freuen uns auf die nächsten Meilensteine und halten euch natürlich wie immer auf dem Laufenden.
 
 Bis zum nächsten Eintrag!
+
 Liebe Grüße
+
 Alina, Lukas, Alex, Moumen und Yahya
