@@ -1,4 +1,4 @@
-# Blog #14 – Fortschritte bei Reservierungen und Tischverwaltung
+# Blog #14
 
 Herzlich Willkommen bei unserem Blog – schön, dass ihr wieder hier seid!
 
