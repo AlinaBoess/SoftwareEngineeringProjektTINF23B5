@@ -15,16 +15,23 @@ namespace RestaurantReservierung.Controllers
         private readonly ReservationSystem _reservationSystem;
         private readonly UserService _userService;
         private readonly TableService _tableService;
+        private readonly RestaurantOwnerService _restaurantOwnerService;
 
-        public ReservationController(ReservationSystem reservationSystem, UserService userService, TableService tableService)
+        public ReservationController(ReservationSystem reservationSystem, UserService userService, TableService tableService, RestaurantOwnerService restaurantOwnerService)
         {
             // Initialisiere das ReservationSystem im Konstruktor
             _reservationSystem = reservationSystem;
             _userService = userService;
             _tableService = tableService;
+            _restaurantOwnerService = restaurantOwnerService;
         }
 
-
+        /// <summary>
+        /// Make A Reservation for a table.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="tableId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("{tableId}")]
         public async Task<IActionResult> makeReservation([FromBody] ReservationFormModel model, int tableId)
@@ -54,16 +61,59 @@ namespace RestaurantReservierung.Controllers
 
             return BadRequest(new { Message = "Reservation was not successfull!" });
         }
-        
+
         /// <summary>
-        /// Get Reservations, filtered by query parameters.
+        /// Get all Reservations, filtered by query parameters. Only Admins can Access
         /// </summary>
-        /// <returns></returns>
-        
-        [HttpGet] // TODO: Filtern Nutzerrechte, wer darf welche Reservierungen sehen.
+        /// <returns>List of Rerservations</returns>
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet("All")] 
         public async Task<ActionResult> GetAllReservations([FromQuery] ReservationReturnFormModel model)
+        {         
+            return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+        }
+
+        /// <summary>
+        /// Get all Reservations from the restaurants of a restaurant owner. The Data can be filtered by query parameters. Only RESTAURANT_OWNER can access.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>List of Reservations</returns>
+        [Authorize(Roles = "RESTAURANT_OWNER")]
+        [HttpGet("Owner")] 
+        public async Task<ActionResult> GetAllReservationsForOwner([FromQuery] ReservationReturnFormModel model)
         {
             var user = await _userService.GetLoggedInUser();
+
+            if (model.RestaurantId.HasValue)
+            {
+                if (await _restaurantOwnerService.OwnsRestaurant(user, (int)model.RestaurantId))
+                {
+                    return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+                }
+                else
+                {
+                    return Unauthorized(new { Message = "You are not the owner of the restaurant." });
+                }
+            }
+            else
+            {           
+                var restaurants = await _restaurantOwnerService.GetUserRestaurants(user);
+
+                return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservationsForRestaurants(restaurants, model)));
+
+            }
+        }
+
+        /// <summary>
+        /// Get All Reservations made from the user who is logged in. 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("User")]
+        public async Task<IActionResult> GetReservationsForUser([FromQuery] ReservationReturnFormModel model)
+        {
+            model.UserId = (await _userService.GetLoggedInUser()).UserId;
 
             return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
         }

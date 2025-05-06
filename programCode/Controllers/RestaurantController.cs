@@ -131,7 +131,7 @@ namespace RestaurantReservierung.Controllers
         */
 
         /// <summary>
-        /// Get one Restaurant by id
+        /// Get one Restaurant by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>One Restaurant</returns>

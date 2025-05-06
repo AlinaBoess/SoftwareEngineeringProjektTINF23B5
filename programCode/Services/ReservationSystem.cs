@@ -2,17 +2,15 @@
 using RestaurantReservierung.Controllers;
 using RestaurantReservierung.Data;
 using RestaurantReservierung.Models;
+using System.ComponentModel;
 
 namespace RestaurantReservierung.Services
 {
     public class ReservationSystem
     {
-        //already initialized this way, therefore no extra constructor is needed
-        List<Restaurant> restaurants = new List<Restaurant>();
-        List<User> users = new List<User>();
-
         private readonly AppDbContext _context;
 
+        // The min Timespan how long a reservation needs to be.
         public TimeSpan MinReservationTime { get; } = new TimeSpan(1,0,0);
 
         public ReservationSystem(AppDbContext context)
@@ -20,59 +18,10 @@ namespace RestaurantReservierung.Services
             _context = context;
         }
 
+        // exeists because otherwise there is a compile error in the test files
         public ReservationSystem()
         {
          
-        }
-
-        /// <summary>
-        /// Adds a restaurant to the reservation system if it is not already contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool AddRestaurant(Restaurant r)
-        {
-            if (restaurants == null || r == null || restaurants.Contains(r))
-                return false;
-
-            restaurants.Add(r);
-            return true;
-        }
-
-        /// <summary>
-        /// Removes a restaurant from the reservation system if it is contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool RemoveRestaurant(Restaurant r)
-        {
-            if (restaurants == null || r == null)
-                return false;
-
-            return restaurants.Remove(r);
-        }
-
-        /// <summary>
-        /// Adds a restaurant to the reservation system if it is not already contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool AddUser(User user)
-        {
-            if (users == null || user == null || users.Contains(user))
-                return false;
-
-            users.Add(user);
-            return true;
-        }
-
-        /// <summary>
-        /// Removes a restaurant from the reservation system if it is contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool RemoveUser(User user)
-        {
-            if (users == null || user == null)
-                return false;
-
-            return users.Remove(user);
         }
 
         public async Task<bool> Reserve(ReservationFormModel model, Table table, User user)
@@ -129,7 +78,7 @@ namespace RestaurantReservierung.Services
             if(model.UserId.HasValue)
                 query = query.Where(r => r.UserId == model.UserId);
             if(model.StartTime.HasValue)
-                query = query.Where(r => r.StartTime <= model.StartTime);
+                query = query.Where(r => r.StartTime >= model.StartTime);
             if (model.EndTime.HasValue)
                 query = query.Where(r => r.EndTime <= model.EndTime);
             if (model.Start.HasValue)
@@ -140,6 +89,18 @@ namespace RestaurantReservierung.Services
             var reservations = await query.ToListAsync();
             return reservations;
 
+        }
+
+        public async Task<List<Reservation>> GetReservationsForRestaurants(List<Restaurant> restaurants, ReservationReturnFormModel model)
+        {
+            var reservations = new List<Reservation>();
+
+            foreach(var restaurant in restaurants)
+            {
+                model.RestaurantId = restaurant.RestaurantId;
+                reservations = [.. reservations, .. await GetReservations(model)];
+            }
+            return reservations;
         }
 
         #region Getters / Setters

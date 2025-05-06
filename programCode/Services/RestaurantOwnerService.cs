@@ -82,21 +82,6 @@ namespace RestaurantReservierung.Services
 
         public async Task<List<Restaurant>> GetManyRestaurants(int start = 0, int count = -1)
         {
-            /*
-            if(count >= 0)
-            {
-                return await _context.Restaurants
-                    .Skip(start)
-                    .Take(count)
-                    .ToListAsync();
-            }
-            else 
-            {
-                return await _context.Restaurants
-                    .Skip(start)
-                    .ToListAsync();
-            }
-            */
             var query = _context.Restaurants.AsQueryable();         
            
             query = query.Skip(start);
@@ -104,9 +89,6 @@ namespace RestaurantReservierung.Services
                 query = query.Take(count);
 
             return await query.ToListAsync();
-        
-
-
         }
 
         public async Task<List<Restaurant>> GetUserRestaurants(User user)
@@ -114,57 +96,14 @@ namespace RestaurantReservierung.Services
             return await _context.Restaurants.Where(r => r.User == user).ToListAsync();
         }
 
-        /*
-        /// <summary>
-        /// Add room to list of rooms if it is not contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool AddRoom(ref Restaurant restaurant, Room r)
+        public async Task<bool> OwnsRestaurant(User user, int restaurantId)
         {
-            if (restaurant == null || restaurant.Rooms == null || r == null || restaurant.Rooms.Contains(r))
-                return false;
+            var restaurant = await _context.Restaurants
+                .Where(r => r.RestaurantId == restaurantId)
+                .Where(r => r.User == user)
+                .FirstAsync();
 
-            restaurant.Rooms.Add(r);
-            return true;
+            return restaurant != null;
         }
-
-        /// <summary>
-        /// Remove room to list of rooms if it is contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool RemoveRoom(ref Restaurant restaurant, Room r)
-        {
-            if (restaurant == null || restaurant.Rooms == null || r == null)
-                return false;
-
-            return restaurant.Rooms.Remove(r);
-        }
-
-
-        /// <summary>
-        /// Add room to list of rooms if it is not contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool AddTable(ref Room room, Table t)
-        {
-            if (room == null || room.Tables == null || t == null || room.Tables.Contains(t))
-                return false;
-
-            room.Tables.Add(t);
-            return true;
-        }
-
-        /// <summary>
-        /// Remove room to list of rooms if it is contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool RemoveTable(ref Room room, Table t)
-        {
-            if (room == null || room.Tables == null || t == null)
-                return false;
-
-            return room.Tables.Remove(t);
-        }
-        */
     }
 }

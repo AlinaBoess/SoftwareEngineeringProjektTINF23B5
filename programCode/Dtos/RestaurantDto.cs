@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore.Storage.Json;
 using RestaurantReservierung.Models;
 
@@ -15,9 +16,10 @@ namespace RestaurantReservierung.Dtos
         public string? OpeningHours { get; set; }
 
         public string? Website { get; set; }
-
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual List<TableDto> Tables { get; set; } = new List<TableDto>();
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual UserDto User { get; set; } = null!;
 
         

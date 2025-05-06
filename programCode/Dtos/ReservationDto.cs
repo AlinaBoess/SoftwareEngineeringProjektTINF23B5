@@ -21,6 +21,7 @@ namespace RestaurantReservierung.Dtos
 
         public virtual UserDto User { get; set; }
 
+        public virtual RestaurantDto Restaurant {  get; set; }
         
         public static ReservationDto MapToDto(Reservation reservation)
         {
@@ -45,6 +46,15 @@ namespace RestaurantReservierung.Dtos
                     UserId = reservation.User.UserId,
                     FirstName = reservation.User.FirstName,
                     LastName = reservation.User.LastName,
+                },
+                Restaurant = new RestaurantDto
+                {
+                    RestaurantId = reservation.Table.Restaurant.RestaurantId,
+                    Name = reservation.Table.Restaurant.Name,
+                    Address = reservation.Table.Restaurant.Address,
+                    OpeningHours = reservation.Table.Restaurant.OpeningHours,
+                    Website = reservation.Table.Restaurant.Website,
+                    Tables = null
                 }
 
             };
