@@ -2,7 +2,7 @@
 
 Herzlich Willkommen bei unserem Blog – schön, dass ihr wieder hier seid!
 
-## Testplan & neue Tests
+## Testplan
 
 In dieser Woche gab es keine Änderungen an unserem Testplan, und es wurden keine neuen Tests hinzugefügt.  
 Wir setzen weiterhin auf die bestehenden **Unit-, Integrations- und UI-Tests**, um die Qualität unserer Anwendung sicherzustellen.
