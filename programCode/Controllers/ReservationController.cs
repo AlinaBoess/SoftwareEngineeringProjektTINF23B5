@@ -196,5 +196,7 @@ namespace RestaurantReservierung.Controllers
 
         public int? UserId { get; set; }
 
+        public int? ReservationId { get; set; }
+
     }
 }

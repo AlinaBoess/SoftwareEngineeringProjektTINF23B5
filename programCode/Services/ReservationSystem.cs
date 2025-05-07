@@ -81,6 +81,8 @@ namespace RestaurantReservierung.Services
                 query = query.Where(r => r.Table.RestaurantId == model.RestaurantId);
             if(model.UserId.HasValue)
                 query = query.Where(r => r.UserId == model.UserId);
+            if (model.ReservationId.HasValue)
+                query = query.Where(r => r.ReservationId == model.ReservationId);
             if (model.StartTime.HasValue && !model.EndTime.HasValue)
                 query = query.Where(r => r.StartTime >= model.StartTime);
             else if (model.EndTime.HasValue && !model.StartTime.HasValue)
