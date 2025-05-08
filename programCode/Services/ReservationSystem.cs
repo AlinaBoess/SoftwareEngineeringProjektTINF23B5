@@ -71,7 +71,7 @@ namespace RestaurantReservierung.Services
             return model.StartTime < DateTime.Now;
         }
 
-        public async Task<List<Reservation>> GetReservations(ReservationReturnFormModel model)
+        public async Task<List<Reservation>> GetReservations(ReservationFilterModel model)
         {
             var query = _context.Reservations.AsQueryable();
 
@@ -103,7 +103,7 @@ namespace RestaurantReservierung.Services
 
         }
 
-        public async Task<List<Reservation>> GetReservationsForRestaurants(List<Restaurant> restaurants, ReservationReturnFormModel model)
+        public async Task<List<Reservation>> GetReservationsForRestaurants(List<Restaurant> restaurants, ReservationFilterModel model)
         {
             var reservations = new List<Reservation>();
 

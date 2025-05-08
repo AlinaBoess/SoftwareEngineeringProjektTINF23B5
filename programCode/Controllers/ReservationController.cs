@@ -75,7 +75,7 @@ namespace RestaurantReservierung.Controllers
         /// <returns>List of Rerservations</returns>
         [Authorize(Roles = "ADMIN")]
         [HttpGet("All")] 
-        public async Task<ActionResult> GetAllReservations([FromQuery] ReservationReturnFormModel model)
+        public async Task<ActionResult> GetAllReservations([FromQuery] ReservationFilterModel model)
         {         
             return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
         }
@@ -94,7 +94,7 @@ namespace RestaurantReservierung.Controllers
         /// <returns>List of Reservations</returns>
         [Authorize(Roles = "RESTAURANT_OWNER")]
         [HttpGet("Owner")] 
-        public async Task<ActionResult> GetAllReservationsForOwner([FromQuery] ReservationReturnFormModel model)
+        public async Task<ActionResult> GetAllReservationsForOwner([FromQuery] ReservationFilterModel model)
         {
             var user = await _userService.GetLoggedInUser();
 
@@ -132,7 +132,7 @@ namespace RestaurantReservierung.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("User")]
-        public async Task<IActionResult> GetReservationsForUser([FromQuery] ReservationReturnFormModel model)
+        public async Task<IActionResult> GetReservationsForUser([FromQuery] ReservationFilterModel model)
         {
             model.UserId = (await _userService.GetLoggedInUser()).UserId;
 
@@ -180,7 +180,7 @@ namespace RestaurantReservierung.Controllers
 
     }
 
-    public class ReservationReturnFormModel
+    public class ReservationFilterModel
     {
         public DateTime? StartTime { get; set; }
 
