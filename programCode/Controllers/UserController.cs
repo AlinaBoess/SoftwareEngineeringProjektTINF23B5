@@ -76,10 +76,12 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteCurrentUser()
         {
-            // TODO
-            return Ok();
+            var user = await _userService.GetLoggedInUser();
+
+            return Ok(await _userService.DeleteUserAsync(user));
         }
 
+        /*
         /// <summary>
         /// Allows Admins to create new Users without the Authentication Process.
         /// </summary>
@@ -92,6 +94,7 @@ namespace RestaurantReservierung.Controllers
             // TODO
             return Ok();
         }
+        */
 
 
         /// <summary>

@@ -4,6 +4,7 @@ using RestaurantReservierung.Data;
 using RestaurantReservierung.Models;
 using System.Collections.Concurrent;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace RestaurantReservierung.Services
 {
@@ -42,12 +43,27 @@ namespace RestaurantReservierung.Services
         // Benutzer registrieren
         public async Task<bool> RegisterAsync(User user)
         {
+            string emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+            string passwordRegex = "^.{6,64}$";
+
             // Prüfen, ob ein Benutzer mit dieser E-Mail bereits existiert
-            bool emailExists = await _context.Users.AnyAsync(u => u.Email == user.Email);
-            if (emailExists)
+            if (await _context.Users.AnyAsync(u => u.Email == user.Email))
                 return false;
 
+            if (!Regex.IsMatch(user.Email, emailRegex))
+                return false;
+
+            if(!Regex.IsMatch(user.Password, passwordRegex))
+                return false;
+
+            user.Email = user.Email.ToLower();
+
             user.Password = _authService.HashPasswordForRegistration(user.Password);
+
+            // if no users exist, the first user is an admin
+            if (!await _context.Users.AnyAsync())
+                user.Role = "ADMIN";
+
             // Benutzer hinzufügen und speichern
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

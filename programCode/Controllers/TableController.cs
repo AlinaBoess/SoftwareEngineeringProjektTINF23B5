@@ -32,10 +32,6 @@ namespace RestaurantReservierung.Controllers
         public async Task<IActionResult> CreateTable([FromBody] TableFormModel tableForm, int restaurantId)
         {
             var user = await _userService.GetLoggedInUser();
-            if (user == null)
-            {
-                return BadRequest();
-            }
 
             var restaurant = await _ownerService.GetRestaurantById(restaurantId);
             if (restaurant == null)
@@ -71,6 +67,51 @@ namespace RestaurantReservierung.Controllers
 
             return Ok(TableDto.MapToDtos(tables));
         }
+
+
+        /// <summary>
+        /// Delete Table by id
+        /// </summary>
+        /// <param name="tableId"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "RESTAURANT_OWNER,ADMIN")]
+        [HttpDelete("{tableId}")]
+        public async Task<IActionResult> DeleteTable(int tableId)
+        {
+            var table = await _tableService.GetTableById(tableId);
+            var user = await _userService.GetLoggedInUser();
+
+            if(!await _ownerService.OwnsRestaurant(user, table.RestaurantId) && user.Role != "ADMIN")
+                return Unauthorized(new { Message = "You are not owner of the restaurant"});
+
+            if (await _tableService.RemoveTable(table))
+                return Ok( new { Messsage = "The Table has been deleted successfully!"});
+
+            return BadRequest( new { Message = "The table could not be deleted"});
+        }
+
+        /// <summary>
+        /// Update table by id
+        /// </summary>
+        /// <param name="tableId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "RESTAURANT_OWNER,ADMIN")]
+        [HttpPut("{tableId}")]
+        public async Task<IActionResult> UpdateTable(int tableId, TableFormModel model)
+        {
+            var table = await _tableService.GetTableById(tableId);
+            var user = await _userService.GetLoggedInUser();
+
+            if (!await _ownerService.OwnsRestaurant(user, table.RestaurantId) && user.Role != "ADMIN")
+                return Unauthorized(new { Message = "You are not owner of the restaurant" });
+
+            if (await _tableService.UpdateTable(table, model))
+                return Ok(new { Message = "The Table has been updated successfully!"});
+            
+            return BadRequest(new { Message = "The table could not be updated" });
+        }
+
     }
 
     public class TableFormModel

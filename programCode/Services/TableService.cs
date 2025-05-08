@@ -46,5 +46,21 @@ namespace RestaurantReservierung.Services
         {
             return await _context.Tables.FirstOrDefaultAsync(t => t.TableId == tableId);
         }
+
+        public async Task<bool> RemoveTable(Table table)
+        {
+            _context.Tables.Remove(table);
+
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> UpdateTable(Table table, TableFormModel model)
+        {
+            table.TableNr = model.TableNr;
+            table.Area = model.Area;
+            table.Capacity = model.Capacity;
+
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

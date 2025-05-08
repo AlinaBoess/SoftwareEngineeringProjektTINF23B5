@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -20,11 +21,14 @@ namespace RestaurantReservierung.Controllers
         {
             _userService = userService;
             _authService = authService;
-
         }
 
 
-        // registers a new user
+        /// <summary>
+        /// Register a new User. The Email has to be valid and unique email. The Password has to be at least 6 characters.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
         {
@@ -40,7 +44,7 @@ namespace RestaurantReservierung.Controllers
             if (await _userService.RegisterAsync(user))
                 return Ok(new { message = "User registered successfully" });
 
-            return BadRequest(new { message = "User already exists" });
+            return BadRequest(new { message = "User could not be registered!" });
         }
 
         // logs a new user in and sets a oidc token
@@ -79,10 +83,15 @@ namespace RestaurantReservierung.Controllers
         // represents the register input form in the frontend
         public class RegisterModel
         {
+            [Required]
             public string FirstName { get; set; }
+            [Required]
             public string LastName { get; set; }
+            [Required]
             public string Email { get; set; }
+            [Required]
             public string Password { get; set; }
+            
         }
     }
 }

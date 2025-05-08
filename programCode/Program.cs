@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservierung.Data;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,11 +99,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();              // WICHTIG: Routing aktivieren
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
-app.UseStaticFiles
-    ();
+
+app.UseHttpMetrics();          // Prometheus-Middleware (nach Routing, vor Endpoints)
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();  // Controller-Mapping
+    endpoints.MapMetrics();      // Prometheus-Metrics-Endpunkt
+});
+
 app.Run();

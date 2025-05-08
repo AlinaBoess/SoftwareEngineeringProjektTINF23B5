@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 using RestaurantReservierung.Controllers;
 using RestaurantReservierung.Data;
 using RestaurantReservierung.Models;
@@ -70,7 +71,7 @@ namespace RestaurantReservierung.Services
             return model.StartTime < DateTime.Now;
         }
 
-        public async Task<List<Reservation>> GetReservations(ReservationReturnFormModel model)
+        public async Task<List<Reservation>> GetReservations(ReservationFilterModel model)
         {
             var query = _context.Reservations.AsQueryable();
 
@@ -80,6 +81,8 @@ namespace RestaurantReservierung.Services
                 query = query.Where(r => r.Table.RestaurantId == model.RestaurantId);
             if(model.UserId.HasValue)
                 query = query.Where(r => r.UserId == model.UserId);
+            if (model.ReservationId.HasValue)
+                query = query.Where(r => r.ReservationId == model.ReservationId);
             if (model.StartTime.HasValue && !model.EndTime.HasValue)
                 query = query.Where(r => r.StartTime >= model.StartTime);
             else if (model.EndTime.HasValue && !model.StartTime.HasValue)
@@ -100,7 +103,7 @@ namespace RestaurantReservierung.Services
 
         }
 
-        public async Task<List<Reservation>> GetReservationsForRestaurants(List<Restaurant> restaurants, ReservationReturnFormModel model)
+        public async Task<List<Reservation>> GetReservationsForRestaurants(List<Restaurant> restaurants, ReservationFilterModel model)
         {
             var reservations = new List<Reservation>();
 
@@ -112,7 +115,34 @@ namespace RestaurantReservierung.Services
             return reservations;
         }
 
+        public async Task<Reservation> GetReservationById(int reservationId)
+        {
+            return await _context.Reservations.FirstAsync(r => r.ReservationId == reservationId);
+        }
 
+        public async Task<bool> CanUpdateReservation(Reservation reservation, ReservationFormModel model)
+        {
+            var reservationsInInterval = await GetReservationsForTimeInterval(model, reservation.Table);
+
+            if(reservationsInInterval.Contains(reservation) && reservationsInInterval.Count == 1)
+                return true;
+
+            if (reservationsInInterval.Count == 0)
+                return true;
+
+            return false;
+        }
+
+        public async Task<bool> UpdateReservation(ReservationFormModel model, Reservation reservation)
+        {
+            reservation.StartTime = model.StartTime;
+            reservation.EndTime = model.EndTime;
+            reservation.UpdatedAt = DateTime.Now;
+
+            return await _context.SaveChangesAsync() > 0;
+
+        }
+        
         /*********************************************
          * 
          * 

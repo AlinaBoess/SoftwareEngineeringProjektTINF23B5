@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
@@ -74,7 +75,7 @@ namespace RestaurantReservierung.Controllers
         /// <returns>List of Rerservations</returns>
         [Authorize(Roles = "ADMIN")]
         [HttpGet("All")] 
-        public async Task<ActionResult> GetAllReservations([FromQuery] ReservationReturnFormModel model)
+        public async Task<ActionResult> GetAllReservations([FromQuery] ReservationFilterModel model)
         {         
             return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
         }
@@ -93,7 +94,7 @@ namespace RestaurantReservierung.Controllers
         /// <returns>List of Reservations</returns>
         [Authorize(Roles = "RESTAURANT_OWNER")]
         [HttpGet("Owner")] 
-        public async Task<ActionResult> GetAllReservationsForOwner([FromQuery] ReservationReturnFormModel model)
+        public async Task<ActionResult> GetAllReservationsForOwner([FromQuery] ReservationFilterModel model)
         {
             var user = await _userService.GetLoggedInUser();
 
@@ -131,13 +132,43 @@ namespace RestaurantReservierung.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("User")]
-        public async Task<IActionResult> GetReservationsForUser([FromQuery] ReservationReturnFormModel model)
+        public async Task<IActionResult> GetReservationsForUser([FromQuery] ReservationFilterModel model)
         {
             model.UserId = (await _userService.GetLoggedInUser()).UserId;
 
             return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
         }
 
+        [Authorize]
+        [HttpPut("{reservationId}")]
+        public async Task<IActionResult> UpdateReservation(int reservationId, ReservationFormModel model)
+        {
+            var user = await _userService.GetLoggedInUser();
+            var reservation = await _reservationSystem.GetReservationById(reservationId);
+
+
+            if(user.UserId != reservation.UserId && user.Role != "ADMIN")
+                return Unauthorized(new { Message = "You don't have Permissions to change the reservation"});
+
+            if (model.EndTime <= model.StartTime)
+                return BadRequest(new { Message = "Illegal time interval!" });
+
+            if (!_reservationSystem.IsGreaterThenMinTimeInterval(model))
+                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationSystem.MinReservationTime.ToString() + "." });
+
+            if (_reservationSystem.IsInPast(model))
+                return BadRequest(new { Message = "The given Time interval is in the past!" });
+
+            if (! await _reservationSystem.CanUpdateReservation(reservation, model))
+                return BadRequest(new { Message = "There already exists a reservation in the given time interval!" });
+
+
+            if (await _reservationSystem.UpdateReservation(model, reservation))
+                return Ok(new { Message = "The reservation was successfull!" });
+
+            return BadRequest(new { Message = "Reservation was not successfull!" });
+
+        }
 
     }
     
@@ -149,7 +180,7 @@ namespace RestaurantReservierung.Controllers
 
     }
 
-    public class ReservationReturnFormModel
+    public class ReservationFilterModel
     {
         public DateTime? StartTime { get; set; }
 
@@ -164,6 +195,8 @@ namespace RestaurantReservierung.Controllers
         public int? Count { get; set; }
 
         public int? UserId { get; set; }
+
+        public int? ReservationId { get; set; }
 
     }
 }
