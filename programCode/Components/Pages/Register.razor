@@ -1,0 +1,69 @@
+﻿@page "/register"
+
+<div class="form-container">
+    <div class="form-box">
+        <h1>Registrieren</h1>
+
+        <EditForm Model="@registerModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div>
+                <label for="firstname">Vorname:</label>
+                <InputText id="firstname" class="form-control" @bind-Value="registerModel.FirstName" />
+                <ValidationMessage For="@(() => registerModel.FirstName)" />
+            </div>
+
+            <div>
+                <label for="lastname">Nachname:</label>
+                <InputText id="lastname" class="form-control" @bind-Value="registerModel.LastName" />
+                <ValidationMessage For="@(() => registerModel.LastName)" />
+            </div>
+
+            <div>
+                <label for="email">E-Mail:</label>
+                <InputText id="email" class="form-control" @bind-Value="registerModel.Email" />
+                <ValidationMessage For="@(() => registerModel.Email)" />
+            </div>
+
+            <div>
+                <label for="password">Passwort:</label>
+                <InputText id="password" type="password" class="form-control" @bind-Value="registerModel.Password" />
+                <ValidationMessage For="@(() => registerModel.Password)" />
+            </div>
+
+            <button type="submit" class="btn-primary">Registrieren</button>
+        </EditForm>
+
+        <p>
+            Bereits ein Konto? <a href="/login">Hier einloggen</a>
+        </p>
+    </div>
+</div>
+
+
+@code {
+    private RegisterModel registerModel = new RegisterModel();
+
+    private void HandleValidSubmit()
+    {
+        // Hier kannst du die Registrierungslogik implementieren
+        Console.WriteLine($"Vorname: {registerModel.FirstName}, Nachname: {registerModel.LastName}, E-Mail: {registerModel.Email}");
+    }
+
+    public class RegisterModel
+    {
+        [Required(ErrorMessage = "Vorname ist erforderlich.")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Nachname ist erforderlich.")]
+        public string LastName { get; set; }
+
+        [Required(ErrorMessage = "E-Mail ist erforderlich.")]
+        [EmailAddress(ErrorMessage = "Ungültige E-Mail-Adresse.")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Passwort ist erforderlich.")]
+        public string Password { get; set; }
+    }
+}

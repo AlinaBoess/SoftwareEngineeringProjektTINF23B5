@@ -23,6 +23,11 @@ builder.Services.AddScoped<ReservationSystem>();
 builder.Services.AddScoped<RestaurantOwnerService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TableService>();
+builder.Services.AddHttpClient("DefaultClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7038"); 
+});
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();  // Swagger API registreren

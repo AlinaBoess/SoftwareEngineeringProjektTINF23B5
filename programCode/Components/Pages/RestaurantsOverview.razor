@@ -1,4 +1,6 @@
 ﻿@page "/RestaurantsOverview"
+@inject HttpClient http
+
 
 <h1>Finden Sie Ihr perfektes Restaurant</h1>
 <p class="subtext">Entdecken Sie die besten Restaurants in Ihrer Nähe und reservieren Sie direkt online</p>
@@ -9,101 +11,34 @@
     @foreach (var r in Restaurants)
     {
         <div class="card">
-            <img src="@r.ImageUrl" />
+            <img src="" />
             <h3>@r.Name</h3>
-            <p>@r.Type</p>
-            <p>⭐ @r.Rating.ToString("0.0") (@r.Reviews Bewertungen)</p>
-            <button class="button" @onclick="() => OpenReservation(r)">Tisch reservieren</button>
+            <p>@r.Address</p>
+            <p>@r.OpeningHours</p>
+            <p>@r.Website</p>
+            <button class="button" >Tisch reservieren</button>
         </div>
     }
 </div>
 
-@if (SelectedRestaurant != null)
-{
-    <div class="modal" @onclick="CloseModal">
-        <div class="modal-content" @onclick:stopPropagation="true">
-            <h3>Reservierung bei @SelectedRestaurant.Name</h3>
-
-            <input type="date" @bind="ReservationDate" class="form-control" />
-            <select @bind="ReservationTime" class="form-control" style="margin-top:1rem;">
-                <option disabled selected>Uhrzeit wählen</option>
-                <option>18:00</option>
-                <option>19:00</option>
-                <option>20:00</option>
-            </select>
-
-            <div class="table-grid">
-                @foreach (var t in Tables)
-                {
-                    <div class="table">
-                        <span>
-                            Tisch @t.Number<br />@t.Seats Plätze<br />
-                            @(t.IsOccupied ? "<span class='occupied'>Besetzt</span>" : "")
-                        </span>
-                    </div>
-                }
-            </div>
-
-            <input placeholder="Name" class="form-control" style="margin-top:1rem;" />
-            <input placeholder="E-Mail" class="form-control" style="margin-top:0.5rem;" />
-            <input placeholder="Telefon" class="form-control" style="margin-top:0.5rem;" />
-
-            <div style="text-align: right; margin-top: 1rem;">
-                <button class="button" style="background: grey; margin-right: 1rem;" @onclick="CloseModal">Abbrechen</button>
-                <button class="button">Reservieren</button>
-            </div>
-        </div>
-    </div>
-}
 
 
 
 @code {
-    class Restaurant
+
+    private List<Restaurant> Restaurants = new List<Restaurant>();
+
+    protected override async Task OnInitializedAsync()
     {
-        public string Name { get; set; }
-        public string Type { get; set; }
-        public string ImageUrl { get; set; }
-        public double Rating { get; set; }
-        public int Reviews { get; set; }
+        await LoadData();
     }
 
-    class Table
+
+    private async Task LoadData()
     {
-        public int Number { get; set; }
-        public int Seats { get; set; }
-        public bool IsOccupied { get; set; }
+        Restaurants = await http.GetFromJsonAsync<List<Restaurant>>("https://localhost:7038/api/Restaurant");
     }
 
-    List<Restaurant> Restaurants = new()
-    {
-        new Restaurant { Name = "Café Gemütlich", Type = "Café & Konditorei", ImageUrl = "https://source.unsplash.com/400x300/?cafe", Rating = 4.6, Reviews = 189 },
-        new Restaurant { Name = "La Cucina", Type = "Italienisch", ImageUrl = "https://source.unsplash.com/400x300/?italian-kitchen", Rating = 4.7, Reviews = 230 },
-        new Restaurant { Name = "Sushi Master", Type = "Japanisch", ImageUrl = "https://source.unsplash.com/400x300/?sushi", Rating = 4.6, Reviews = 189 },
-    };
 
-    List<Table> Tables = new()
-    {
-        new Table { Number = 1, Seats = 2, IsOccupied = false },
-        new Table { Number = 2, Seats = 2, IsOccupied = true },
-        new Table { Number = 3, Seats = 4, IsOccupied = false },
-        new Table { Number = 4, Seats = 4, IsOccupied = false },
-        new Table { Number = 5, Seats = 6, IsOccupied = true },
-        new Table { Number = 6, Seats = 8, IsOccupied = false },
-    };
-
-    Restaurant? SelectedRestaurant;
-    DateTime ReservationDate = DateTime.Today;
-    string? ReservationTime;
-
-    void OpenReservation(Restaurant restaurant)
-    {
-        SelectedRestaurant = restaurant;
-    }
-
-    void CloseModal()
-    {
-        SelectedRestaurant = null;
-    }
 }
 
