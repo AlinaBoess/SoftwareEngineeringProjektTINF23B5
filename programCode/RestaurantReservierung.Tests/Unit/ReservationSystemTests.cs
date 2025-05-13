@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using RestaurantReservierung.Components.Pages;
+using RestaurantReservierung.Data;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 
@@ -8,75 +11,177 @@ namespace RestaurantReservierung.Tests.Unit;
 public class ReservationSystemTests
 {
     private ReservationSystem _system;
+    private AppDbContext inMemoryDBContext;
+
     private Restaurant _restaurant;
+    private User _user;
+    private Reservation _reservation, _reservation2, _reservation3;
+    private Table _table, _table2;
 
 
     [SetUp]
     public void SetUp()
     {
-        // fresh instance before each test
-        _system = new ReservationSystem();
+        //get in-memory DB context
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+           .UseInMemoryDatabase(databaseName: "TestDB_" + Guid.NewGuid())
+           .Options;
 
-        // a minimal Restaurant instance
-        _restaurant = new Restaurant();
-        _restaurant.Name = "TestName";
-        _restaurant.Address = "TestAddress";
-        _restaurant.User = new User();
-        _restaurant.Tables = new List<Table>();
+        inMemoryDBContext = new AppDbContext(options);
+
+        // fresh instances before each test
+        _system = new ReservationSystem(inMemoryDBContext);
+
+
+        _user = new User() { AdminActions = new List<AdminAction>(), Email = "a@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 0 };
+        _restaurant = new Restaurant() { Address = "Am Weg", Name = "Zum Restaurant", OpeningHours = "8-9 Uhr", RestaurantId = 1, Tables = new List<Table>(), User = _user, UserId = 0, Website = "google.com" };
+        _table = new Table()
+        {
+            Area = "in a room",
+            Capacity = 27,
+            Reservations = new List<Reservation>(),
+            Restaurant = _restaurant
+        };
+
+        _table2 = new Table()
+        {
+            Area = "in another room",
+            Capacity = 69,
+            Reservations = new List<Reservation>(),
+            Restaurant = _restaurant
+        };
+
+        _reservation = new Reservation
+        {
+            CreatedAt = DateTime.Now,
+            EndTime = DateTime.Now.Add(TimeSpan.FromMinutes(10)),
+            UpdatedAt = DateTime.Now,
+            Feedbacks = new List<Feedback>(),
+            ReservationId = 1,
+            StartTime = DateTime.Now,
+            Table = _table,
+            User = _user,
+            UserId = _user.UserId,
+            TableId = _table.TableId
+        };
+
+        _reservation2 = new Reservation
+        {
+            CreatedAt = DateTime.Now,
+            EndTime = DateTime.Now.Add(TimeSpan.FromMinutes(10)),
+            UpdatedAt = DateTime.Now,
+            Feedbacks = new List<Feedback>(),
+            ReservationId = 2,
+            StartTime = DateTime.Now,
+            Table = _table,
+            User = _user,
+            UserId = _user.UserId,
+            TableId = _table.TableId
+        };
+
+        _reservation3 = new Reservation
+        {
+            CreatedAt = DateTime.Now,
+            EndTime = DateTime.Now.Add(TimeSpan.FromMinutes(10)),
+            UpdatedAt = DateTime.Now,
+            Feedbacks = new List<Feedback>(),
+            ReservationId = 3,
+            StartTime = DateTime.Now,
+            Table = _table2,
+            User = _user,
+            UserId = _user.UserId,
+            TableId = _table2.TableId
+        };
+
+        inMemoryDBContext.Reservations.Add(_reservation);
+        inMemoryDBContext.Reservations.Add(_reservation2);
+        inMemoryDBContext.Reservations.Add(_reservation3);
+
+
+        inMemoryDBContext.SaveChanges();
+
     }
 
     [TearDown]
     public void TearDown()
     {
-        // clean up references
-        _system = null;
-        _restaurant = null;
+
     }
 
     [Test]
-    public void AddRestaurant_WithValidRestaurant_ReturnsTrueAndContainsIt()
+    public void AddSameReservationTwice_ShouldThrowError()
     {
-        var added = _system.AddRestaurant(_restaurant);
+        try
+        {
+            inMemoryDBContext.Reservations.Add(_reservation);
+            inMemoryDBContext.SaveChanges();
 
-        Assert.That(added, Is.True, "AddRestaurant should return true for a new restaurant");
-        Assert.That(_system.Restaurants, Does.Contain(_restaurant));
+            //fail test if no error was thrown
+            Assert.That(false);
+        }
+        catch (Exception e)
+        {
+            Assert.That(e.Message.Equals("An item with the same key has already been added. Key: 1"));
+        }
+
     }
 
     [Test]
-    public void AddRestaurant_Duplicate_ReturnsFalse()
+    public void AddReservation_ShouldStoreReservation()
     {
-        _system.AddRestaurant(_restaurant);
-        var addedAgain = _system.AddRestaurant(_restaurant);
+        var reservation4 = new Reservation
+        {
+            CreatedAt = DateTime.Now,
+            EndTime = DateTime.Now.Add(TimeSpan.FromMinutes(10)),
+            UpdatedAt = DateTime.Now,
+            Feedbacks = new List<Feedback>(),
+            ReservationId = 4,
+            StartTime = DateTime.Now,
+            Table = _table2,
+            User = _user,
+            UserId = _user.UserId,
+            TableId = _table2.TableId
+        };
 
-        Assert.That(addedAgain, Is.False, "Should prevent adding the same restaurant twice");
-        Assert.That(_system.Restaurants.Count, Is.EqualTo(1), "List count should remain 1");
+        inMemoryDBContext.Reservations.Add(reservation4);
+        inMemoryDBContext.SaveChanges();
+ 
+        Assert.That(reservation4, Is.Not.Null, "Reservation should not be null");
+        Assert.That(inMemoryDBContext.Reservations.Count(), Is.EqualTo(4));
+        Assert.That(reservation4.User.FirstName, Is.EqualTo("a"));
     }
 
     [Test]
-    public void AddRestaurant_Null_ReturnsFalse()
+    public void GetReservationById_ShouldReturnExisting()
     {
-        Assert.That(_system.AddRestaurant(null), Is.False, "Should return false when given null");
-        Assert.That(_system.Restaurants, Is.Empty, "List should stay empty");
+        var reservation = _system.GetReservationById(1);
+
+        Assert.That(reservation, Is.Not.Null, "Returned restaurant should not be null");
+        Assert.That(reservation.Result, Is.Not.Null);
+        Assert.That(reservation.Result.ReservationId, Is.EqualTo(1));
+
     }
 
     [Test]
-    public void RemoveRestaurant_Existing_ReturnsTrueAndRemovesIt()
+    public void GetReservationForRestaurants_ShouldReturnExisting()
     {
-        _system.AddRestaurant(_restaurant);
-        var removed = _system.RemoveRestaurant(_restaurant);
+        var reservation = _system.GetReservationsForRestaurants(new List<Restaurant>() { _restaurant }, new Controllers.ReservationFilterModel() { RestaurantId = _restaurant.RestaurantId });
 
-        Assert.That(removed, Is.True, "Should return true when removing an existing restaurant");
-        Assert.That(_system.Restaurants, Does.Not.Contain(_restaurant), "Should no longer contain that restaurant");
+        Assert.That(reservation, Is.Not.Null, "Returned restaurant should not be null");
+        Assert.That(reservation.Result, Is.Not.Null);
+        Assert.That(reservation.Result.Count, Is.EqualTo(3));
     }
 
     [Test]
-    public void RemoveRestaurant_NotExisting_ReturnsFalse()
+    public void GetReservationsForTimeInterval_ShouldReturnExisting()
     {
-        var other = new Restaurant { Name = "Other", Address = "Addr", User = new User(), Tables = new List<Table>() };
-        var removed = _system.RemoveRestaurant(other);
+        var reservation = _system.GetReservationsForTimeInterval(new Controllers.ReservationFormModel() { StartTime = DateTime.Now.Subtract(TimeSpan.FromMinutes(5)), EndTime = DateTime.Now.Add(TimeSpan.FromMinutes(5)) }, _table);
 
-        Assert.That(removed, Is.False, "Should return false when trying to remove one never added");
-        Assert.That(_system.Restaurants, Is.Empty, "Original list should remain unchanged");
+        Assert.That(reservation, Is.Not.Null, "Returned restaurant should not be null");
+        Assert.That(reservation.Result, Is.Not.Null);
+        Assert.That(reservation.Result.Count, Is.EqualTo(2));
+
+        for (int i = 0; i < 2; ++i)
+            Assert.That(reservation.Result[i].Table, Is.EqualTo(_table));
     }
-
 }

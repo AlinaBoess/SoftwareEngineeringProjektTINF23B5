@@ -15,22 +15,23 @@ namespace RestaurantReservierung.Services
         private readonly AppDbContext _context;
 
         // The min Timespan how long a reservation needs to be.
-        public TimeSpan MinReservationTime { get; } = new TimeSpan(1,0,0);
+        public TimeSpan MinReservationTime { get; } = new TimeSpan(1, 0, 0);
 
         public ReservationSystem(AppDbContext context)
         {
             _context = context;
         }
 
-        // exeists because otherwise there is a compile error in the test files
-        public ReservationSystem()
-        {
-         
-        }
+        /*      // exeists because otherwise there is a compile error in the test files
+              public ReservationSystem()
+              {
+
+              }
+        */
 
         public async Task<bool> Reserve(ReservationFormModel model, Table table, User user)
         {
-            
+
             var reservation = new Reservation
             {
                 User = user,
@@ -43,7 +44,7 @@ namespace RestaurantReservierung.Services
             };
             _context.Reservations.Add(reservation);
             if (await _context.SaveChangesAsync() > 0) return true;
-            
+
             return false;
         }
 
@@ -63,9 +64,9 @@ namespace RestaurantReservierung.Services
         {
             TimeSpan timestamp = model.EndTime - model.StartTime;
             return (timestamp.CompareTo(MinReservationTime) >= 0);
-        
+
         }
-           
+
         public bool IsInPast(ReservationFormModel model)
         {
             return model.StartTime < DateTime.Now;
@@ -75,31 +76,80 @@ namespace RestaurantReservierung.Services
         {
             var query = _context.Reservations.AsQueryable();
 
-            if(model.TableId.HasValue)
+
+
+            if (model.TableId.HasValue)
+
                 query = query.Where(r => r.TableId == model.TableId);
-            if(model.RestaurantId.HasValue)
+
+            if (model.RestaurantId.HasValue)
+
                 query = query.Where(r => r.Table.RestaurantId == model.RestaurantId);
-            if(model.UserId.HasValue)
+
+            if (model.UserId.HasValue)
+
                 query = query.Where(r => r.UserId == model.UserId);
+
+
             if (model.ReservationId.HasValue)
+
+
                 query = query.Where(r => r.ReservationId == model.ReservationId);
+
             if (model.StartTime.HasValue && !model.EndTime.HasValue)
+
                 query = query.Where(r => r.StartTime >= model.StartTime);
+
             else if (model.EndTime.HasValue && !model.StartTime.HasValue)
+
                 query = query.Where(r => r.EndTime <= model.EndTime);
+
             else if (model.StartTime.HasValue && model.EndTime.HasValue)
+
                 query = query.Where(r => (
+
                     (r.StartTime >= model.StartTime && r.StartTime <= model.EndTime) ||
+
                     (r.EndTime >= model.StartTime && r.EndTime <= model.EndTime) ||
+
                     (r.StartTime <= model.StartTime && r.EndTime >= model.EndTime)
+
                 ));
+
+            if (model.Start.HasValue)
+
+                query = query.Skip((int)model.Start);
+
+            if (model.Count.HasValue)
+
+                query = query.Take((int)model.Count);
+
+
+
+            var reservations = await query.ToListAsync();
+
+            return reservations;
+
+            /*var query = _context.Reservations.AsQueryable();
+            query = query.Where(r => r.TableId == model.TableId)
+                         .Where(r => r.Table.RestaurantId == model.RestaurantId)
+                         .Where(r => r.UserId == model.UserId)
+                         .Where(r => r.ReservationId == model.ReservationId)
+                         .Where(r => r.StartTime >= model.StartTime)
+                         .Where(r => r.EndTime <= model.EndTime)
+                         .Where(r => (
+                            (r.StartTime >= model.StartTime && r.StartTime <= model.EndTime) ||
+                            (r.EndTime >= model.StartTime && r.EndTime <= model.EndTime) ||
+                            (r.StartTime <= model.StartTime && r.EndTime >= model.EndTime)
+                         ));
+
             if (model.Start.HasValue)
                 query = query.Skip((int)model.Start);
             if (model.Count.HasValue)
                 query = query.Take((int)model.Count);
 
             var reservations = await query.ToListAsync();
-            return reservations;
+            return reservations; */
 
         }
 
@@ -107,7 +157,7 @@ namespace RestaurantReservierung.Services
         {
             var reservations = new List<Reservation>();
 
-            foreach(var restaurant in restaurants)
+            foreach (var restaurant in restaurants)
             {
                 model.RestaurantId = restaurant.RestaurantId;
                 reservations = [.. reservations, .. await GetReservations(model)];
@@ -124,7 +174,7 @@ namespace RestaurantReservierung.Services
         {
             var reservationsInInterval = await GetReservationsForTimeInterval(model, reservation.Table);
 
-            if(reservationsInInterval.Contains(reservation) && reservationsInInterval.Count == 1)
+            if (reservationsInInterval.Contains(reservation) && reservationsInInterval.Count == 1)
                 return true;
 
             if (reservationsInInterval.Count == 0)
@@ -142,7 +192,7 @@ namespace RestaurantReservierung.Services
             return await _context.SaveChangesAsync() > 0;
 
         }
-        
+
         /*********************************************
          * 
          * 
@@ -151,72 +201,73 @@ namespace RestaurantReservierung.Services
          * 
          * *******************************************/
 
+        /*
 
 
 
+                /// <summary>
+                /// Adds a restaurant to the reservation system if it is not already contained.
+                /// Returns true if successful.
+                /// </summary>
+                public bool AddRestaurant(Restaurant r)
+                {
+                    if (restaurants == null || r == null || restaurants.Contains(r))
+                        return false;
 
-        /// <summary>
-        /// Adds a restaurant to the reservation system if it is not already contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool AddRestaurant(Restaurant r)
-        {
-            if (restaurants == null || r == null || restaurants.Contains(r))
-                return false;
+                    restaurants.Add(r);
+                    return true;
+                }
 
-            restaurants.Add(r);
-            return true;
-        }
+                /// <summary>
+                /// Removes a restaurant from the reservation system if it is contained.
+                /// Returns true if successful.
+                /// </summary>
+                public bool RemoveRestaurant(Restaurant r)
+                {
+                    if (restaurants == null || r == null)
+                        return false;
 
-        /// <summary>
-        /// Removes a restaurant from the reservation system if it is contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool RemoveRestaurant(Restaurant r)
-        {
-            if (restaurants == null || r == null)
-                return false;
+                    return restaurants.Remove(r);
+                }
 
-            return restaurants.Remove(r);
-        }
+                /// <summary>
+                /// Adds a restaurant to the reservation system if it is not already contained.
+                /// Returns true if successful.
+                /// </summary>
+                public bool AddUser(User user)
+                {
+                    if (users == null || user == null || users.Contains(user))
+                        return false;
 
-        /// <summary>
-        /// Adds a restaurant to the reservation system if it is not already contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool AddUser(User user)
-        {
-            if (users == null || user == null || users.Contains(user))
-                return false;
+                    users.Add(user);
+                    return true;
+                }
 
-            users.Add(user);
-            return true;
-        }
+                /// <summary>
+                /// Removes a restaurant from the reservation system if it is contained.
+                /// Returns true if successful.
+                /// </summary>
+                public bool RemoveUser(User user)
+                {
+                    if (users == null || user == null)
+                        return false;
 
-        /// <summary>
-        /// Removes a restaurant from the reservation system if it is contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool RemoveUser(User user)
-        {
-            if (users == null || user == null)
-                return false;
+                    return users.Remove(user);
+                }
 
-            return users.Remove(user);
-        }
+                #region Getters / Setters
 
-        #region Getters / Setters
+                public List<Restaurant> Restaurants
+                {
+                    get { return restaurants; }
+                }
 
-        public List<Restaurant> Restaurants
-        {
-            get { return restaurants; }
-        }
+                public List<User> Users
+                {
+                    get { return users; }
+                }
 
-        public List<User> Users
-        {
-            get { return users; }
-        }
-
-        #endregion
+                #endregion
+            } */
     }
 }
