@@ -1,6 +1,25 @@
 # Restaurant Reservierung
 
 ## Frontend
+Zuerst den Entwicklungsserver starten:
+`cd .\frontend\´
+`cd .\app\´
+`npm run dev
+# oder
+yarn dev
+# oder
+pnpm dev
+# oder
+bun dev´
+Um mehr zu erfahren, wirf einen Blick auf die folgenden Ressourcen:
+
+    React Dokumentation (https://react.dev/) Erfahre mehr über React
+
+    TailwindCSS Dokumentation (https://tailwindcss.com/) Erfahre mehr über TailwindCSS
+
+    Next.js Dokumentation (https://nextjs.org/docs) Erfahre mehr über die Funktionen und die API von Next.js
+
+    Next.js lernen (https://nextjs.org/learn) Ein interaktives Tutorial zu Next.js
 
 ## Backend
 
