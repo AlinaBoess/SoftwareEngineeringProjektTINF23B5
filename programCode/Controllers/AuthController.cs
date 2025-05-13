@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,31 +15,36 @@ namespace RestaurantReservierung.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserService _userService;
-        private readonly IConfiguration _configuration;
+        private readonly AuthService _authService;
 
-        public AuthController(UserService userService, IConfiguration configuration)
+        public AuthController(UserService userService, AuthService authService)
         {
             _userService = userService;
-            _configuration = configuration;
+            _authService = authService;
         }
 
 
-        // registers a new user
+        /// <summary>
+        /// Register a new User. The Email has to be valid and unique email. The Password has to be at least 6 characters.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
         {
-            var user = new User { 
-                FirstName = model.FirstName, 
-                LastName = model.LastName, 
-                Email = model.Email, 
-                Password = model.Password 
+            var user = new User
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Password = model.Password
             };
 
 
             if (await _userService.RegisterAsync(user))
                 return Ok(new { message = "User registered successfully" });
 
-            return BadRequest(new { message = "User already exists" });
+            return BadRequest(new { message = "User could not be registered!" });
         }
 
         // logs a new user in and sets a oidc token
@@ -60,57 +66,32 @@ namespace RestaurantReservierung.Controllers
             }
 
             // generate jwt-token
-            var token = GenerateJwtToken(user);
+            var token = _authService.GenerateJwtToken(user);
 
             return Ok(new { token });
         }
 
-        // generates the authorizatin token
-        private string GenerateJwtToken(User user)
+
+
+        // represents the login form in the frontend
+        public class LoginModel
         {
-            var authClaims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-            if (user.Role == "ADMIN")
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, "ADMIN"));
-            }
-            else if (user.Role == "RESTAURANT_OWNER")
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, "RESTAURANT_OWNER"));
-            }
-
-
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                expires: DateTime.Now.AddHours(1),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            public string Email { get; set; }
+            public string Password { get; set; }
         }
-    }
 
-    // represents the login form in the frontend
-    public class LoginModel
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
-
-    // represents the register input form in the frontend
-    public class RegisterModel
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        // represents the register input form in the frontend
+        public class RegisterModel
+        {
+            [Required]
+            public string FirstName { get; set; }
+            [Required]
+            public string LastName { get; set; }
+            [Required]
+            public string Email { get; set; }
+            [Required]
+            public string Password { get; set; }
+            
+        }
     }
 }

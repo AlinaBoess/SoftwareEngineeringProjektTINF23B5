@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.IdentityModel.Tokens.Jwt;
@@ -31,7 +32,23 @@ namespace RestaurantReservierung.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsersAsync()
         {
-            return Ok(await _userService.GetAllUsersAsync());
+            var users = await _userService.GetAllUsersAsync();
+
+            return Ok(UserDto.MapToDtos(users));
+        }
+
+        /// <summary>
+        /// Get a user by userId.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet("{userId}")]
+        public async Task<ActionResult> GetUserById(int userId)
+        {
+            var user = await _userService.GetUserByIdAsync(userId);
+
+            return Ok(UserDto.MapToDto(user));
         }
 
         /// <summary>
@@ -59,10 +76,12 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteCurrentUser()
         {
-            // TODO
-            return Ok();
+            var user = await _userService.GetLoggedInUser();
+
+            return Ok(await _userService.DeleteUserAsync(user));
         }
 
+        /*
         /// <summary>
         /// Allows Admins to create new Users without the Authentication Process.
         /// </summary>
@@ -75,6 +94,7 @@ namespace RestaurantReservierung.Controllers
             // TODO
             return Ok();
         }
+        */
 
 
         /// <summary>

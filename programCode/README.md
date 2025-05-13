@@ -40,3 +40,7 @@ Anschließend wird das Modell in der Anwendung von EF Core generiert, indem es d
 
 Die Anmeldedaten stehen im Discord.
 Wenn Änderungen an der Datenbank vorgenommen werden, wie zum Beispiel das Hinzufügen einer Spalte in einer Tabelle, muss das Modell neu generiert werden. Dafür wird ebenfalls der oben genannte Befehl verwendet.
+
+### Metriken mit Prometheus
+
+Prometheus dient der Erfassung von Metriken für die ASP.NET Core Web API. Die erfassten Metriken sind ausschließlich während der Laufzeit der Anwendung verfügbar. Nach dem Start der Anwendung können sie unter https://localhost:7038/metrics eingesehen werden.

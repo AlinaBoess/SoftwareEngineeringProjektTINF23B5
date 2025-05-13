@@ -1,4 +1,7 @@
-﻿using RestaurantReservierung.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantReservierung.Controllers;
+using RestaurantReservierung.Data;
+using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 
 namespace RestaurantReservierung.Services
@@ -13,10 +16,19 @@ namespace RestaurantReservierung.Services
         }
 
 
-        public async Task<bool> AddRestaurant(Restaurant restaurant)
+        public async Task<bool> AddRestaurant(RestaurantFormModel restaurantModel, User user)
         {
             try
             {
+                var restaurant = new Restaurant
+                {
+                    Name = restaurantModel.Name,
+                    Address = restaurantModel.Adress,
+                    OpeningHours = restaurantModel.OpeningHours,
+                    Website = restaurantModel.Website,
+                    User = user
+                };
+
                 if (restaurant != null)
                 {
                     _context.Restaurants.Add(restaurant);
@@ -32,57 +44,66 @@ namespace RestaurantReservierung.Services
                 return false;
             }
         }
-        /*
-        /// <summary>
-        /// Add room to list of rooms if it is not contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool AddRoom(ref Restaurant restaurant, Room r)
-        {
-            if (restaurant == null || restaurant.Rooms == null || r == null || restaurant.Rooms.Contains(r))
-                return false;
 
-            restaurant.Rooms.Add(r);
-            return true;
+        public async Task<bool> UpdateRestaurant(Restaurant restaurant, RestaurantFormModel restaurantModel)
+        {
+            restaurant.Name = restaurantModel.Name;
+            restaurant.Address = restaurantModel.Adress;
+            restaurant.OpeningHours = restaurantModel.OpeningHours;
+            restaurant.Website = restaurantModel.Website;
+
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            return false;
         }
 
-        /// <summary>
-        /// Remove room to list of rooms if it is contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool RemoveRoom(ref Restaurant restaurant, Room r)
+        public async Task<Restaurant> GetRestaurantById(int id)
         {
-            if (restaurant == null || restaurant.Rooms == null || r == null)
-                return false;
+            var restaurant = await _context.Restaurants.FirstOrDefaultAsync(r => r.RestaurantId  == id);
 
-            return restaurant.Rooms.Remove(r);
+            if (restaurant != null)
+            {
+                return restaurant;
+            }
+            return null;
         }
 
-
-        /// <summary>
-        /// Add room to list of rooms if it is not contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool AddTable(ref Room room, Table t)
+        public async Task<bool> DeleteRestaurant(Restaurant restaurant)
         {
-            if (room == null || room.Tables == null || t == null || room.Tables.Contains(t))
-                return false;
+            _context.Restaurants.Remove(restaurant);
 
-            room.Tables.Add(t);
-            return true;
+            if (await _context.SaveChangesAsync() > 0) {  
+                return true; 
+            }
+            return false;
         }
 
-        /// <summary>
-        /// Remove room to list of rooms if it is contained.
-        /// Returns true if successful.
-        /// </summary>
-        public bool RemoveTable(ref Room room, Table t)
+        public async Task<List<Restaurant>> GetManyRestaurants(int start = 0, int count = -1)
         {
-            if (room == null || room.Tables == null || t == null)
-                return false;
+            var query = _context.Restaurants.AsQueryable();         
+           
+            query = query.Skip(start);
+            if (count > 0)
+                query = query.Take(count);
 
-            return room.Tables.Remove(t);
+            return await query.ToListAsync();
         }
-        */
+
+        public async Task<List<Restaurant>> GetUserRestaurants(User user)
+        {
+            return await _context.Restaurants.Where(r => r.User == user).ToListAsync();
+        }
+
+        public async Task<bool> OwnsRestaurant(User user, int restaurantId)
+        {
+            var restaurant = await _context.Restaurants
+                .Where(r => r.RestaurantId == restaurantId)
+                .Where(r => r.User == user)
+                .FirstAsync();
+
+            return restaurant != null;
+        }
     }
 }

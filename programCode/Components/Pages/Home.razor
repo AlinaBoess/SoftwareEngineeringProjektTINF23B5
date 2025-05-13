@@ -1,0 +1,25 @@
+﻿@page "/"
+@inject NavigationManager navMan
+
+<PageTitle>Home</PageTitle>
+
+<h1>Wilkommen auf unserer Homepage</h1>
+
+<p class="subtext">Entdecken Sie die besten kulinarischen Erlebnisse in Ihrer Nähe.</p>
+
+<button class="buttonCenter" @onclick="NavigateToRestaurants">Jetzt reservieren</button>
+
+<p class="dunkel"></p>
+<AboutUs></AboutUs>
+<p class="dunkel"></p>
+<Kontakt></Kontakt>
+
+@code {
+
+    private void NavigateToRestaurants()
+    {
+        navMan.NavigateTo("/RestaurantsOverview");
+    }
+}
+
+
