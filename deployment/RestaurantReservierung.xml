@@ -6,7 +6,9 @@
     <members>
         <member name="M:RestaurantReservierung.Controllers.AuthController.RegisterAsync(RestaurantReservierung.Controllers.AuthController.RegisterModel)">
             <summary>
-            Register a new User. The Email has to be valid and unique email. The Password has to be at least 6 characters.
+            Register a new User. 
+            The Email has to be valid and unique email. 
+            The Password has to be at least 6 characters.
             </summary>
             <param name="model"></param>
             <returns></returns>
