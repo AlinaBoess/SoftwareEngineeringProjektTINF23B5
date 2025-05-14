@@ -32,7 +32,7 @@ jobs:
       run: |
         rm -rf deployment
         mkdir deployment
-        cp -r programCode/bin/Release/net8.0/publish/* deployment/
+        cp -r publish/* deployment/
     - name: Commit & push to repo
       run: |
         git config user.name "github-actions"
