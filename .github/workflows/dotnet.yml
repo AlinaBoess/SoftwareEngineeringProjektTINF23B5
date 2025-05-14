@@ -35,6 +35,7 @@ jobs:
         rm -rf deployment
         mkdir deployment
         cp -r publish/* deployment/
+        cp programCode/bin/Release/net8.0/RestaurantReservierung.dll deployment/RestaurantReservierung.dll
     - name: Commit & push to repo
       run: |
         git config user.name "github-actions"
