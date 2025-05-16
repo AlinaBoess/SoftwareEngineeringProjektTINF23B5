@@ -9,12 +9,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservierung.Data;
 using Prometheus;
-using RestaurantReservierung.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddRazorComponents();
 /*
     .AddJsonOptions(x =>
         x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve);*/
@@ -23,10 +21,6 @@ builder.Services.AddScoped<ReservationSystem>();
 builder.Services.AddScoped<RestaurantOwnerService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TableService>();
-builder.Services.AddHttpClient("DefaultClient", client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7038"); 
-});
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -110,10 +104,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();              // WICHTIG: Routing aktivieren
-app.UseStaticFiles(); 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseAntiforgery();
 
 app.UseHttpMetrics();          // Prometheus-Middleware (nach Routing, vor Endpoints)
 
@@ -124,6 +116,5 @@ app.UseEndpoints(endpoints =>
 });
 
 
-app.MapRazorComponents<App>(); 
 
 app.Run();
