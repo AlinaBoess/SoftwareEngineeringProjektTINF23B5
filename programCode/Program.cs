@@ -93,7 +93,12 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactFrontend",
-        policy => policy.WithOrigins("http://localhost:3000")  // React-URL hier eintragen
+        policy => policy.WithOrigins("http://localhost:3000")  
+                         .AllowAnyHeader()
+                         .AllowAnyMethod());
+
+    options.AddPolicy("AllowReactFrontend",
+        policy => policy.WithOrigins("https://localhost:3000")  
                          .AllowAnyHeader()
                          .AllowAnyMethod());
 });
