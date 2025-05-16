@@ -109,7 +109,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 
 app.UseRouting();              // WICHTIG: Routing aktivieren
 app.UseAuthentication();
