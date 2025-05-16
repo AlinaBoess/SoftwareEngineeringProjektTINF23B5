@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RestaurantReservierung</name>
+    </assembly>
+    <members>
+        <member name="M:RestaurantReservierung.Controllers.AuthController.RegisterAsync(RestaurantReservierung.Controllers.AuthController.RegisterModel)">
+            <summary>
+            Register a new User. 
+            The Email has to be valid and unique email. 
+            The Password has to be at least 6 characters.
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.ReservationController.makeReservation(RestaurantReservierung.Controllers.ReservationFormModel,System.Int32)">
+            <summary>
+            Make A Reservation for a table.
+            </summary>
+            <param name="model"></param>
+            <param name="tableId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.ReservationController.GetAllReservations(RestaurantReservierung.Controllers.ReservationFilterModel)">
+             <summary>
+             Get all Reservations, filtered by query parameters. Only Admins can Access.
+             
+             Filtering behavior of startDate and endDate:
+             1. Only `startDate` is set: Returns all reservations that start on or after the given `startDate`.
+             2. Only `endDate` is set: Returns all reservations that end on or before the given `endDate`.
+             3. Both `startDate` and `endDate` are set: Returns all reservations that overlap with the given date range.
+            
+             </summary>
+             <returns>List of Rerservations</returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.ReservationController.GetAllReservationsForOwner(RestaurantReservierung.Controllers.ReservationFilterModel)">
+             <summary>
+             Retrieves all reservations for the restaurants owned by the authenticated restaurant owner.
+             Only users with the role RESTAURANT_OWNER can access this endpoint.
+            
+             Filtering behavior of startDate and endDate:
+             1. Only `startDate` is set: Returns all reservations that start on or after the given `startDate`.
+             2. Only `endDate` is set: Returns all reservations that end on or before the given `endDate`.
+             3. Both `startDate` and `endDate` are set: Returns all reservations that overlap with the given date range.
+            
+             </summary>
+             <param name="model"></param>
+             <returns>List of Reservations</returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.ReservationController.GetReservationsForUser(RestaurantReservierung.Controllers.ReservationFilterModel)">
+             <summary>
+             Get All Reservations made from the user who is logged in. 
+             
+            
+             Filtering behavior of startDate and endDate:
+             1. Only `startDate` is set: Returns all reservations that start on or after the given `startDate`.
+             2. Only `endDate` is set: Returns all reservations that end on or before the given `endDate`.
+             3. Both `startDate` and `endDate` are set: Returns all reservations that overlap with the given date range.
+            
+             </summary>
+             <param name="model"></param>
+             <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.createRestaurant(RestaurantReservierung.Controllers.RestaurantFormModel)">
+            <summary>
+            Creates a new restaurant. Only a user of Role restaurant_owner or an admin can delete a restaurant.
+            </summary>
+            <param name="restaurantModel"></param>
+            <returns>Status</returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.UpdateRestaurant(RestaurantReservierung.Controllers.RestaurantFormModel,System.Int32)">
+            <summary>
+            Updates a Rerstaurant by id. Only the restaurant owner or an admin can delete a restaurant.
+            </summary>
+            <param name="restaurantModel"></param>
+            <param name="id"></param>
+            <returns>Status</returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.DeleteRestaurant(System.Int32)">
+            <summary>
+            Deletes a restaurant by id. Only the restaurant owner or an admin can delete a restaurant.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.GetRestaurants(System.Int32)">
+            <summary>
+            Get one Restaurant by id.
+            </summary>
+            <param name="id"></param>
+            <returns>One Restaurant</returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.GetManyRestaurants(System.Int32,System.Int32)">
+            <summary>
+            Get many Restaurants. If no Url-Parameters are added, the Endpoint will return all Restaurants. 
+            </summary>
+            <param name="count">How many restaurants will be returned.</param>
+            <param name="start">Starting at:</param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.GetOnwerRestaurants">
+            <summary>
+            Returns a list of the restaurants from a restaurant owner.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.TableController.CreateTable(RestaurantReservierung.Controllers.TableFormModel,System.Int32)">
+            <summary>
+            Create a table for a restaurant. The creator must be the restaurant owner or an admin.
+            </summary>
+            <param name="tableForm"></param>
+            <param name="restaurantId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.TableController.GetTables(System.Int32)">
+            <summary>
+            Get all tables for an restaurant.
+            </summary>
+            <param name="restuarantId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.TableController.DeleteTable(System.Int32)">
+            <summary>
+            Delete Table by id
+            </summary>
+            <param name="tableId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.TableController.UpdateTable(System.Int32,RestaurantReservierung.Controllers.TableFormModel)">
+            <summary>
+            Update table by id
+            </summary>
+            <param name="tableId"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.UserController.GetAllUsersAsync">
+            <summary>
+            Returns all Users that exist. Only Admins can use this Endpoint.
+            </summary>
+            <returns>All Users</returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.UserController.GetUserById(System.Int32)">
+            <summary>
+            Get a user by userId.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.UserController.DeleteUserByIdAsync(System.Int32)">
+            <summary>
+            Deletes a User specified by ID. Only Admins can use this Endpoint.
+            </summary>
+            <param name="id"></param>
+            <returns>Deletion Status</returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.UserController.DeleteCurrentUser">
+            <summary>
+            Deletes the User who is currently logged in.
+            </summary>
+            <returns>Deletion Status</returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.UserController.UpdateRole(System.String,System.String)">
+            <summary>
+            Updates the Role of an user. Only Admins can use this endpoint
+            </summary>
+            <param name="email"></param>
+            <param name="newRole"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Services.AuthService.IsCorrectPassword(System.String,RestaurantReservierung.Models.User)">
+            <summary>
+            Checks if the provided password matches the password of the current User object.
+            Call this when processing login attempts.
+            </summary>
+        </member>
+    </members>
+</doc>

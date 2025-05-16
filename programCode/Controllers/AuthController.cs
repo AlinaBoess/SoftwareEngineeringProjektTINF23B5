@@ -25,7 +25,9 @@ namespace RestaurantReservierung.Controllers
 
 
         /// <summary>
-        /// Register a new User. The Email has to be valid and unique email. The Password has to be at least 6 characters.
+        /// Register a new User. 
+        /// The Email has to be valid and unique email. 
+        /// The Password has to be at least 6 characters.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -42,7 +44,7 @@ namespace RestaurantReservierung.Controllers
 
 
             if (await _userService.RegisterAsync(user))
-                return Ok(new { message = "User registered successfully" });
+                return Ok(new { message = "User registered successfully." });
 
             return BadRequest(new { message = "User could not be registered!" });
         }

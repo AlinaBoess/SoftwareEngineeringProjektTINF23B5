@@ -25,12 +25,11 @@
     <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.1" />
-	<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
-	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
 
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\" />
     <Folder Include="RestaurantReservierung.Tests\Integration\" />
     <Folder Include="Tests\" />
   </ItemGroup>
