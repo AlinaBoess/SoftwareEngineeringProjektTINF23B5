@@ -19,11 +19,13 @@ function MainComponent() {
     const [phone, setPhone] = useState("");
     const [selectedTable, setSelectedTable] = useState(null);
     const router = useRouter();
-
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
+    //...
     useEffect(() => {
+        //const { user, loading, login, register, logout } = useAuth();
         async function checkAuth() {
             try {
-                const res = await fetch("https://localhost:7038/api/User", {
+                const res = await fetch(`${API_URL}/api/User`, {
                     credentials: "include",
                 });
                 if (res.ok) {
@@ -39,7 +41,7 @@ function MainComponent() {
 
     const handleLogout = async () => {
         try {
-            await fetch("https://localhost:7038/api/Auth/logout", {
+            await fetch(`${API_URL}/api/Auth/logout`, {  
                 method: "POST",
                 credentials: "include",
             });
@@ -52,15 +54,29 @@ function MainComponent() {
     const handleAuthSubmit = async (e) => {
         e.preventDefault();
         const form = e.target;
-        const name = form.name?.value;
+        const firstName = form.firstName?.value;
+        const lastName = form.lastName?.value;
         const email = form.email.value;
         const password = form.password.value;
 
         setIsLoading(true);
         try {
             const endpoint = authMode === "login"
-                ? "https://localhost:7038/api/Auth/login"
-                : "https://localhost:7038/api/Auth/register";
+                ? `${API_URL}/api/Auth/login`
+                : `${API_URL}/api/Auth/register`; 
+
+            let requestBody;
+
+            if (authMode === "login") {
+                requestBody = { email, password };
+            } else {
+                requestBody = {
+                    firstName,
+                    lastName,
+                    email,
+                    password
+                };
+            }
 
             const response = await fetch(endpoint, {
                 method: "POST",
@@ -68,12 +84,9 @@ function MainComponent() {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({
-                    email,
-                    password,
-                    ...(authMode === "register" && { name })
-                }),
+                body: JSON.stringify(requestBody),
             });
+            
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -452,13 +465,22 @@ function MainComponent() {
                         </h3>
                         <form onSubmit={handleAuthSubmit} className="grid gap-4">
                             {authMode === "register" && (
-                                <input
-                                    name="name"
-                                    type="text"
-                                    placeholder="Name"
-                                    className="w-full p-2 border rounded"
-                                    required
-                                />
+                                <>
+                                    <input
+                                        name="firstName"
+                                        type="text"
+                                        placeholder="Vorname"
+                                        className="w-full p-2 border rounded"
+                                        required
+                                    />
+                                    <input
+                                        name="lastName"
+                                        type="text"
+                                        placeholder="Nachname"
+                                        className="w-full p-2 border rounded"
+                                        required
+                                    />
+                                </>
                             )}
                             <input
                                 name="email"
@@ -517,7 +539,6 @@ function MainComponent() {
                     </div>
                 </div>
             )}
-
             <section id="about" className="bg-[#2c1810] text-[#f5f1e9] py-16 px-4">
                 <div className="container mx-auto">
                     <h2 className="text-3xl font-playfair text-center mb-8">Über uns</h2>
