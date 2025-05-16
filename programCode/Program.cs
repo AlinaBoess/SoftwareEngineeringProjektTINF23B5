@@ -90,9 +90,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactFrontend",
+        policy => policy.WithOrigins("http://localhost:3000")  // React-URL hier eintragen
+                         .AllowAnyHeader()
+                         .AllowAnyMethod());
+});
+
 var app = builder.Build();
 
-
+app.UseCors("AllowReactFrontend");
 
 if (app.Environment.IsDevelopment())
 {
