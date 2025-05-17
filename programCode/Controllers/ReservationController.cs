@@ -170,6 +170,24 @@ namespace RestaurantReservierung.Controllers
 
         }
 
+        [Authorize]
+        [HttpDelete("{reservationId}")]
+        public async Task<IActionResult> DeleteReservation(int reservationId)
+        {
+            var user = await _userService.GetLoggedInUser();
+
+            var reservation = await _reservationSystem.GetReservationById(reservationId);
+
+            if (user != reservation.User && user.Role != "ADMIN" && user != reservation.Table.Restaurant.User)
+                return Unauthorized(new { Message = "Your dont have permissions to perform this action!" });
+
+            if (await _reservationSystem.DeleteReservation(reservation))
+                return Ok(new { Message = "The Reservation has been canceled successfully!" });
+
+            return BadRequest( new { Message = "The Reservation could not be canceled"});
+        } 
+
+
     }
     
     public class ReservationFormModel
