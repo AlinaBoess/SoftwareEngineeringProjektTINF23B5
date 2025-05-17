@@ -93,19 +93,15 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactFrontend",
-        policy => policy.WithOrigins("http://localhost:3000")  
-                         .AllowAnyHeader()
-                         .AllowAnyMethod());
-
-    options.AddPolicy("AllowReactFrontend",
-        policy => policy.WithOrigins("https://localhost:3000")  
-                         .AllowAnyHeader()
-                         .AllowAnyMethod());
+        policy => policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials()); // This is crucial for cookies/auth
 });
 
 var app = builder.Build();
 
-app.UseCors("AllowReactFrontend");
+//app.UseCors("AllowReactFrontend");
 
 if (app.Environment.IsDevelopment())
 {
@@ -114,8 +110,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseRouting();              // WICHTIG: Routing aktivieren
+app.UseRouting(); // WICHTIG: Routing aktivieren
+app.UseCors("AllowReactFrontend"); // CORS after Routing, before Auth
 app.UseAuthentication();
 app.UseAuthorization();
 
