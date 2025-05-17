@@ -16,49 +16,50 @@ function AddRestaurantForm() {
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
     useEffect(() => {
-        async function checkAuth() {
+        // Check localStorage first for instant UI update
+        const storedUser = localStorage.getItem('authUser');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+
+        // Then verify with server
+        const checkAuth = async () => {
             try {
                 const res = await fetch(`${API_URL}/api/User`, {
                     credentials: "include",
-                    headers: {
-                        'Accept': 'application/json',
-                    }
+                    headers: { 'Accept': 'application/json' }
                 });
 
                 if (res.status === 401) {
-                    // Not authenticated
                     setUser(null);
                     return;
                 }
 
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
                 const data = await res.json();
                 setUser(data);
             } catch (err) {
-                console.error("Authentication check failed:", err);
+                console.error("Auth check failed:", err);
                 setUser(null);
             }
-        }
-        //const { user, loading, login, register, logout } = useAuth();
-        //async function checkAuth() {
-        //  try {
-        //    const res = await fetch(`${API_URL}/api/User`, {
-        //      credentials: "include",
-        //});
-        //if (res.ok) {
-        //  const data = await res.json();
-        //setUser(data);
-        //}
-        //} catch (err) {
-        //   console.error("Fehler beim Abrufen des Benutzers:", err);
-        //}
-        //    }
-        checkAuth();
-    }, []);
+        };
 
+        // Check auth on initial load and when path changes
+        checkAuth();
+        window.addEventListener('popstate', checkAuth);
+
+        return () => window.removeEventListener('popstate', checkAuth);
+    }, [router]);
+    useEffect(() => {
+        const syncAuthState = () => {
+            const storedUser = localStorage.getItem('authUser');
+            setUser(storedUser ? JSON.parse(storedUser) : null);
+        };
+
+        window.addEventListener('storage', syncAuthState);
+        return () => window.removeEventListener('storage', syncAuthState);
+    }, []);
     const handleLogout = async () => {
         try {
             await fetch(`${API_URL}/api/Auth/logout`, {
@@ -106,6 +107,8 @@ function AddRestaurantForm() {
                 credentials: "include",
                 body: JSON.stringify(requestBody),
             });
+            // Debug cookies
+            console.log("Response headers:", [...response.headers.entries()]);
 
 
             if (!response.ok) {
@@ -115,7 +118,9 @@ function AddRestaurantForm() {
 
             const data = await response.json();
             setUser(data);
+            localStorage.setItem('authUser', JSON.stringify(data)); //Added to maintain login data
             setAuthModalOpen(false);
+
         } catch (error) {
             alert(error.message);
             console.error('Authentifizierungsfehler:', error);
@@ -143,7 +148,23 @@ function AddRestaurantForm() {
 
     // router.push("/"); // Falls du auf Startseite zurück möchtest
   };
+    useEffect(() => {
+        const syncAuthState = (e) => {
+            if (e.key === 'authState') {
+                setUser(JSON.parse(e.newValue));
+            }
+        };
 
+        window.addEventListener('storage', syncAuthState);
+        return () => window.removeEventListener('storage', syncAuthState);
+    }, []);
+
+    // Update when user changes
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.localStorage.setItem('authState', JSON.stringify(user));
+        }
+    }, [user]);
   return (
     <div className="min-h-screen bg-[#f5f1e9]">
       <nav className="bg-[#2c1810] p-4">

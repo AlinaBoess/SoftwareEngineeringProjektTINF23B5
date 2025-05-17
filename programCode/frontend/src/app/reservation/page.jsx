@@ -112,7 +112,8 @@ function MainComponent() {
                 credentials: "include",
                 body: JSON.stringify(requestBody),
             });
-            
+            // Debug cookies
+            console.log("Response headers:", [...response.headers.entries()]);
 
             if (!response.ok) {
                 const errorData = await response.json();
