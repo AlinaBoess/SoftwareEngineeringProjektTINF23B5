@@ -3,15 +3,16 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 function AddRestaurantForm() {
-  const [name, setName] = useState("");
-  const [cuisine, setCuisine] = useState("");
-  const [rating, setRating] = useState("");
-  const [image, setImage] = useState("");
-  const [message, setMessage] = useState("");
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState("login");
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+    const [name, setName] = useState("");
+    const [address, setAddress] = useState("");
+    const [openingHours, setOpeningHours] = useState("");
+    const [website, setWebsite] = useState("");
+    const [image, setImage] = useState("");
+    const [message, setMessage] = useState("");
+    const [authModalOpen, setAuthModalOpen] = useState(false);
+    const [authMode, setAuthMode] = useState("login");
+    const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
@@ -136,21 +137,44 @@ function AddRestaurantForm() {
     };
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    // Hier könnte man das Restaurant z.B. per API an das Backend schicken
-    if (!name || !cuisine || !rating || !image) {
-      setMessage("Bitte füllen Sie alle Felder aus.");
-      return;
-    }
+        // Hier könnte man das Restaurant z.B. per API an das Backend schicken
+        if (!name || !address || !openingHours || !website) {
+            setMessage("Bitte füllen Sie alle Felder aus.");
+            return;
+        }
 
-    setMessage("Restaurant erfolgreich hinzugefügt!");
-    // Nach dem Speichern zurück zur Startseite oder Clear Form
-    setName("");
-    setCuisine("");
-    setRating("");
-    setImage("");
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("address", address);
+        formData.append("openingHours", openingHours);
+        formData.append("website", website);
+
+        // Bild nur hinzufügen, wenn es vorhanden ist
+        //if (image) {
+        //    formData.append("image", image);
+        //}
+
+        try {
+            const response = await fetch(`${API_URL}/api/restaurants`, {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Fehler beim Hinzufügen des Restaurants");
+            }
+
+        setMessage("Restaurant erfolgreich hinzugefügt!");
+        // Nach dem Speichern zurück zur Startseite oder Clear Form
+        setName("");
+        setAddress("");
+        setOpeningHours("");
+            setWebsite("");
+            setImage(null);
 
     // router.push("/"); // Falls du auf Startseite zurück möchtest
   };
@@ -160,6 +184,12 @@ function AddRestaurantForm() {
                 setUser(JSON.parse(e.newValue));
             }
         };
+            // router.push("/"); // Falls du auf Startseite zurück möchtest
+        } catch (error) {
+            console.error("Fehler beim Hinzufügen des Restaurants:", error);
+            setMessage("Fehler beim Hinzufügen des Restaurants.");
+        }
+    };
 
         window.addEventListener('storage', syncAuthState);
         return () => window.removeEventListener('storage', syncAuthState);
@@ -296,89 +326,102 @@ function AddRestaurantForm() {
           )}
 
 
-      <div className="container mx-auto px-4 py-16 max-w-xl">
-        <h2 className="text-3xl font-playfair text-center text-[#2c1810] mb-8">
-          Neues Restaurant hinzufügen
-        </h2>
-        {message && (
-          <div className="mb-4 text-center text-[#2c1810] font-medium">
-            {message}
-          </div>
-        )}
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow">
-          <div className="mb-4">
-            <label className="block mb-2 text-[#2c1810] font-semibold">
-              Name des Restaurants
-            </label>
-            <input
-              type="text"
-              className="w-full p-2 border rounded"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
+            <div className="container mx-auto px-4 py-16 max-w-xl">
+                <h2 className="text-3xl font-playfair text-center text-[#2c1810] mb-8">
+                    Neues Restaurant hinzufügen
+                </h2>
+                {message && (
+                    <div className="mb-4 text-center text-[#2c1810] font-medium">
+                        {message}
+                    </div>
+                )}
 
-          <div className="mb-4">
-            <label className="block mb-2 text-[#2c1810] font-semibold">
-              Küche / Typ
-            </label>
-            <input
-              type="text"
-              className="w-full p-2 border rounded"
-              value={cuisine}
-              onChange={(e) => setCuisine(e.target.value)}
-              required
-            />
-          </div>
 
-          <div className="mb-4">
-            <label className="block mb-2 text-[#2c1810] font-semibold">
-              Bewertung (1 - 5)
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="5"
-              step="0.1"
-              className="w-full p-2 border rounded"
-              value={rating}
-              onChange={(e) => setRating(e.target.value)}
-              required
-            />
-          </div>
+                <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow">
+                    <div className="mb-4">
+                        <label className="block mb-2 text-[#2c1810] font-semibold">
+                            Name des Restaurants
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full p-2 border rounded"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
 
-          <div className="mb-4">
-            <label className="block mb-2 text-[#2c1810] font-semibold">
-              Bild-URL
-            </label>
-            <input
-              type="text"
-              className="w-full p-2 border rounded"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              required
-            />
-          </div>
+                    <div className="mb-4">
+                        <label className="block mb-2 text-[#2c1810] font-semibold">
+                            Adresse
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full p-2 border rounded"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            required
+                        />
+                    </div>
 
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="bg-[#2c1810] text-white px-4 py-2 rounded hover:bg-[#3d251c]"
-            >
-              Restaurant hinzufügen
-            </button>
-          </div>
-        </form>
-      </div>
+                    <div className="mb-4">
+                        <label className="block mb-2 text-[#2c1810] font-semibold">
+                            Öffnungszeiten
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full p-2 border rounded"
+                            value={openingHours}
+                            onChange={(e) => setOpeningHours(e.target.value)}
+                            required
+                        />
+                    </div>
 
-      <footer className="bg-[#2c1810] text-[#e6b17e] py-6">
-        <div className="container mx-auto text-center">
-          <p>© 2025 Restaurant Finder. Alle Rechte vorbehalten.</p>
+                    <div className="mb-4">
+                        <label className="block mb-2 text-[#2c1810] font-semibold">
+                            Webseiten-URL
+                        </label>
+                        <input
+                            type="text"
+                            className="w-full p-2 border rounded"
+                            value={website}
+                            onChange={(e) => setWebsite(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block mb-2 text-[#2c1810] font-semibold">
+                            Bild
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="w-full p-2 border rounded"
+                            onChange={(e) => setImage(e.target.files[0])}
+                        >
+
+                        </input>
+                    </div>
+
+                    <div className="flex justify-end">
+                        <button
+                            type="submit"
+                            className="bg-[#2c1810] text-white px-4 py-2 rounded hover:bg-[#3d251c]"
+                        >
+                            Restaurant hinzufügen
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <footer className="bg-[#2c1810] text-[#e6b17e] py-6">
+                <div className="container mx-auto text-center">
+                    <p>© 2025 Restaurant Finder. Alle Rechte vorbehalten.</p>
+                </div>
+            </footer>
         </div>
-      </footer>
-    </div>
-  );
+    );
 }
 
 export default AddRestaurantForm;
