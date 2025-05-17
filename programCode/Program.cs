@@ -90,28 +90,22 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactFrontend",
-        policy => policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+        policy => policy.WithOrigins("https://localhost:3443", "http://localhost:3000", "https://localhost:3000")
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials()); // This is crucial for cookies/auth
 });
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.Lax; // Or None if using HTTPS cross-domain
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // For HTTPS
-    options.Cookie.HttpOnly = true;
-    options.Cookie.Path = "/"; // Make cookie available to all paths
-    options.Cookie.Domain = "localhost"; // Explicit domain setting
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    //options.Cookie.HttpOnly = true;
 });
-//builder.Services.ConfigureApplicationCookie(options =>
-//{
-//    options.Cookie.SameSite = SameSiteMode.None;
-//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-//    options.Cookie.HttpOnly = true;
-//});
+
 
 var app = builder.Build();
 

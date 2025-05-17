@@ -16,9 +16,11 @@ function AddRestaurantForm() {
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
     useEffect(() => {
-        // Check localStorage first for instant UI update
+        let isMounted = true;
+
+        // Immediately set user from localStorage if available
         const storedUser = localStorage.getItem('authUser');
-        if (storedUser) {
+        if (storedUser && isMounted) {
             setUser(JSON.parse(storedUser));
         }
 
@@ -30,27 +32,31 @@ function AddRestaurantForm() {
                     headers: { 'Accept': 'application/json' }
                 });
 
-                if (res.status === 401) {
+                if (!isMounted) return;
+
+                if (res.ok) {
+                    const data = await res.json();
+                    setUser(data);
+                    localStorage.setItem('authUser', JSON.stringify(data));
+                } else {
                     setUser(null);
-                    return;
+                    localStorage.removeItem('authUser');
                 }
-
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-                const data = await res.json();
-                setUser(data);
             } catch (err) {
-                console.error("Auth check failed:", err);
-                setUser(null);
+                if (isMounted) {
+                    console.error("Auth check failed:", err);
+                    setUser(null);
+                    localStorage.removeItem('authUser');
+                }
             }
         };
 
-        // Check auth on initial load and when path changes
         checkAuth();
-        window.addEventListener('popstate', checkAuth);
 
-        return () => window.removeEventListener('popstate', checkAuth);
-    }, [router]);
+        return () => {
+            isMounted = false;
+        };
+    }, []);
     useEffect(() => {
         const syncAuthState = () => {
             const storedUser = localStorage.getItem('authUser');

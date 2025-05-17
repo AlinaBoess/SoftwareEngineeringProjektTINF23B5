@@ -10,65 +10,64 @@ function Homepage() {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isAuthChecking, setIsAuthChecking] = useState(true);
     const router = useRouter();
 
-    useEffect(() => {
-        // Check localStorage first for instant UI update
-        const storedUser = localStorage.getItem('authUser');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
+ 
 
-        // Then verify with server
+    useEffect(() => {
+        let isMounted = true;
+
         const checkAuth = async () => {
             try {
                 const res = await fetch(`${API_URL}/api/User`, {
                     credentials: "include",
-                    headers: { 'Accept': 'application/json' }
+                    headers: {
+                        'Accept': 'application/json',
+                    }
                 });
+                console.log('Auth check response status:', res.status);
+                console.log('Headers:', res.headers);
 
-                if (res.status === 401) {
+                if (!isMounted) return;
+
+                if (res.ok) {
+                    const data = await res.json();
+                    setUser(data);
+                    
+                } else {
                     setUser(null);
-                    return;
                 }
-
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-                const data = await res.json();
-                setUser(data);
             } catch (err) {
                 console.error("Auth check failed:", err);
                 setUser(null);
+            } finally {
+                if (isMounted) {
+                    setIsAuthChecking(false);
+                }
             }
+            
         };
-
-        // Check auth on initial load and when path changes
+        console.log("Checking auth...");
         checkAuth();
-        window.addEventListener('popstate', checkAuth);
+        return () => {
+            isMounted = false;
+            
 
-        return () => window.removeEventListener('popstate', checkAuth);
-    }, [router]);
-    useEffect(() => {
-        const syncAuthState = () => {
-            const storedUser = localStorage.getItem('authUser');
-            setUser(storedUser ? JSON.parse(storedUser) : null);
         };
 
-        window.addEventListener('storage', syncAuthState);
-        return () => window.removeEventListener('storage', syncAuthState);
     }, []);
 
     const handleLogout = async () => {
         try {
-            //await fetch(`${API_URL}/api/Auth/logout`, {
-            //    method: "POST",
-            //    credentials: "include"
-            //});
+            await fetch(`${API_URL}/api/Auth/logout`, {
+                method: "POST",
+                credentials: "include",
+            });
             setUser(null);
-            localStorage.removeItem('authUser');
+            window.location.reload();
 
-            // Force refresh all tabs
-            window.dispatchEvent(new Event('storage'));
+
         } catch (err) {
             console.error("Logout failed:", err);
         }
@@ -76,6 +75,7 @@ function Homepage() {
 
     const handleAuthSubmit = async (e) => {
         e.preventDefault();
+        console.log('form submitted');
         const form = e.target;
         const firstName = form.firstName?.value;
         const lastName = form.lastName?.value;
@@ -109,47 +109,35 @@ function Homepage() {
                 credentials: "include",
                 body: JSON.stringify(requestBody),
             });
+            console.log('Login response status:', response.status);
+            console.log('Set-Cookie header:', response.headers.get('set-cookie'));
 
-            // Debug cookies
-            console.log("Response headers:", [...response.headers.entries()]);
-
-            
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Authentifizierung fehlgeschlagen');
+                throw new Error(errorData.message || 'Authentication failed');
             }
 
             const data = await response.json();
-            // Store user data in both state and localStorage
-            setUser(data);
-            localStorage.setItem('authUser', JSON.stringify(data)); //Added to maintain login data
+
+            // Store data
+            setUser(data); // Since the API returns { email, password }
+
             setAuthModalOpen(false);
 
+            // Force a refresh of the auth state
+            //checkAuth();
+            router.refresh();
         } catch (error) {
             alert(error.message);
             console.error('Authentifizierungsfehler:', error);
         } finally {
             setIsLoading(false);
         }
+        
+
     };
-    useEffect(() => {
-        const syncAuthState = (e) => {
-            if (e.key === 'authState') {
-                setUser(JSON.parse(e.newValue));
-            }
-        };
 
-        window.addEventListener('storage', syncAuthState);
-        return () => window.removeEventListener('storage', syncAuthState);
-    }, []);
-
-    // Update when user changes
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            window.localStorage.setItem('authState', JSON.stringify(user));
-        }
-    }, [user]);
 
     return (
   
@@ -162,9 +150,11 @@ function Homepage() {
           </a>
         </div>
                 <div className="flex items-center gap-4">
-                    {user ? (
+                    {isAuthChecking ? (
+                        <div>Loading...</div>
+                    ) : user ? (
                         <>
-                            <span className="text-[#e6b17e]">Willkommen, {user.name}</span>
+                                <span className="text-[#e6b17e]">Willkommen, {user.email}</span>
                             <button
                                 onClick={handleLogout}
                                 className="text-[#e6b17e] hover:text-[#f5f1e9]"
