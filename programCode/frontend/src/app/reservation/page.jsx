@@ -22,20 +22,46 @@ function MainComponent() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
     //...
     useEffect(() => {
-        //const { user, loading, login, register, logout } = useAuth();
         async function checkAuth() {
             try {
                 const res = await fetch(`${API_URL}/api/User`, {
                     credentials: "include",
+                    headers: {
+                        'Accept': 'application/json',
+                    }
                 });
-                if (res.ok) {
-                    const data = await res.json();
-                    setUser(data);
+
+                if (res.status === 401) {
+                    // Not authenticated
+                    setUser(null);
+                    return;
                 }
+
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+
+                const data = await res.json();
+                setUser(data);
             } catch (err) {
-                console.error("Fehler beim Abrufen des Benutzers:", err);
+                console.error("Authentication check failed:", err);
+                setUser(null);
             }
         }
+        //const { user, loading, login, register, logout } = useAuth();
+        //async function checkAuth() {
+          //  try {
+            //    const res = await fetch(`${API_URL}/api/User`, {
+              //      credentials: "include",
+                //});
+                //if (res.ok) {
+                  //  const data = await res.json();
+                    //setUser(data);
+                //}
+            //} catch (err) {
+             //   console.error("Fehler beim Abrufen des Benutzers:", err);
+        //}
+//    }
         checkAuth();
     }, []);
 

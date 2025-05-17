@@ -98,6 +98,12 @@ builder.Services.AddCors(options =>
                        .AllowAnyMethod()
                        .AllowCredentials()); // This is crucial for cookies/auth
 });
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+});
 
 var app = builder.Build();
 
