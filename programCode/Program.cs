@@ -100,10 +100,18 @@ builder.Services.AddCors(options =>
 });
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.None;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Lax; // Or None if using HTTPS cross-domain
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // For HTTPS
     options.Cookie.HttpOnly = true;
+    options.Cookie.Path = "/"; // Make cookie available to all paths
+    options.Cookie.Domain = "localhost"; // Explicit domain setting
 });
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    options.Cookie.SameSite = SameSiteMode.None;
+//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//    options.Cookie.HttpOnly = true;
+//});
 
 var app = builder.Build();
 
