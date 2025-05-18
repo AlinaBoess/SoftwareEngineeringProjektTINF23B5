@@ -5,75 +5,88 @@ import { useRouter } from 'next/navigation';
 
 function MainComponent() {
     const [authModalOpen, setAuthModalOpen] = useState(false);
+    /** @type {'login' | 'register'} */
     const [authMode, setAuthMode] = useState("login");
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState("");
-    const [selectedTime, setSelectedTime] = useState("");
+
+    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedTime, setSelectedTime] = useState('');
     const [selectedGuests, setSelectedGuests] = useState(2);
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
     const [reservationModal, setReservationModal] = useState(false);
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
     const [selectedTable, setSelectedTable] = useState(null);
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
     //...
     useEffect(() => {
-        async function checkAuth() {
+        let isMounted = true;
+
+        const storedUser = localStorage.getItem('authUser');
+        if (storedUser && isMounted) setUser(JSON.parse(storedUser));
+
+        (async () => {
             try {
                 const res = await fetch(`${API_URL}/api/User`, {
-                    credentials: "include",
-                    headers: {
-                        'Accept': 'application/json',
-                    }
+                    credentials: 'include',                // sends cookies :contentReference[oaicite:2]{index=2}
+                    headers: { Accept: 'application/json' },
                 });
 
-                if (res.status === 401) {
-                    // Not authenticated
+                if (!isMounted) return;
+
+                if (res.ok) {
+                    const data = await res.json();
+                    setUser(data);
+                    localStorage.setItem('authUser', JSON.stringify(data));
+                } else {
                     setUser(null);
-                    return;
+                    localStorage.removeItem('authUser');
                 }
-
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-
-                const data = await res.json();
-                setUser(data);
+            
+          
             } catch (err) {
-                console.error("Authentication check failed:", err);
+                console.error('Auth check failed:', err);
                 setUser(null);
+                localStorage.removeItem('authUser');
             }
-        }
-        //const { user, loading, login, register, logout } = useAuth();
-        //async function checkAuth() {
-          //  try {
-            //    const res = await fetch(`${API_URL}/api/User`, {
-              //      credentials: "include",
-                //});
-                //if (res.ok) {
-                  //  const data = await res.json();
-                    //setUser(data);
-                //}
-            //} catch (err) {
-             //   console.error("Fehler beim Abrufen des Benutzers:", err);
-        //}
-//    }
-        checkAuth();
+        })();
+
+        return () => { isMounted = false; };
     }, []);
 
+    // Listen for cross-tab login/logout
+    useEffect(() => {
+        const syncAuth = () => {
+            const stored = localStorage.getItem('authUser');
+            setUser(stored ? JSON.parse(stored) : null);
+        };
+        window.addEventListener('storage', syncAuth);
+        return () => window.removeEventListener('storage', syncAuth);
+    }, []);
+
+    // Persist latest user object in localStorage for quick boot-up
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('authState', JSON.stringify(user));
+        }
+    }, [user]);
+
+    // ────────────────────────────────────────────────────────────
+    // Handlers
+    // ────────────────────────────────────────────────────────────
     const handleLogout = async () => {
         try {
-            await fetch(`${API_URL}/api/Auth/logout`, {  
-                method: "POST",
-                credentials: "include",
-            });
+            await fetch(`${API_URL}/api/Auth/logout`, { method: 'POST', credentials: 'include' });
             setUser(null);
+            localStorage.removeItem('authUser');
         } catch (err) {
-            console.error("Fehler beim Logout:", err);
+            console.error('Fehler beim Logout:', err);
         }
     };
 
@@ -87,50 +100,40 @@ function MainComponent() {
 
         setIsLoading(true);
         try {
-            const endpoint = authMode === "login"
-                ? `${API_URL}/api/Auth/login`
-                : `${API_URL}/api/Auth/register`; 
+            const endpoint =
+                authMode === 'login'
+                    ? `${API_URL}/api/Auth/login`
+                    : `${API_URL}/api/Auth/register`;
 
-            let requestBody;
+            const body =
+                authMode === 'login'
+                    ? { email, password }
+                    : { firstName, lastName, email, password };
 
-            if (authMode === "login") {
-                requestBody = { email, password };
-            } else {
-                requestBody = {
-                    firstName,
-                    lastName,
-                    email,
-                    password
-                };
-            }
-
-            const response = await fetch(endpoint, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify(requestBody),
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(body),
             });
-            // Debug cookies
-            console.log("Response headers:", [...response.headers.entries()]);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Authentifizierung fehlgeschlagen');
+            if (!res.ok) {
+                /** Expect backend to send { message } */
+                const { message } = await res.json();
+                throw new Error(message ?? 'Authentifizierung fehlgeschlagen');
             }
 
-            const data = await response.json();
+            const data = await res.json();   // user DTO returned by the backend
             setUser(data);
+            localStorage.setItem('authUser', JSON.stringify(data));
             setAuthModalOpen(false);
-        } catch (error) {
-            alert(error.message);
-            console.error('Authentifizierungsfehler:', error);
+        } catch (err) {
+            alert(err.message);
+            console.error('Authentifizierungsfehler:', err);
         } finally {
             setIsLoading(false);
         }
     };
-
     const restaurants = [
         {
             id: 1,
@@ -422,10 +425,10 @@ function MainComponent() {
                                                 disabled={table.isBooked}
                                                 onClick={() => handleTableSelect(table.id)}
                                                 className={`p-4 border rounded ${table.isBooked
-                                                        ? "bg-gray-200 cursor-not-allowed"
-                                                        : selectedTable === table.id
-                                                            ? "bg-[#2c1810] text-white"
-                                                            : "hover:bg-[#f5f1e9]"
+                                                    ? "bg-gray-200 cursor-not-allowed"
+                                                    : selectedTable === table.id
+                                                        ? "bg-[#2c1810] text-white"
+                                                        : "hover:bg-[#f5f1e9]"
                                                     }`}
                                             >
                                                 <div className="text-center">

@@ -4,78 +4,89 @@ import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 
 function Homepage() {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
+    const [name, setName] = useState("");
+    const [address, setAddress] = useState("");
+    const [openingHours, setOpeningHours] = useState("");
+    const [website, setWebsite] = useState("");
+    const [image, setImage] = useState(null);
+    const [message, setMessage] = useState("");
     const [authModalOpen, setAuthModalOpen] = useState(false);
     const [authMode, setAuthMode] = useState("login");
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+
     const router = useRouter();
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
+  
 
  
 
     useEffect(() => {
         let isMounted = true;
 
-        const checkAuth = async () => {
+        const storedUser = localStorage.getItem('authUser');
+        if (storedUser && isMounted) setUser(JSON.parse(storedUser));
+
+        (async () => {
             try {
                 const res = await fetch(`${API_URL}/api/User`, {
-                    credentials: "include",
-                    headers: {
-                        'Accept': 'application/json',
-                    }
+                    credentials: 'include',                // sends cookies :contentReference[oaicite:2]{index=2}
+                    headers: { Accept: 'application/json' },
                 });
-                console.log('Auth check response status:', res.status);
-                console.log('Headers:', res.headers);
 
                 if (!isMounted) return;
 
                 if (res.ok) {
                     const data = await res.json();
                     setUser(data);
-                    
+                    localStorage.setItem('authUser', JSON.stringify(data));
                 } else {
                     setUser(null);
+                    localStorage.removeItem('authUser');
                 }
             } catch (err) {
-                console.error("Auth check failed:", err);
+                console.error('Auth check failed:', err);
                 setUser(null);
-            } finally {
-                if (isMounted) {
-                    setIsAuthChecking(false);
-                }
+                localStorage.removeItem('authUser');
             }
-            
-        };
-        console.log("Checking auth...");
-        checkAuth();
-        return () => {
-            isMounted = false;
-            
+        })();
 
-        };
-
+        return () => { isMounted = false; };
     }, []);
 
+    // Listen for cross-tab login/logout
+    useEffect(() => {
+        const syncAuth = () => {
+            const stored = localStorage.getItem('authUser');
+            setUser(stored ? JSON.parse(stored) : null);
+        };
+        window.addEventListener('storage', syncAuth);
+        return () => window.removeEventListener('storage', syncAuth);
+    }, []);
+
+    // Persist latest user object in localStorage for quick boot-up
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('authState', JSON.stringify(user));
+        }
+    }, [user]);
+
+    // ────────────────────────────────────────────────────────────
+    // Handlers
+    // ────────────────────────────────────────────────────────────
     const handleLogout = async () => {
         try {
-            await fetch(`${API_URL}/api/Auth/logout`, {
-                method: "POST",
-                credentials: "include",
-            });
+            await fetch(`${API_URL}/api/Auth/logout`, { method: 'POST', credentials: 'include' });
             setUser(null);
-            window.location.reload();
-
-
+            localStorage.removeItem('authUser');
         } catch (err) {
-            console.error("Logout failed:", err);
+            console.error('Fehler beim Logout:', err);
         }
     };
 
     const handleAuthSubmit = async (e) => {
         e.preventDefault();
-        console.log('form submitted');
         const form = e.target;
         const firstName = form.firstName?.value;
         const lastName = form.lastName?.value;
@@ -84,59 +95,43 @@ function Homepage() {
 
         setIsLoading(true);
         try {
-            const endpoint = authMode === "login"
-                ? `${API_URL}/api/Auth/login`
-                : `${API_URL}/api/Auth/register`;
+            const endpoint =
+                authMode === 'login'
+                    ? `${API_URL}/api/Auth/login`
+                    : `${API_URL}/api/Auth/register`;
 
-            let requestBody;
+            const body =
+                authMode === 'login'
+                    ? { email, password }
+                    : { firstName, lastName, email, password };
 
-            if (authMode === "login") {
-                requestBody = { email, password };
-            } else {
-                requestBody = {
-                    firstName,
-                    lastName,
-                    email,
-                    password
-                };
-            }
-
-            const response = await fetch(endpoint, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify(requestBody),
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(body),
             });
-            console.log('Login response status:', response.status);
-            console.log('Set-Cookie header:', response.headers.get('set-cookie'));
 
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Authentication failed');
+            if (!res.ok) {
+                /** Expect backend to send { message } */
+                const { message } = await res.json();
+                throw new Error(message ?? 'Authentifizierung fehlgeschlagen');
             }
 
-            const data = await response.json();
-
-            // Store data
-            setUser(data); // Since the API returns { email, password }
-
+            const data = await res.json();   // user DTO returned by the backend
+            setUser(data);
+            localStorage.setItem('authUser', JSON.stringify(data));
             setAuthModalOpen(false);
-
-            // Force a refresh of the auth state
-            //checkAuth();
-            router.refresh();
-        } catch (error) {
-            alert(error.message);
-            console.error('Authentifizierungsfehler:', error);
+        } catch (err) {
+            alert(err.message);
+            console.error('Authentifizierungsfehler:', err);
         } finally {
             setIsLoading(false);
         }
+    };
         
 
-    };
+    
 
 
     return (
@@ -150,11 +145,9 @@ function Homepage() {
           </a>
         </div>
                 <div className="flex items-center gap-4">
-                    {isAuthChecking ? (
-                        <div>Loading...</div>
-                    ) : user ? (
+                    {user ? (
                         <>
-                                <span className="text-[#e6b17e]">Willkommen, {user.email}</span>
+                            <span className="text-[#e6b17e]">Willkommen, {user.name}</span>
                             <button
                                 onClick={handleLogout}
                                 className="text-[#e6b17e] hover:text-[#f5f1e9]"
@@ -289,7 +282,6 @@ function Homepage() {
                     </div>
                 </div>
             )}
-
       <footer className="bg-[#2c1810] text-[#e6b17e] py-6">
         <div className="container mx-auto text-center">
           <p>© 2025 Restaurant Finder. Alle Rechte vorbehalten.</p>
