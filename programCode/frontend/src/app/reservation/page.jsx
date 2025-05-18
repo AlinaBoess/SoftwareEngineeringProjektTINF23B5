@@ -21,8 +21,8 @@ function MainComponent() {
     const [isLoading, setIsLoading] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    //const [selectedDate, setSelectedDate] = useState('');
-    // const [selectedTime, setSelectedTime] = useState('');
+    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedTime, setSelectedTime] = useState('');
     const [restaurants, setRestaurants] = useState([]);
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
@@ -457,6 +457,7 @@ function MainComponent() {
                                     className="w-full p-2 border rounded"
                                     value={selectedTime}
                                     onChange={(e) => setSelectedTime(e.target.value)}
+                                    disabled={!selectedDate}
                                     required
                                 >
                                     <option value="">Uhrzeit wählen</option>
@@ -470,16 +471,19 @@ function MainComponent() {
                                 </select>
                                 <div className="grid grid-cols-2 gap-4">
                                     {selectedRestaurant?.tables
-                                        .filter((table) => table.seats >= selectedGuests)
+                                        //.filter((table) => table.seats >= selectedGuests)
                                         .map((table) => (
                                             <button
-                                                key={table.id}
+                                                key={table.tableId}
                                                 type="button"
-                                                disabled={table.isBooked}
-                                                onClick={() => handleTableSelect(table.id)}
-                                                className={`p-4 border rounded ${table.isBooked
-                                                    ? "bg-gray-200 cursor-not-allowed"
-                                                    : selectedTable === table.id
+                                                disabled={
+                                                    !selectedDate || !selectedTime //|| table.isBooked
+                                                }
+                                                onClick={() => handleTableSelect(table.tableId)}
+                                                className={`p-4 border rounded ${//table.isBooked
+                                                    //? "bg-gray-200 cursor-not-allowed"
+                                                    //:
+                                    selectedTable === table.tableId
                                                         ? "bg-[#2c1810] text-white"
                                                         : "hover:bg-[#f5f1e9]"
                                                     }`}
@@ -495,30 +499,30 @@ function MainComponent() {
                                             </button>
                                         ))}
                                 </div>
-                                <input
-                                    type="text"
-                                    placeholder="Name"
-                                    className="w-full p-2 border rounded"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="E-Mail"
-                                    className="w-full p-2 border rounded"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                />
-                                <input
-                                    type="tel"
-                                    placeholder="Telefon"
-                                    className="w-full p-2 border rounded"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    required
-                                />
+                                {/*<input*/}
+                                {/*    type="text"*/}
+                                {/*    placeholder="Name"*/}
+                                {/*    className="w-full p-2 border rounded"*/}
+                                {/*    value={name}*/}
+                                {/*    onChange={(e) => setName(e.target.value)}*/}
+                                {/*    required*/}
+                                {/*/>*/}
+                                {/*<input*/}
+                                {/*    type="email"*/}
+                                {/*    placeholder="E-Mail"*/}
+                                {/*    className="w-full p-2 border rounded"*/}
+                                {/*    value={email}*/}
+                                {/*    onChange={(e) => setEmail(e.target.value)}*/}
+                                {/*    required*/}
+                                {/*/>*/}
+                                {/*<input*/}
+                                {/*    type="tel"*/}
+                                {/*    placeholder="Telefon"*/}
+                                {/*    className="w-full p-2 border rounded"*/}
+                                {/*    value={phone}*/}
+                                {/*    onChange={(e) => setPhone(e.target.value)}*/}
+                                {/*    required*/}
+                                {/*/>*/}
                             </div>
                             <div className="flex justify-end gap-4">
                                 <button
