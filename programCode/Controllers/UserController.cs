@@ -119,6 +119,19 @@ namespace RestaurantReservierung.Controllers
             }
             return BadRequest(new { Message = "The user with the email " + email + " does not exist" });
         }
+
+        /// <summary>
+        /// Returns the user who is currently loggid in (from the jwt token)
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("Me")]
+        public async Task<IActionResult> GetLoggedInUser()
+        {
+            var user = await _userService.GetLoggedInUser();
+
+            return Ok(new { user = UserDto.MapToDto(user) });
+        }
     }
   
 }
