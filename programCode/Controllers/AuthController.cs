@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.ComponentModel.DataAnnotations;
@@ -70,7 +71,7 @@ namespace RestaurantReservierung.Controllers
             // generate jwt-token
             var token = _authService.GenerateJwtToken(user);
 
-            return Ok(new { token });
+            return Ok(new { token,  user = UserDto.MapToDto(user) });
         }
 
 

@@ -6,9 +6,9 @@ namespace RestaurantReservierung.Dtos
     public class UserDto
     {
         public int? UserId { get; set; }
-
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? FirstName { get; set; } = null!;
-
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? LastName { get; set; } = null!;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

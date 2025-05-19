@@ -74,7 +74,7 @@ namespace RestaurantReservierung.Controllers
         /// </summary>
         /// <returns>List of Rerservations</returns>
         [Authorize(Roles = "ADMIN")]
-        [HttpGet("All")] 
+        [HttpGet("Admin")] 
         public async Task<ActionResult> GetAllReservations([FromQuery] ReservationFilterModel model)
         {         
             return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
@@ -139,6 +139,30 @@ namespace RestaurantReservierung.Controllers
             return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
         }
 
+        /// <summary>
+        /// Get All Reservations which does not contain user specific data. 
+        /// 
+        ///
+        /// Filtering behavior of startDate and endDate:
+        /// 1. Only `startDate` is set: Returns all reservations that start on or after the given `startDate`.
+        /// 2. Only `endDate` is set: Returns all reservations that end on or before the given `endDate`.
+        /// 3. Both `startDate` and `endDate` are set: Returns all reservations that overlap with the given date range.
+        ///
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpGet("Public")]
+        public async Task<IActionResult> GetAnonymousReservations([FromQuery] ReservationFilterModel model)
+        {
+            return Ok(ReservationDto.MapToPublicDtos(await _reservationSystem.GetReservations(model)));
+        }
+
+        /// <summary>
+        /// Update a Reservation by id.
+        /// </summary>
+        /// <param name="reservationId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPut("{reservationId}")]
         public async Task<IActionResult> UpdateReservation(int reservationId, ReservationFormModel model)
@@ -170,6 +194,11 @@ namespace RestaurantReservierung.Controllers
 
         }
 
+        /// <summary>
+        /// Deletes a Reservation by id.
+        /// </summary>
+        /// <param name="reservationId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("{reservationId}")]
         public async Task<IActionResult> DeleteReservation(int reservationId)
