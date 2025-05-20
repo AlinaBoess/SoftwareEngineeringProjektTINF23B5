@@ -3,6 +3,7 @@ using RestaurantReservierung.Controllers;
 using RestaurantReservierung.Data;
 using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
+using System;
 
 namespace RestaurantReservierung.Services
 {
@@ -26,6 +27,7 @@ namespace RestaurantReservierung.Services
                     Address = restaurantModel.Adress,
                     OpeningHours = restaurantModel.OpeningHours,
                     Website = restaurantModel.Website,
+                    Pictures = Convert.FromBase64String(restaurantModel.Pictures.Substring(restaurantModel.Pictures.IndexOf(",") + 1)),
                     User = user
                 };
 
@@ -51,6 +53,7 @@ namespace RestaurantReservierung.Services
             restaurant.Address = restaurantModel.Adress;
             restaurant.OpeningHours = restaurantModel.OpeningHours;
             restaurant.Website = restaurantModel.Website;
+            restaurant.Pictures = Convert.FromBase64String(restaurantModel.Pictures.Substring(restaurantModel.Pictures.IndexOf(",") + 1));
 
             if (await _context.SaveChangesAsync() > 0)
             {

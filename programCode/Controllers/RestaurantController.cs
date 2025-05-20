@@ -206,5 +206,7 @@ namespace RestaurantReservierung.Controllers
         public string OpeningHours { get; set; }
 
         public string Website {  get; set; }
+
+        public string? Pictures { get; set; }
     }
 }
