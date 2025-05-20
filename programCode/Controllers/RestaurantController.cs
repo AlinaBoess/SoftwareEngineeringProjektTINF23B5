@@ -14,10 +14,13 @@ namespace RestaurantReservierung.Controllers
         private readonly RestaurantOwnerService _ownerService;
         
         private readonly UserService _userService;
-        public RestaurantController(RestaurantOwnerService ownerService, UserService userService)
+
+        private readonly FeedbackService _feedbackService;
+        public RestaurantController(RestaurantOwnerService ownerService, UserService userService, FeedbackService feedbackService)
         {
             _ownerService = ownerService;
             _userService = userService;
+            _feedbackService = feedbackService;
         }
 
         /// <summary>
@@ -175,6 +178,19 @@ namespace RestaurantReservierung.Controllers
             var restaurants = await _ownerService.GetUserRestaurants(user);
 
             return Ok(RestaurantDto.MapToDtos(restaurants));
+        }
+
+        [HttpGet("Rating/{restaurantId}")]
+        public async Task<IActionResult> GetRestaurantRating(int restaurantId)
+        {
+            var restaurant = await _ownerService.GetRestaurantById(restaurantId);
+
+            if (restaurant == null)
+                return NotFound(new { Message = $"The restaurant with the id {restaurantId} does not exist!" });
+
+            var rating = await _feedbackService.CalcRestaurantRating(restaurant);
+
+            return Ok(new { rating });
         }
         
 

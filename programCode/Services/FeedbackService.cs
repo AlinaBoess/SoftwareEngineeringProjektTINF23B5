@@ -15,7 +15,7 @@ namespace RestaurantReservierung.Services
             _context = context;
         }
 
-        public async Task<bool> CreateFeedback(User user, FeedbackFormModel model, Reservation reservation)
+        public async Task<bool> CreateFeedback(User user, FeedbackFormModel model, Restaurant restaurant, Reservation reservation)
         {
             var feedback = new Feedback
             {
@@ -24,6 +24,7 @@ namespace RestaurantReservierung.Services
                 User = user,
                 Reservation = reservation,
                 CreatedAt = DateTime.Now,
+                Restaurant = restaurant
             };
 
             _context.Feedbacks.Add(feedback);
@@ -46,11 +47,21 @@ namespace RestaurantReservierung.Services
         {
             return await _context.Feedbacks.FirstAsync(f => f.FeedbackId == feedbackId);
         }
-        /*
-        public async Task<float> CalcRestaurantRating(Restaurant restaurant)
+        
+        public async Task<double> CalcRestaurantRating(Restaurant restaurant)
         {
+            var averageRating = await _context.Feedbacks
+            .Where(f => f.Restaurant == restaurant)
+            .AverageAsync(f => (double)f.Rating);
 
+            return averageRating;
         }
-        */
+
+        public async Task<List<Feedback>> GetFeedbacksForRestaurant(Restaurant restaurant)
+        {
+            return await _context.Feedbacks
+                .Where(f => f.Restaurant == restaurant)
+                .ToListAsync();
+        }
     }
 }

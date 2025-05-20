@@ -17,7 +17,11 @@ public partial class Feedback
 
     public DateTime? CreatedAt { get; set; }
 
+    public int RestaurantId { get; set; }
+
     public virtual Reservation Reservation { get; set; } = null!;
+
+    public virtual Restaurant Restaurant { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
 }

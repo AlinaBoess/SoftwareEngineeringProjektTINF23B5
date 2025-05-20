@@ -17,6 +17,10 @@ public partial class Restaurant
 
     public string? Website { get; set; }
 
+    public byte[]? Pictures { get; set; }
+
+    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+
     public virtual ICollection<Table> Tables { get; set; } = new List<Table>();
 
     public virtual User User { get; set; } = null!;
