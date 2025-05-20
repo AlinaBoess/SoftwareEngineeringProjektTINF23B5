@@ -61,6 +61,35 @@
              <param name="model"></param>
              <returns></returns>
         </member>
+        <member name="M:RestaurantReservierung.Controllers.ReservationController.GetAnonymousReservations(RestaurantReservierung.Controllers.ReservationFilterModel)">
+             <summary>
+             Get All Reservations which does not contain user specific data. 
+             
+            
+             Filtering behavior of startDate and endDate:
+             1. Only `startDate` is set: Returns all reservations that start on or after the given `startDate`.
+             2. Only `endDate` is set: Returns all reservations that end on or before the given `endDate`.
+             3. Both `startDate` and `endDate` are set: Returns all reservations that overlap with the given date range.
+            
+             </summary>
+             <param name="model"></param>
+             <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.ReservationController.UpdateReservation(System.Int32,RestaurantReservierung.Controllers.ReservationFormModel)">
+            <summary>
+            Update a Reservation by id.
+            </summary>
+            <param name="reservationId"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.ReservationController.DeleteReservation(System.Int32)">
+            <summary>
+            Deletes a Reservation by id.
+            </summary>
+            <param name="reservationId"></param>
+            <returns></returns>
+        </member>
         <member name="M:RestaurantReservierung.Controllers.RestaurantController.createRestaurant(RestaurantReservierung.Controllers.RestaurantFormModel)">
             <summary>
             Creates a new restaurant. Only a user of Role restaurant_owner or an admin can delete a restaurant.
@@ -166,6 +195,12 @@
             </summary>
             <param name="email"></param>
             <param name="newRole"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.UserController.GetLoggedInUser">
+            <summary>
+            Returns the user who is currently loggid in (from the jwt token)
+            </summary>
             <returns></returns>
         </member>
         <member name="M:RestaurantReservierung.Services.AuthService.IsCorrectPassword(System.String,RestaurantReservierung.Models.User)">
