@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.ComponentModel.DataAnnotations;
@@ -78,13 +79,7 @@ namespace RestaurantReservierung.Controllers
                 Expires = DateTimeOffset.Now.AddDays(30),
                 Path = "/"
             });
-
-            return Ok(new
-            {
-                user.Email,
-                user.FirstName,
-                user.LastName
-            });
+            return Ok(new { token, user = UserDto.MapToDto(user) });
         }
 
         [HttpPost("logout")]

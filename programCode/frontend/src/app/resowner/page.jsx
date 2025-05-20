@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 function AddRestaurantForm() {
+    // State-Variablen für Formularfelder und Benutzerstatus
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
     const [openingHours, setOpeningHours] = useState("");
@@ -13,11 +14,12 @@ function AddRestaurantForm() {
     const [authMode, setAuthMode] = useState("login");
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    //const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
 
+    // Authentifizierten Benutzer aus dem lokalen speicher laden
     useEffect(() => {
         let isMounted = true;
 
@@ -25,7 +27,10 @@ function AddRestaurantForm() {
         if (storedUser && isMounted) {
             setUser(JSON.parse(storedUser));
         }
+    }, []);
 
+    // Authentifizierungstatus mit den Server Synchronisieren
+    useEffect(() => {
         const checkAuth = async () => {
             try {
                 const res = await fetch(`${API_URL}/api/User`, {
@@ -33,7 +38,7 @@ function AddRestaurantForm() {
                     headers: { Accept: "application/json" },
                 });
 
-                if (!isMounted) return;
+                //if (!isMounted) return;
 
                 if (res.ok) {
                     const data = await res.json();
@@ -44,21 +49,23 @@ function AddRestaurantForm() {
                     localStorage.removeItem("authUser");
                 }
             } catch (err) {
-                if (isMounted) {
-                    console.error("Auth check failed:", err);
-                    setUser(null);
-                    localStorage.removeItem("authUser");
-                }
+                //if (isMounted) {
+                console.error("Auth check failed:", err);
+                setUser(null);
+                localStorage.removeItem("authUser");
+                //}
             }
         };
 
         checkAuth();
-
-        return () => {
-            isMounted = false;
-        };
     }, []);
 
+        //return () => {
+            //isMounted = false;
+        //};
+    //}, []);
+
+    // Authentifizierungsstatus bei änderungen synchronisieren
     useEffect(() => {
         const syncAuthState = () => {
             const storedUser = localStorage.getItem("authUser");
@@ -69,12 +76,14 @@ function AddRestaurantForm() {
         return () => window.removeEventListener("storage", syncAuthState);
     }, []);
 
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            window.localStorage.setItem("authState", JSON.stringify(user));
-        }
-    }, [user]);
+   
+    //useEffect(() => {
+        //if (typeof window !== "undefined") {
+            //window.localStorage.setItem("authState", JSON.stringify(user));
+        //}
+    //}, [user]);
 
+    // Logout - Funktion
     const handleLogout = async () => {
         try {
             await fetch(`${API_URL}/api/Auth/logout`, {
@@ -87,6 +96,7 @@ function AddRestaurantForm() {
         }
     };
 
+    // Authenthifizierungsformular absenden
     const handleAuthSubmit = async (e) => {
         e.preventDefault();
         const form = e.target;
@@ -133,6 +143,7 @@ function AddRestaurantForm() {
         }
     };
 
+    // Formular zum hinzufügen eines Restaurants absenden
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -173,6 +184,7 @@ function AddRestaurantForm() {
 
     return (
         <div className="min-h-screen bg-[#f5f1e9]">
+            {/* Navigation */}
             <nav className="bg-[#2c1810] p-4">
                 <div className="container mx-auto flex justify-between items-center">
                     <h1
@@ -213,6 +225,7 @@ function AddRestaurantForm() {
                 </div>
             </nav>
 
+            {/* Authentifizierungsmodal */}
             {authModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-white p-8 rounded-lg max-w-sm w-full">
@@ -312,6 +325,8 @@ function AddRestaurantForm() {
                 </div>
             )}
 
+
+            {/* Formular zum Hinzufügen eines Restaurants */}
             <div className="container mx-auto px-4 py-16 max-w-xl">
                 <h2 className="text-3xl font-playfair text-center text-[#2c1810] mb-8">
                     Neues Restaurant hinzufügen
@@ -398,6 +413,7 @@ function AddRestaurantForm() {
                 </form>
             </div>
 
+            {/* Fußzeile */}
             <footer className="bg-[#2c1810] text-[#e6b17e] py-6">
                 <div className="container mx-auto text-center">
                     <p>© 2025 Restaurant Finder. Alle Rechte vorbehalten.</p>

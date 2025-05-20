@@ -1,9 +1,19 @@
-﻿"use client";
+﻿// ────────────────────────────────────────────────────────────
+// Imports
+// ────────────────────────────────────────────────────────────
+"use client";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 
+
+// ────────────────────────────────────────────────────────────
+// Main Component
+// ────────────────────────────────────────────────────────────
 function MainComponent() {
+    // ────────────────────────────────────────────────────────────
+    // State Management
+    // ────────────────────────────────────────────────────────────
     const [authModalOpen, setAuthModalOpen] = useState(false);
     /** @type {'login' | 'register'} */
     const [authMode, setAuthMode] = useState("login");
@@ -13,18 +23,27 @@ function MainComponent() {
 
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
-    const [selectedGuests, setSelectedGuests] = useState(2);
+    const [restaurants, setRestaurants] = useState([]);
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
+    //const [selectedGuests, setSelectedGuests] = useState(2);
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
     const [reservationModal, setReservationModal] = useState(false);
     const [selectedTable, setSelectedTable] = useState(null);
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
+    //const [name, setName] = useState('');
+    //const [email, setEmail] = useState('');
+    //const [phone, setPhone] = useState('');
 
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
-    //...
+
+
+    // ────────────────────────────────────────────────────────────
+    // Effects
+    // ────────────────────────────────────────────────────────────
+
+    // Authentifizierungslogik
     useEffect(() => {
         let isMounted = true;
 
@@ -77,9 +96,28 @@ function MainComponent() {
         }
     }, [user]);
 
+    useEffect(() => {
+        const fetchRestaurants = async () => {
+            try {
+                const response = await fetch(`${API_URL}/api/Restaurant`);
+                if (!response.ok) throw new Error("Fehler beim Laden der Restaurants");
+                const data = await response.json();
+                setRestaurants(data);
+            } catch (error) {
+                console.error("Fehler beim Laden der Restaurants:", error);
+                alert("Die Restaurants konnten nicht geladen werden.");
+            }
+        };
+
+        fetchRestaurants();
+    }, []);
+
+
+
     // ────────────────────────────────────────────────────────────
-    // Handlers
+    // Event Handlers
     // ────────────────────────────────────────────────────────────
+    //Logout
     const handleLogout = async () => {
         try {
             await fetch(`${API_URL}/api/Auth/logout`, { method: 'POST', credentials: 'include' });
@@ -90,6 +128,7 @@ function MainComponent() {
         }
     };
 
+    //Authentifizierung
     const handleAuthSubmit = async (e) => {
         e.preventDefault();
         const form = e.target;
@@ -134,115 +173,121 @@ function MainComponent() {
             setIsLoading(false);
         }
     };
-    const restaurants = [
-        {
-            id: 1,
-            name: "Café Gemütlich",
-            cuisine: "Café & Konditorei",
-            rating: 4.5,
-            reviews: 128,
-            image: "/images/r-it.jpg",
-            tables: [
-                { id: 1, seats: 2, isBooked: false },
-                { id: 2, seats: 2, isBooked: true },
-                { id: 3, seats: 4, isBooked: false },
-                { id: 4, seats: 4, isBooked: false },
-                { id: 5, seats: 6, isBooked: true },
-                { id: 6, seats: 8, isBooked: false },
-            ],
-        },
-        {
-            id: 2,
-            name: "La Cucina",
-            cuisine: "Italienisch",
-            rating: 4.7,
-            reviews: 256,
-            image: "/images/r-cui.jpg",
-            tables: [
-                { id: 1, seats: 2, isBooked: false },
-                { id: 2, seats: 2, isBooked: false },
-                { id: 3, seats: 4, isBooked: true },
-                { id: 4, seats: 4, isBooked: false },
-                { id: 5, seats: 6, isBooked: false },
-                { id: 6, seats: 8, isBooked: true },
-            ],
-        },
-        {
-            id: 3,
-            name: "Sushi Master",
-            cuisine: "Japanisch",
-            rating: 4.6,
-            reviews: 189,
-            image: "/images/r-sushi2.jpg",
-            tables: [
-                { id: 1, seats: 2, isBooked: true },
-                { id: 2, seats: 2, isBooked: false },
-                { id: 3, seats: 4, isBooked: false },
-                { id: 4, seats: 4, isBooked: true },
-                { id: 5, seats: 6, isBooked: false },
-                { id: 6, seats: 8, isBooked: false },
-            ],
-        },
-        {
-            id: 4,
-            name: "Damaskino",
-            cuisine: "Syrian",
-            rating: 4.9,
-            reviews: 367,
-            image: "/images/syr2.jpg",
-            tables: [
-                { id: 1, seats: 2, isBooked: false },
-                { id: 2, seats: 2, isBooked: true },
-                { id: 3, seats: 4, isBooked: false },
-                { id: 4, seats: 4, isBooked: false },
-                { id: 5, seats: 6, isBooked: true },
-                { id: 6, seats: 8, isBooked: false },
-            ],
-        },
-        {
-            id: 5,
-            name: "Taj Mahal",
-            cuisine: "Indisch",
-            rating: 4.8,
-            reviews: 234,
-            image: "/images/r-taj.jpg",
-            tables: [
-                { id: 1, seats: 2, isBooked: true },
-                { id: 2, seats: 2, isBooked: false },
-                { id: 3, seats: 4, isBooked: false },
-                { id: 4, seats: 4, isBooked: true },
-                { id: 5, seats: 6, isBooked: false },
-                { id: 6, seats: 8, isBooked: true },
-            ],
-        },
-        {
-            id: 6,
-            name: "Zum Goldenen Hirsch",
-            cuisine: "Deutsch",
-            rating: 4.3,
-            reviews: 145,
-            image: "/images/r-hirsch.jpg",
-            tables: [
-                { id: 1, seats: 2, isBooked: false },
-                { id: 2, seats: 2, isBooked: true },
-                { id: 3, seats: 4, isBooked: false },
-                { id: 4, seats: 4, isBooked: true },
-                { id: 5, seats: 6, isBooked: false },
-                { id: 6, seats: 8, isBooked: false },
-            ],
-        },
-    ];
+    //const restaurants = [
+    //    {
+    //        id: 1,
+    //        name: "Café Gemütlich",
+    //        cuisine: "Café & Konditorei",
+    //        rating: 4.5,
+    //        reviews: 128,
+    //        image: "/images/r-it.jpg",
+    //        tables: [
+    //            { id: 1, seats: 2, isBooked: false },
+    //            { id: 2, seats: 2, isBooked: true },
+    //            { id: 3, seats: 4, isBooked: false },
+    //            { id: 4, seats: 4, isBooked: false },
+    //            { id: 5, seats: 6, isBooked: true },
+    //            { id: 6, seats: 8, isBooked: false },
+    //        ],
+    //    },
+    //    {
+    //        id: 2,
+    //        name: "La Cucina",
+    //        cuisine: "Italienisch",
+    //        rating: 4.7,
+    //        reviews: 256,
+    //        image: "/images/r-cui.jpg",
+    //        tables: [
+    //            { id: 1, seats: 2, isBooked: false },
+    //            { id: 2, seats: 2, isBooked: false },
+    //            { id: 3, seats: 4, isBooked: true },
+    //            { id: 4, seats: 4, isBooked: false },
+    //            { id: 5, seats: 6, isBooked: false },
+    //            { id: 6, seats: 8, isBooked: true },
+    //        ],
+    //    },
+    //    {
+    //        id: 3,
+    //        name: "Sushi Master",
+    //        cuisine: "Japanisch",
+    //        rating: 4.6,
+    //        reviews: 189,
+    //        image: "/images/r-sushi2.jpg",
+    //        tables: [
+    //            { id: 1, seats: 2, isBooked: true },
+    //            { id: 2, seats: 2, isBooked: false },
+    //            { id: 3, seats: 4, isBooked: false },
+    //            { id: 4, seats: 4, isBooked: true },
+    //            { id: 5, seats: 6, isBooked: false },
+    //            { id: 6, seats: 8, isBooked: false },
+    //        ],
+    //    },
+    //    {
+    //        id: 4,
+    //        name: "Damaskino",
+    //        cuisine: "Syrian",
+    //        rating: 4.9,
+    //        reviews: 367,
+    //        image: "/images/syr2.jpg",
+    //        tables: [
+    //            { id: 1, seats: 2, isBooked: false },
+    //            { id: 2, seats: 2, isBooked: true },
+    //            { id: 3, seats: 4, isBooked: false },
+    //            { id: 4, seats: 4, isBooked: false },
+    //            { id: 5, seats: 6, isBooked: true },
+    //            { id: 6, seats: 8, isBooked: false },
+    //        ],
+    //    },
+    //    {
+    //        id: 5,
+    //        name: "Taj Mahal",
+    //        cuisine: "Indisch",
+    //        rating: 4.8,
+    //        reviews: 234,
+    //        image: "/images/r-taj.jpg",
+    //        tables: [
+    //            { id: 1, seats: 2, isBooked: true },
+    //            { id: 2, seats: 2, isBooked: false },
+    //            { id: 3, seats: 4, isBooked: false },
+    //            { id: 4, seats: 4, isBooked: true },
+    //            { id: 5, seats: 6, isBooked: false },
+    //            { id: 6, seats: 8, isBooked: true },
+    //        ],
+    //    },
+    //    {
+    //        id: 6,
+    //        name: "Zum Goldenen Hirsch",
+    //        cuisine: "Deutsch",
+    //        rating: 4.3,
+    //        reviews: 145,
+    //        image: "/images/r-hirsch.jpg",
+    //        tables: [
+    //            { id: 1, seats: 2, isBooked: false },
+    //            { id: 2, seats: 2, isBooked: true },
+    //            { id: 3, seats: 4, isBooked: false },
+    //            { id: 4, seats: 4, isBooked: true },
+    //            { id: 5, seats: 6, isBooked: false },
+    //            { id: 6, seats: 8, isBooked: false },
+    //        ],
+    //    },
+    //];
 
+
+    // Restaurant Auswahl
     const handleRestaurantSelect = (restaurantId) => {
-        setSelectedRestaurant(restaurants.find((r) => r.id === restaurantId));
+        const restaurant = restaurants.find((r) => r.restaurantId === restaurantId);
+        setSelectedRestaurant(restaurant);
         setReservationModal(true);
         setSelectedTable(null);
     };
 
+
+    // Tisch Auswahl
     const handleTableSelect = (tableId) => {
         setSelectedTable(tableId);
     };
 
+    // Reservierungslogik
     const handleReservation = (e) => {
         e.preventDefault();
         if (!selectedTable) {
@@ -260,8 +305,12 @@ function MainComponent() {
         setPhone("");
     };
 
+    // ────────────────────────────────────────────────────────────
+    // JSX Rendering
+    // ────────────────────────────────────────────────────────────
     return (
         <div className="min-h-screen bg-[#f5f1e9]">
+            {/* Navigation */}
             <nav className="bg-[#2c1810] p-4">
                 <div className="container mx-auto flex justify-between items-center">
                     <h1
@@ -336,6 +385,7 @@ function MainComponent() {
                 </div>
             )}
 
+            {/* Header */}
             <header id="restaurants" className="text-center py-20">
                 <h2 className="text-4xl font-playfair text-[#2c1810] mb-4">
                     Finden Sie Ihr perfektes Restaurant
@@ -346,6 +396,7 @@ function MainComponent() {
                 </p>
             </header>
 
+            {/* Restaurant-Liste */}
             <section className="container mx-auto py-16 px-4">
                 <h2 className="text-3xl font-playfair text-center text-[#2c1810] mb-8">
                     Unsere Partnerrestaurants
@@ -354,7 +405,7 @@ function MainComponent() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {restaurants.map((restaurant) => (
                         <div
-                            key={restaurant.id}
+                            key={restaurant.restaurantId}
                             className="bg-white rounded-lg shadow-lg overflow-hidden"
                         >
                             <img
@@ -366,7 +417,8 @@ function MainComponent() {
                                 <h3 className="text-xl font-playfair text-[#2c1810] mb-2">
                                     {restaurant.name}
                                 </h3>
-                                <p className="text-[#5c3d2e] mb-4">{restaurant.cuisine}</p>
+                                <p className="text-[#5c3d2e] mb-4">{restaurant.address}</p>
+                                <p className="text-[#5c3d2e] mb-4">{restaurant.openingHours}</p>
                                 <div className="flex items-center mb-4">
                                     <i className="fas fa-star text-yellow-400 mr-1"></i>
                                     <span>
@@ -385,6 +437,7 @@ function MainComponent() {
                 </div>
             </section>
 
+            {/* Reservierungsmodal */}
             {reservationModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
                     <div className="bg-white p-8 rounded-lg max-w-md w-full">
@@ -404,6 +457,7 @@ function MainComponent() {
                                     className="w-full p-2 border rounded"
                                     value={selectedTime}
                                     onChange={(e) => setSelectedTime(e.target.value)}
+                                    disabled={!selectedDate}
                                     required
                                 >
                                     <option value="">Uhrzeit wählen</option>
@@ -417,16 +471,19 @@ function MainComponent() {
                                 </select>
                                 <div className="grid grid-cols-2 gap-4">
                                     {selectedRestaurant?.tables
-                                        .filter((table) => table.seats >= selectedGuests)
+                                        //.filter((table) => table.seats >= selectedGuests)
                                         .map((table) => (
                                             <button
-                                                key={table.id}
+                                                key={table.tableId}
                                                 type="button"
-                                                disabled={table.isBooked}
-                                                onClick={() => handleTableSelect(table.id)}
-                                                className={`p-4 border rounded ${table.isBooked
-                                                    ? "bg-gray-200 cursor-not-allowed"
-                                                    : selectedTable === table.id
+                                                disabled={
+                                                    !selectedDate || !selectedTime //|| table.isBooked
+                                                }
+                                                onClick={() => handleTableSelect(table.tableId)}
+                                                className={`p-4 border rounded ${//table.isBooked
+                                                    //? "bg-gray-200 cursor-not-allowed"
+                                                    //:
+                                    selectedTable === table.tableId
                                                         ? "bg-[#2c1810] text-white"
                                                         : "hover:bg-[#f5f1e9]"
                                                     }`}
@@ -442,30 +499,30 @@ function MainComponent() {
                                             </button>
                                         ))}
                                 </div>
-                                <input
-                                    type="text"
-                                    placeholder="Name"
-                                    className="w-full p-2 border rounded"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="E-Mail"
-                                    className="w-full p-2 border rounded"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                />
-                                <input
-                                    type="tel"
-                                    placeholder="Telefon"
-                                    className="w-full p-2 border rounded"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    required
-                                />
+                                {/*<input*/}
+                                {/*    type="text"*/}
+                                {/*    placeholder="Name"*/}
+                                {/*    className="w-full p-2 border rounded"*/}
+                                {/*    value={name}*/}
+                                {/*    onChange={(e) => setName(e.target.value)}*/}
+                                {/*    required*/}
+                                {/*/>*/}
+                                {/*<input*/}
+                                {/*    type="email"*/}
+                                {/*    placeholder="E-Mail"*/}
+                                {/*    className="w-full p-2 border rounded"*/}
+                                {/*    value={email}*/}
+                                {/*    onChange={(e) => setEmail(e.target.value)}*/}
+                                {/*    required*/}
+                                {/*/>*/}
+                                {/*<input*/}
+                                {/*    type="tel"*/}
+                                {/*    placeholder="Telefon"*/}
+                                {/*    className="w-full p-2 border rounded"*/}
+                                {/*    value={phone}*/}
+                                {/*    onChange={(e) => setPhone(e.target.value)}*/}
+                                {/*    required*/}
+                                {/*/>*/}
                             </div>
                             <div className="flex justify-end gap-4">
                                 <button
@@ -487,6 +544,7 @@ function MainComponent() {
                 </div>
             )}
 
+            {/* Authentifizierungsmodal */}
             {authModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-white p-8 rounded-lg max-w-sm w-full">
@@ -569,6 +627,8 @@ function MainComponent() {
                     </div>
                 </div>
             )}
+
+            {/* Über uns */}
             <section id="about" className="bg-[#2c1810] text-[#f5f1e9] py-16 px-4">
                 <div className="container mx-auto">
                     <h2 className="text-3xl font-playfair text-center mb-8">Über uns</h2>
@@ -579,6 +639,7 @@ function MainComponent() {
                 </div>
             </section>
 
+            {/* Kontakt */}
             <section id="contact" className="container mx-auto py-16 px-4">
                 <h2 className="text-3xl font-playfair text-center text-[#2c1810] mb-8">
                     Kontakt
@@ -599,6 +660,7 @@ function MainComponent() {
                 </div>
             </section>
 
+            {/* Footer */}
             <footer className="bg-[#2c1810] text-[#e6b17e] py-6">
                 <div className="container mx-auto text-center">
                     <p>© 2025 Restaurant Finder. Alle Rechte vorbehalten.</p>
