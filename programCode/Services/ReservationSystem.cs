@@ -193,6 +193,17 @@ namespace RestaurantReservierung.Services
 
         }
 
+        public async Task<bool> DeleteReservation(Reservation reservation)
+        {
+            _context.Reservations.Remove(reservation);
+
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
         /*********************************************
          * 
          * 
