@@ -152,17 +152,23 @@ function AddRestaurantForm() {
             return;
         }
 
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("address", address);
-        formData.append("openingHours", openingHours);
-        formData.append("website", website);
-        if (image) formData.append("image", image);
+        const requestBody = {
+            name: name,
+            adress: address,
+            openingHours: openingHours,
+            website: website
+            // Image sobald verfügbar
+        };
+
 
         try {
             const response = await fetch(`${API_URL}/api/restaurants`, {
                 method: "POST",
-                body: formData,
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user?.token}`,
+                },
+                body: JSON.stringify(requestBody),
             });
 
             if (!response.ok) {
