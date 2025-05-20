@@ -403,7 +403,7 @@ FodyWeavers.xsd
 *.vsidx
 
 # Ignoriere Build-Dateien
-programCode/obj/
+/programCode/obj/
 *.cache
 *.AssemblyInfo.cs
 *.editorconfig
@@ -413,4 +413,4 @@ programCode/obj/
 
 RestaurantReservierung.dll
 RestaurantReservierung.exe
-programCode/bin
+/programCode/bin
