@@ -184,7 +184,7 @@ function AddRestaurantForm() {
                     <div className="flex items-center gap-4">
                         {user ? (
                             <>
-                                <span className="text-[#e6b17e]">Willkommen, {user.name}</span>
+                                <span className="text-[#e6b17e]">Willkommen, {user.email}</span>
                                 <button
                                     onClick={handleLogout}
                                     className="text-[#e6b17e] hover:text-[#f5f1e9]"
