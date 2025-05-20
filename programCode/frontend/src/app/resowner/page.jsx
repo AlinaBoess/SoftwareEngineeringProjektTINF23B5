@@ -184,7 +184,7 @@ function AddRestaurantForm() {
             setImage(null);
         } catch (error) {
             console.error("Fehler beim Hinzufügen des Restaurants:", error);
-            //setMessage("Fehler beim Hinzufügen des Restaurants.	a");
+            setMessage("Fehler beim Hinzufügen des Restaurants.");
         }
     };
 
