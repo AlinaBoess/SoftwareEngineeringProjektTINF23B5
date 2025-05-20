@@ -192,7 +192,7 @@ function MainComponent() {
         </div>
         {user ? (
   <div className="flex items-center space-x-4">
-    <span className="text-[#e6b17e]">Willkommen, {user.name}</span>
+    <span className="text-[#e6b17e]">Willkommen, {user.user.firstName}</span>
     <button
       onClick={() => setUser(null)}
       className="text-[#e6b17e] hover:text-[#f5f1e9]"
