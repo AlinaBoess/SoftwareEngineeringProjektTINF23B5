@@ -56,6 +56,9 @@ namespace RestaurantReservierung.Services
             if(!Regex.IsMatch(user.Password, passwordRegex))
                 return false;
 
+            if (user.Email.Length > 255)
+                return false;
+
             user.Email = user.Email.ToLower();
 
             user.Password = _authService.HashPasswordForRegistration(user.Password);
