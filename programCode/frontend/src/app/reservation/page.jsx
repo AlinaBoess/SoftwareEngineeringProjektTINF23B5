@@ -30,6 +30,7 @@ function MainComponent() {
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
     const [reservationModal, setReservationModal] = useState(false);
     const [selectedTable, setSelectedTable] = useState(null);
+    const [reservedTables, setReservedTables] = useState([]);
 
     //const [name, setName] = useState('');
     //const [email, setEmail] = useState('');
@@ -96,6 +97,7 @@ function MainComponent() {
         }
     }, [user]);
 
+    // Ruft Restaurants ab 
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
@@ -112,6 +114,37 @@ function MainComponent() {
 
         fetchRestaurants();
     }, []);
+
+    useEffect(() => {
+        const fetchReservations = async () => {
+            if (!selectedDate || !startTime || !endTime || !selectedRestaurant) return;
+
+            try {
+                const formattedStartTime = `${selectedDate}T${startTime}:00Z`;
+                const formattedEndTime = `${selectedDate}T${endTime}:00Z`;
+
+                const response = await fetch(
+                    `${API_URL}/api/Reservation/Public?RestaurantId=${selectedRestaurant.restaurantId}&StartTime=${encodeURIComponent(formattedStartTime)}&EndTime=${encodeURIComponent(formattedEndTime)}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Accept: "*/*",
+                        },
+                    }
+                );
+
+                if (!response.ok) throw new Error("Fehler beim Laden der Reservierungen");
+                const data = await response.json();
+                setReservedTables(data); // Reservierungen im State speichern
+            } catch (error) {
+                console.error("Fehler beim Laden der Reservierungen:", error);
+            }
+        };
+
+
+        fetchReservations();
+    }, [selectedDate, startTime, endTime, selectedRestaurant]);
+
 
 
 
@@ -487,31 +520,39 @@ function MainComponent() {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     {selectedRestaurant?.tables.length > 0 ? (
-                                        selectedRestaurant.tables.map((table) => (
-                                            <button
-                                                key={table.tableId}
-                                                type="button"
-                                                disabled={!selectedDate || !startTime || !endTime} // Button deaktivieren, wenn Datum oder Uhrzeiten fehlen
-                                                onClick={() => handleTableSelect(table.tableId)}
-                                                className={`p-4 border rounded ${selectedTable === table.tableId
-                                                        ? "bg-[#2c1810] text-white" // Hervorhebung für den ausgewählten Tisch
-                                                        : !selectedDate || !startTime || !endTime
-                                                            ? "bg-gray-200 cursor-not-allowed" // Deaktivierter Zustand
-                                                            : "hover:bg-[#f5f1e9]" // Standard-Hover-Effekt
-                                                    }`}
-                                            >
-                                                <div className="text-center">
-                                                    <i className="fas fa-chair text-xl mb-2"></i>
-                                                    <p>Tisch {table.tableNr}</p>
-                                                    <p>{table.capacity} Plätze</p>
-                                                    <p>Bereich: {table.area}</p>
-                                                </div>
-                                            </button>
-                                        ))
+                                        selectedRestaurant.tables.map((table) => {
+                                            const isReserved = reservedTables.some(
+                                                (reservation) => reservation.tableId === table.tableId
+                                            ); // Prüfen, ob der Tisch reserviert ist
+                                            return (
+                                                <button
+                                                    key={table.tableId}
+                                                    type="button"
+                                                    disabled={!selectedDate || !startTime || !endTime || isReserved} // Deaktivieren, wenn reserviert
+                                                    onClick={() => handleTableSelect(table.tableId)}
+                                                    className={`p-4 border rounded ${selectedTable === table.tableId
+                                                            ? "bg-[#2c1810] text-white" // Hervorhebung für den ausgewählten Tisch
+                                                            : isReserved
+                                                                ? "bg-gray-200 cursor-not-allowed" // Deaktivierter Zustand für reservierte Tische
+                                                                : "hover:bg-[#f5f1e9]" // Standard-Hover-Effekt
+                                                        }`}
+                                                >
+                                                    <div className="text-center">
+                                                        <i className="fas fa-chair text-xl mb-2"></i>
+                                                        <p>Tisch {table.tableNr}</p>
+                                                        <p>{table.capacity} Plätze</p>
+                                                        <p>Bereich: {table.area}</p>
+                                                        {isReserved && <p className="text-red-500">Reserviert</p>}
+                                                    </div>
+                                                </button>
+                                            );
+                                        })
                                     ) : (
                                         <p>Keine Tische verfügbar.</p>
                                     )}
                                 </div>
+
+
 
 
                                 {/*<div className="grid grid-cols-2 gap-4">*/}
