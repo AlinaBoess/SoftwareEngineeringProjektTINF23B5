@@ -31,6 +31,7 @@ function MainComponent() {
     const [reservationModal, setReservationModal] = useState(false);
     const [selectedTable, setSelectedTable] = useState(null);
     const [reservedTables, setReservedTables] = useState([]);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     //const [name, setName] = useState('');
     //const [email, setEmail] = useState('');
@@ -115,6 +116,7 @@ function MainComponent() {
         fetchRestaurants();
     }, []);
 
+    // Ruft schon besetzte Tische ab
     useEffect(() => {
         const fetchReservations = async () => {
             if (!selectedDate || !startTime || !endTime || !selectedRestaurant) return;
@@ -322,22 +324,52 @@ function MainComponent() {
     };
 
     // Reservierungslogik
-    const handleReservation = (e) => {
+    const handleReservation = async (e) => {
         e.preventDefault();
+
         if (!selectedTable) {
             alert("Bitte wählen Sie einen Tisch aus.");
             return;
         }
-        alert(
-            "Reservierung erfolgreich! Sie erhalten in Kürze eine Bestätigungs-E-Mail."
-        );
-        setReservationModal(false);
-        setSelectedRestaurant(null);
-        setSelectedTable(null);
-        setName("");
-        setEmail("");
-        setPhone("");
+
+        if (!user) {
+            alert("Bitte loggen Sie sich ein, um eine Reservierung vorzunehmen.");
+            return;
+        }
+
+        const formattedStartTime = `${selectedDate}T${startTime}:00Z`;
+        const formattedEndTime = `${selectedDate}T${endTime}:00Z`;
+
+        try {
+            const response = await fetch(`${API_URL}/api/Reservation/${selectedTable}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user.token}`, // Token des Benutzers
+                },
+                body: JSON.stringify({
+                    startTime: formattedStartTime,
+                    endTime: formattedEndTime,
+                }),
+            });
+
+            if (!response.ok) {
+                const { message } = await response.json();
+                throw new Error(message || "Reservierung fehlgeschlagen.");
+            }
+
+            alert("Reservierung erfolgreich! Sie erhalten in Kürze eine Bestätigungs-E-Mail.");
+            setReservationModal(false);
+            setSelectedRestaurant(null);
+            setSelectedTable(null);
+            setErrorMessage(null);
+        } catch (error) {
+            console.error("Fehler bei der Reservierung:", error);
+            alert(error.message || "Ein Fehler ist aufgetreten.");
+            setErrorMessage(error.message || "Ein Fehler ist aufgetreten.");
+        }
     };
+
 
     // ────────────────────────────────────────────────────────────
     // JSX Rendering
@@ -478,6 +510,19 @@ function MainComponent() {
                         <h3 className="text-2xl font-playfair mb-4">
                             Reservierung bei {selectedRestaurant?.name}
                         </h3>
+                        {errorMessage && (
+                            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                                <strong className="font-bold">Fehler: </strong>
+                                <span className="block sm:inline">{errorMessage}</span>
+                                <button
+                                    onClick={() => setErrorMessage(null)}
+                                    className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                                >
+                                    <span className="text-red-500">&times;</span>
+                                </button>
+                            </div>
+                        )}
+
                         <form onSubmit={handleReservation}>
                             <div className="grid grid-cols-1 gap-4 mb-4">
                                 <input
