@@ -27,6 +27,8 @@ export const AuthProvider = ({ children }) => {
         } else {
             delete axios.defaults.headers.common['Authorization'];
             localStorage.removeItem('token');
+            log.console("help")
+
         }
     };
 
@@ -38,7 +40,7 @@ export const AuthProvider = ({ children }) => {
                 return;
             }
 
-            const res = await axios.get(`${API_URL}/api/User`);
+            const res = await axios.get(`${API_URL}/api/User/Me`);
             setUser({
                 id: res.data.id,
                 name: res.data.name,

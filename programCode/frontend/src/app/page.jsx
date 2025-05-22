@@ -1,3 +1,12 @@
+/**
+ * @fileoverview Homepage der Webanwendung
+ *
+ * @author Alina Böß <alinaboess05@gmail.com>
+ * @author Yahya Ezz Edin <yaezzedin@gmail.com>
+ * @author Moumen Kheto <kheto.moumen@gmail.com>
+ * @created 2025-04-17
+ */
+
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -25,14 +34,18 @@ function Homepage() {
     useEffect(() => {
         let isMounted = true;
 
+        if (!localStorage.getItem('authUser')  || localStorage.getItem('authUser') == "null") return
         const storedUser = localStorage.getItem('authUser');
         if (storedUser && isMounted) setUser(JSON.parse(storedUser));
 
         (async () => {
             try {
-                const res = await fetch(`${API_URL}/api/User`, {
-                    credentials: 'include',                // sends cookies :contentReference[oaicite:2]{index=2}
-                    headers: { Accept: 'application/json' },
+                const res = await fetch(`${API_URL}/api/User/Me`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem('authUser')).token}`
+                    },
                 });
 
                 if (!isMounted) return;
@@ -54,6 +67,40 @@ function Homepage() {
 
         return () => { isMounted = false; };
     }, []);
+    // Authentifizierungstatus mit den Server Synchronisieren
+    useEffect(() => {
+        const checkAuth = async () => {
+            if(!localStorage.getItem('authUser')) return
+            try {
+                const res = await fetch(`${API_URL}/api/User/Me`, {
+                    credentials: "include",
+                    headers: {
+                        Accept: "application/json",
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem('authUser')).token}`
+                    },
+                });
+
+                //if (!isMounted) return;
+
+                if (res.ok) {
+                    const data = await res.json();
+                    setUser(data);
+                    localStorage.setItem("authUser", JSON.stringify(data));
+                } else {
+                    setUser(null);
+                    localStorage.removeItem("authUser");
+                }
+            } catch (err) {
+                //if (isMounted) {
+                console.error("Auth check failed:", err);
+                setUser(null);
+                localStorage.removeItem("authUser");
+                //}
+            }
+        };
+
+        checkAuth();
+    }, []);
 
     // Listen for cross-tab login/logout
     useEffect(() => {
@@ -68,7 +115,7 @@ function Homepage() {
     // Persist latest user object in localStorage for quick boot-up
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            localStorage.setItem('authState', JSON.stringify(user));
+            localStorage.setItem('authUser', JSON.stringify(user));
         }
     }, [user]);
 
@@ -239,7 +286,9 @@ function Homepage() {
                                 className="w-full p-2 border rounded"
                                 required
                                 minLength="6"
+                                id="pwd"
                             />
+                            <input type="checkbox" onClick="pwd.type =this.checked ? 'rext' : 'password'"></input>
                             <div className="flex justify-between items-center">
                                 <button
                                     type="button"

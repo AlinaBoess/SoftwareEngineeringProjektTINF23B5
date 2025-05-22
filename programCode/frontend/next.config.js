@@ -10,3 +10,17 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+module.exports = {
+    async headers() {
+        return [
+            {
+                source: '/api/:path*',
+                headers: [
+                    { key: 'Access-Control-Allow-Credentials', value: 'true' },
+                    { key: 'Access-Control-Allow-Origin', value: 'http://localhost:3000' },
+                    
+                ],
+            },
+        ];
+    },
+};

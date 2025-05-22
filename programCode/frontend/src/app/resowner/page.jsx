@@ -20,22 +20,63 @@ function AddRestaurantForm() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
 
     // Authentifizierten Benutzer aus dem lokalen speicher laden
+    //useEffect(() => {
+    //   let isMounted = true;
+
+    //    const storedUser = localStorage.getItem("authUser");
+    //    if (storedUser && isMounted) {
+    //        setUser(JSON.parse(storedUser));
+    //    }
+    //}, []);
     useEffect(() => {
         let isMounted = true;
 
-        const storedUser = localStorage.getItem("authUser");
-        if (storedUser && isMounted) {
-            setUser(JSON.parse(storedUser));
-        }
-    }, []);
+        if (!localStorage.getItem('authUser') || localStorage.getItem('authUser') == "null") return
+        const storedUser = localStorage.getItem('authUser');
+        if (storedUser && isMounted) setUser(JSON.parse(storedUser));
 
+        (async () => {
+            try {
+                const res = await fetch(`${API_URL}/api/User/Me`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem('authUser')).token}`
+                    },
+                });
+
+                if (!isMounted) return;
+
+                if (res.ok) {
+                    const data = await res.json();
+                    setUser(data);
+                    localStorage.setItem('authUser', JSON.stringify(data));
+                } else {
+                    setUser(null);
+                    localStorage.removeItem('authUser');
+                }
+            } catch (err) {
+                console.error('Auth check failed:', err);
+                setUser(null);
+                localStorage.removeItem('authUser');
+            }
+        })();
+
+        return () => { isMounted = false; };
+    }, []);
     // Authentifizierungstatus mit den Server Synchronisieren
     useEffect(() => {
+
         const checkAuth = async () => {
+            if (!localStorage.getItem('authUser') || localStorage.getItem('authUser') == "null") return
             try {
-                const res = await fetch(`${API_URL}/api/User`, {
+                const res = await fetch(`${API_URL}/api/User/Me`, {
+
                     credentials: "include",
-                    headers: { Accept: "application/json" },
+                    headers: {
+                        Accept: "application/json",
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem('authUser')).token}`
+                                        },
                 });
 
                 //if (!isMounted) return;
@@ -75,6 +116,12 @@ function AddRestaurantForm() {
         window.addEventListener("storage", syncAuthState);
         return () => window.removeEventListener("storage", syncAuthState);
     }, []);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('authUser', JSON.stringify(user));
+        }
+    }, [user]);
 
    
     //useEffect(() => {

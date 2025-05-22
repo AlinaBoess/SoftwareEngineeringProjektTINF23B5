@@ -94,7 +94,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactFrontend",
-        policy => policy.WithOrigins("https://localhost:3443", "http://localhost:3000", "https://localhost:3000")
+        policy => policy.WithOrigins("https://localhost:3443", "http://localhost:3000", "https://localhost:3000", "http://localhost:3002")
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials()); // This is crucial for cookies/auth
@@ -103,7 +103,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    //options.Cookie.HttpOnly = true;
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromDays(10); 
+    options.SlidingExpiration = true;
 });
 
 
