@@ -14,8 +14,6 @@ namespace RestaurantReservierung.Dtos
         public string? Address { get; set; }
 
         public string? OpeningHours { get; set; }
-
-        public string? PicturesBase64 { get; set; }
         public string? Website { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public virtual List<TableDto> Tables { get; set; } = new List<TableDto>();
@@ -35,7 +33,6 @@ namespace RestaurantReservierung.Dtos
                     Address = restaurant.Address,
                     OpeningHours = restaurant.OpeningHours,
                     Website = restaurant.Website,
-                    PicturesBase64 = (restaurant.Pictures != null) ? Convert.ToBase64String(restaurant.Pictures) : null,
                     Tables = restaurant.Tables?                    
                         .Select(t => new TableDto
                         {

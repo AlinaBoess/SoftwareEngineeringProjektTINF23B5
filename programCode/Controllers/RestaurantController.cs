@@ -192,7 +192,17 @@ namespace RestaurantReservierung.Controllers
 
             return Ok(new { rating });
         }
-        
+        /*
+        [Authorize(Roles = "ADMIN,RESTAURANT_OWNER")]
+        [HttpPut("Picture/{restaurantId}")]
+        public async Task<IActionResult> ChangePicture(int restaurantId, IFormFile picture)
+        {
+            if (picture == null || picture.Length == 0)
+                return BadRequest( new { Message = "No File was uploaded"});
+
+
+        }        
+        */
 
     }
 
@@ -207,6 +217,5 @@ namespace RestaurantReservierung.Controllers
 
         public string Website {  get; set; }
 
-        public string? Pictures { get; set; }
     }
 }

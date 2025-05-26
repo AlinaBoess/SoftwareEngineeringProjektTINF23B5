@@ -27,7 +27,6 @@ namespace RestaurantReservierung.Services
                     Address = restaurantModel.Adress,
                     OpeningHours = restaurantModel.OpeningHours,
                     Website = restaurantModel.Website,
-                    Pictures = Convert.FromBase64String(restaurantModel.Pictures.Substring(restaurantModel.Pictures.IndexOf(",") + 1)),
                     User = user
                 };
 
@@ -53,7 +52,6 @@ namespace RestaurantReservierung.Services
             restaurant.Address = restaurantModel.Adress;
             restaurant.OpeningHours = restaurantModel.OpeningHours;
             restaurant.Website = restaurantModel.Website;
-            restaurant.Pictures = Convert.FromBase64String(restaurantModel.Pictures.Substring(restaurantModel.Pictures.IndexOf(",") + 1));
 
             if (await _context.SaveChangesAsync() > 0)
             {
@@ -108,5 +106,29 @@ namespace RestaurantReservierung.Services
 
             return restaurant != null;
         }
+
+        public async Task<bool> UploadPicture(int restaurantId, IFormFile picture)
+        {
+            using var memoryStream = new MemoryStream();
+            await picture.CopyToAsync(memoryStream);
+            byte[] imageBytes = memoryStream.ToArray();
+
+            var restaurant = await GetRestaurantById(restaurantId);
+
+            restaurant.Pictures = imageBytes;
+
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        /*
+        public async Task<IFormFile> GetPictureByRestaurantId(int restaurantId)
+        {
+            var restaurant = await GetRestaurantById(restaurantId);
+
+            var imageBytes = restaurant.Pictures;
+        }
+        */
+
+
     }
 }
