@@ -102,33 +102,59 @@ namespace RestaurantReservierung.Services
             var restaurant = await _context.Restaurants
                 .Where(r => r.RestaurantId == restaurantId)
                 .Where(r => r.User == user)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
             return restaurant != null;
         }
 
-        public async Task<bool> UploadPicture(int restaurantId, IFormFile picture)
+        public async Task<bool> UploadImage(int restaurantId, IFormFile picture)
         {
+
             using var memoryStream = new MemoryStream();
             await picture.CopyToAsync(memoryStream);
             byte[] imageBytes = memoryStream.ToArray();
 
             var restaurant = await GetRestaurantById(restaurantId);
 
-            restaurant.Pictures = imageBytes;
+            if (restaurant == null) return false;
+
+            if (restaurant.ImageId != null)
+            {
+                restaurant.Image.Data = imageBytes;
+                restaurant.Image.MimeType = picture.ContentType;
+            }
+            else
+            {
+                var image = new Image
+                {
+                    MimeType = picture.ContentType,
+                    Data = imageBytes
+                };
+                restaurant.Image = image;
+            }
 
             return await _context.SaveChangesAsync() > 0;
         }
 
-        /*
-        public async Task<IFormFile> GetPictureByRestaurantId(int restaurantId)
+        
+        public async Task<Image> GetImageByRestaurantId(int restaurantId)
+        {
+            var restaurant = await GetRestaurantById(restaurantId);
+            if (restaurant == null) return null;
+
+            return await _context.Images.FirstOrDefaultAsync(i => i.ImageId == restaurant.ImageId);
+        }
+
+        public async Task<bool> DeleteImageByRestaurantId(int restaurantId)
         {
             var restaurant = await GetRestaurantById(restaurantId);
 
-            var imageBytes = restaurant.Pictures;
+            if (restaurant.ImageId == null)
+                return true;
+
+            _context.Images.Remove(restaurant.Image);
+
+            return await _context.SaveChangesAsync() > 0;
         }
-        */
-
-
     }
 }

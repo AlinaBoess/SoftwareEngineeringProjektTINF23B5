@@ -192,16 +192,51 @@ namespace RestaurantReservierung.Controllers
 
             return Ok(new { rating });
         }
-        /*
+        
         [Authorize(Roles = "ADMIN,RESTAURANT_OWNER")]
-        [HttpPut("Picture/{restaurantId}")]
-        public async Task<IActionResult> ChangePicture(int restaurantId, IFormFile picture)
+        [HttpPut("Image/{restaurantId}")]
+        public async Task<IActionResult> ChangeImage(int restaurantId, IFormFile picture)
         {
+            var user = await _userService.GetLoggedInUser();
+
+            if(!await _ownerService.OwnsRestaurant(user, restaurantId))
+                return Unauthorized();
+
             if (picture == null || picture.Length == 0)
                 return BadRequest( new { Message = "No File was uploaded"});
 
+            if (await _ownerService.UploadImage(restaurantId, picture))
+                return Ok(new { Message = "The picture has been uploaded successfully!" });
 
-        }        
+            return BadRequest( new { Message = "The picture could not be uploaded!"});
+
+        }
+
+        [HttpGet("Image/{restaurantId}")]
+        public async Task<IActionResult> GetImage(int restaurantId)
+        {
+            var image = await _ownerService.GetImageByRestaurantId(restaurantId);
+
+            if(image == null)
+                return NoContent();
+
+            return File(image.Data, image.MimeType);
+        }
+        /*
+        [Authorize(Roles = "ADMIN,RESTAURANT_OWNER")]
+        [HttpDelete("Image/{restaurantId}")]
+        public async Task<IActionResult> DeleteImage(int restaurantId)
+        {
+            var user = await _userService.GetLoggedInUser();
+
+            if (!await _ownerService.OwnsRestaurant(user, restaurantId))
+                return Unauthorized();
+
+            if (await _ownerService.DeleteImageByRestaurantId(restaurantId))
+                return Ok(new { Message = "The Image has been deleted successfully!"});
+
+            return BadRequest( new { Message = "The Image could not be deleted!"});
+        }
         */
 
     }
