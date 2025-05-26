@@ -211,7 +211,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Image).WithMany(p => p.Restaurants)
                 .HasForeignKey(d => d.ImageId)
-                .OnDelete(DeleteBehavior.Cascade)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("Restaurant_ibfk_2");
 
             entity.HasOne(d => d.User).WithMany(p => p.Restaurants)

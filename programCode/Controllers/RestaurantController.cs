@@ -222,7 +222,7 @@ namespace RestaurantReservierung.Controllers
 
             return File(image.Data, image.MimeType);
         }
-        /*
+        
         [Authorize(Roles = "ADMIN,RESTAURANT_OWNER")]
         [HttpDelete("Image/{restaurantId}")]
         public async Task<IActionResult> DeleteImage(int restaurantId)
@@ -237,7 +237,7 @@ namespace RestaurantReservierung.Controllers
 
             return BadRequest( new { Message = "The Image could not be deleted!"});
         }
-        */
+        
 
     }
 

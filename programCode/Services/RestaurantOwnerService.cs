@@ -73,6 +73,7 @@ namespace RestaurantReservierung.Services
 
         public async Task<bool> DeleteRestaurant(Restaurant restaurant)
         {
+            await DeleteImageByRestaurantId(restaurant.RestaurantId);
             _context.Restaurants.Remove(restaurant);
 
             if (await _context.SaveChangesAsync() > 0) {  
@@ -150,7 +151,7 @@ namespace RestaurantReservierung.Services
             var restaurant = await GetRestaurantById(restaurantId);
 
             if (restaurant.ImageId == null)
-                return true;
+                return true;   
 
             _context.Images.Remove(restaurant.Image);
 

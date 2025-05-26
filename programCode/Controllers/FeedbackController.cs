@@ -7,6 +7,8 @@ using RestaurantReservierung.Services;
 
 namespace RestaurantReservierung.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class FeedbackController : Controller
     {
         private readonly FeedbackService _feedbackService;
