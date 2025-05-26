@@ -21,6 +21,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
+    public virtual DbSet<Image> Images { get; set; }
+
     public virtual DbSet<Reservation> Reservations { get; set; }
 
     public virtual DbSet<Restaurant> Restaurants { get; set; }
@@ -115,6 +117,23 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("Feedback_ibfk_1");
         });
 
+        modelBuilder.Entity<Image>(entity =>
+        {
+            entity.HasKey(e => e.ImageId).HasName("PRIMARY");
+
+            entity.ToTable("Image");
+
+            entity.Property(e => e.ImageId)
+                .HasColumnType("int(11)")
+                .HasColumnName("imageId");
+            entity.Property(e => e.Data)
+                .HasColumnType("mediumblob")
+                .HasColumnName("data");
+            entity.Property(e => e.MimeType)
+                .HasMaxLength(255)
+                .HasColumnName("mimeType");
+        });
+
         modelBuilder.Entity<Reservation>(entity =>
         {
             entity.HasKey(e => e.ReservationId).HasName("PRIMARY");
@@ -164,6 +183,8 @@ public partial class AppDbContext : DbContext
 
             entity.ToTable("Restaurant");
 
+            entity.HasIndex(e => e.ImageId, "imageId");
+
             entity.HasIndex(e => e.UserId, "userId");
 
             entity.Property(e => e.RestaurantId)
@@ -172,21 +193,26 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
                 .HasColumnName("address");
+            entity.Property(e => e.ImageId)
+                .HasColumnType("int(11)")
+                .HasColumnName("imageId");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
             entity.Property(e => e.OpeningHours)
                 .HasMaxLength(255)
                 .HasColumnName("openingHours");
-            entity.Property(e => e.Pictures)
-                .HasColumnType("blob")
-                .HasColumnName("pictures");
             entity.Property(e => e.UserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("userId");
             entity.Property(e => e.Website)
                 .HasMaxLength(255)
                 .HasColumnName("website");
+
+            entity.HasOne(d => d.Image).WithMany(p => p.Restaurants)
+                .HasForeignKey(d => d.ImageId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("Restaurant_ibfk_2");
 
             entity.HasOne(d => d.User).WithMany(p => p.Restaurants)
                 .HasForeignKey(d => d.UserId)
