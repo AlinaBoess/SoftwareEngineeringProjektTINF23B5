@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using RestaurantReservierung.Data;
 using Prometheus;
+using RestaurantReservierung.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddScoped<ReservationSystem>();
 builder.Services.AddScoped<RestaurantOwnerService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TableService>();
+builder.Services.AddScoped<FeedbackService>();
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -124,6 +126,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseHttpMetrics();          // Prometheus-Middleware (nach Routing, vor Endpoints)
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseEndpoints(endpoints =>
 {
