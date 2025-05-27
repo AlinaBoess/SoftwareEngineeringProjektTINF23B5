@@ -21,6 +21,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
+    public virtual DbSet<Image> Images { get; set; }
+
     public virtual DbSet<Reservation> Reservations { get; set; }
 
     public virtual DbSet<Restaurant> Restaurants { get; set; }
@@ -77,6 +79,8 @@ public partial class AppDbContext : DbContext
 
             entity.ToTable("Feedback");
 
+            entity.HasIndex(e => e.RestaurantId, "fk_feedback_restaurant");
+
             entity.HasIndex(e => e.ReservationId, "reservationId");
 
             entity.HasIndex(e => e.UserId, "userId");
@@ -92,11 +96,14 @@ public partial class AppDbContext : DbContext
                 .HasColumnType("timestamp")
                 .HasColumnName("createdAt");
             entity.Property(e => e.Rating)
-                .HasColumnType("int(11)")
+                .HasColumnType("tinyint(3) unsigned")
                 .HasColumnName("rating");
             entity.Property(e => e.ReservationId)
                 .HasColumnType("int(11)")
                 .HasColumnName("reservationId");
+            entity.Property(e => e.RestaurantId)
+                .HasColumnType("int(11)")
+                .HasColumnName("restaurantId");
             entity.Property(e => e.UserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("userId");
@@ -105,9 +112,30 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.ReservationId)
                 .HasConstraintName("Feedback_ibfk_2");
 
+            entity.HasOne(d => d.Restaurant).WithMany(p => p.Feedbacks)
+                .HasForeignKey(d => d.RestaurantId)
+                .HasConstraintName("fk_feedback_restaurant");
+
             entity.HasOne(d => d.User).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("Feedback_ibfk_1");
+        });
+
+        modelBuilder.Entity<Image>(entity =>
+        {
+            entity.HasKey(e => e.ImageId).HasName("PRIMARY");
+
+            entity.ToTable("Image");
+
+            entity.Property(e => e.ImageId)
+                .HasColumnType("int(11)")
+                .HasColumnName("imageId");
+            entity.Property(e => e.Data)
+                .HasColumnType("mediumblob")
+                .HasColumnName("data");
+            entity.Property(e => e.MimeType)
+                .HasMaxLength(255)
+                .HasColumnName("mimeType");
         });
 
         modelBuilder.Entity<Reservation>(entity =>
@@ -159,6 +187,8 @@ public partial class AppDbContext : DbContext
 
             entity.ToTable("Restaurant");
 
+            entity.HasIndex(e => e.ImageId, "imageId");
+
             entity.HasIndex(e => e.UserId, "userId");
 
             entity.Property(e => e.RestaurantId)
@@ -167,6 +197,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
                 .HasColumnName("address");
+            entity.Property(e => e.ImageId)
+                .HasColumnType("int(11)")
+                .HasColumnName("imageId");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
@@ -179,6 +212,11 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Website)
                 .HasMaxLength(255)
                 .HasColumnName("website");
+
+            entity.HasOne(d => d.Image).WithMany(p => p.Restaurants)
+                .HasForeignKey(d => d.ImageId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("Restaurant_ibfk_2");
 
             entity.HasOne(d => d.User).WithMany(p => p.Restaurants)
                 .HasForeignKey(d => d.UserId)

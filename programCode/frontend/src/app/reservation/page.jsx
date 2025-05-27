@@ -30,6 +30,8 @@ function MainComponent() {
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
     const [reservationModal, setReservationModal] = useState(false);
     const [selectedTable, setSelectedTable] = useState(null);
+    const [reservedTables, setReservedTables] = useState([]);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     //const [name, setName] = useState('');
     //const [email, setEmail] = useState('');
@@ -67,8 +69,8 @@ function MainComponent() {
                     setUser(null);
                     localStorage.removeItem('authUser');
                 }
-            
-          
+
+
             } catch (err) {
                 console.error('Auth check failed:', err);
                 setUser(null);
@@ -96,6 +98,7 @@ function MainComponent() {
         }
     }, [user]);
 
+    // Ruft Restaurants ab 
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
@@ -103,6 +106,7 @@ function MainComponent() {
                 if (!response.ok) throw new Error("Fehler beim Laden der Restaurants");
                 const data = await response.json();
                 setRestaurants(data);
+                console.log(data);
             } catch (error) {
                 console.error("Fehler beim Laden der Restaurants:", error);
                 alert("Die Restaurants konnten nicht geladen werden.");
@@ -111,6 +115,38 @@ function MainComponent() {
 
         fetchRestaurants();
     }, []);
+
+    // Ruft schon besetzte Tische ab
+    useEffect(() => {
+        const fetchReservations = async () => {
+            if (!selectedDate || !startTime || !endTime || !selectedRestaurant) return;
+
+            try {
+                const formattedStartTime = `${selectedDate}T${startTime}:00Z`;
+                const formattedEndTime = `${selectedDate}T${endTime}:00Z`;
+
+                const response = await fetch(
+                    `${API_URL}/api/Reservation/Public?RestaurantId=${selectedRestaurant.restaurantId}&StartTime=${encodeURIComponent(formattedStartTime)}&EndTime=${encodeURIComponent(formattedEndTime)}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Accept: "*/*",
+                        },
+                    }
+                );
+
+                if (!response.ok) throw new Error("Fehler beim Laden der Reservierungen");
+                const data = await response.json();
+                setReservedTables(data); // Reservierungen im State speichern
+            } catch (error) {
+                console.error("Fehler beim Laden der Reservierungen:", error);
+            }
+        };
+
+
+        fetchReservations();
+    }, [selectedDate, startTime, endTime, selectedRestaurant]);
+
 
 
 
@@ -288,22 +324,52 @@ function MainComponent() {
     };
 
     // Reservierungslogik
-    const handleReservation = (e) => {
+    const handleReservation = async (e) => {
         e.preventDefault();
+
         if (!selectedTable) {
             alert("Bitte wählen Sie einen Tisch aus.");
             return;
         }
-        alert(
-            "Reservierung erfolgreich! Sie erhalten in Kürze eine Bestätigungs-E-Mail."
-        );
-        setReservationModal(false);
-        setSelectedRestaurant(null);
-        setSelectedTable(null);
-        setName("");
-        setEmail("");
-        setPhone("");
+
+        if (!user) {
+            alert("Bitte loggen Sie sich ein, um eine Reservierung vorzunehmen.");
+            return;
+        }
+
+        const formattedStartTime = `${selectedDate}T${startTime}:00Z`;
+        const formattedEndTime = `${selectedDate}T${endTime}:00Z`;
+
+        try {
+            const response = await fetch(`${API_URL}/api/Reservation/${selectedTable}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user.token}`, // Token des Benutzers
+                },
+                body: JSON.stringify({
+                    startTime: formattedStartTime,
+                    endTime: formattedEndTime,
+                }),
+            });
+
+            if (!response.ok) {
+                const { message } = await response.json();
+                throw new Error(message || "Reservierung fehlgeschlagen.");
+            }
+
+            alert("Reservierung erfolgreich! Sie erhalten in Kürze eine Bestätigungs-E-Mail.");
+            setReservationModal(false);
+            setSelectedRestaurant(null);
+            setSelectedTable(null);
+            setErrorMessage(null);
+        } catch (error) {
+            console.error("Fehler bei der Reservierung:", error);
+            alert(error.message || "Ein Fehler ist aufgetreten.");
+            setErrorMessage(error.message || "Ein Fehler ist aufgetreten.");
+        }
     };
+
 
     // ────────────────────────────────────────────────────────────
     // JSX Rendering
@@ -337,7 +403,12 @@ function MainComponent() {
                     <div className="flex items-center gap-4">
                         {user ? (
                             <>
-                                <span className="text-[#e6b17e]">Willkommen, {user.user.firstName}</span>
+                                <span
+                                    onClick={() => router.push("/my-reservations")}
+                                    className="text-[#e6b17e] cursor-pointer hover:text-[#f5f1e9]"
+                                >
+                                    Willkommen, {user.user.firstName}
+                                </span>
                                 <button
                                     onClick={handleLogout}
                                     className="text-[#e6b17e] hover:text-[#f5f1e9]"
@@ -426,7 +497,7 @@ function MainComponent() {
                                     </span>
                                 </div>
                                 <button
-                                    onClick={() => handleRestaurantSelect(restaurant.id)}
+                                    onClick={() => handleRestaurantSelect(restaurant.restaurantId)}
                                     className="w-full bg-[#2c1810] text-white py-2 rounded hover:bg-[#3d251c]"
                                 >
                                     Tisch reservieren
@@ -444,6 +515,19 @@ function MainComponent() {
                         <h3 className="text-2xl font-playfair mb-4">
                             Reservierung bei {selectedRestaurant?.name}
                         </h3>
+                        {errorMessage && (
+                            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                                <strong className="font-bold">Fehler: </strong>
+                                <span className="block sm:inline">{errorMessage}</span>
+                                <button
+                                    onClick={() => setErrorMessage(null)}
+                                    className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                                >
+                                    <span className="text-red-500">&times;</span>
+                                </button>
+                            </div>
+                        )}
+
                         <form onSubmit={handleReservation}>
                             <div className="grid grid-cols-1 gap-4 mb-4">
                                 <input
@@ -453,52 +537,108 @@ function MainComponent() {
                                     onChange={(e) => setSelectedDate(e.target.value)}
                                     required
                                 />
-                                <select
-                                    className="w-full p-2 border rounded"
-                                    value={selectedTime}
-                                    onChange={(e) => setSelectedTime(e.target.value)}
-                                    disabled={!selectedDate}
-                                    required
-                                >
-                                    <option value="">Uhrzeit wählen</option>
-                                    <option value="17:00">17:00</option>
-                                    <option value="17:30">17:30</option>
-                                    <option value="18:00">18:00</option>
-                                    <option value="18:30">18:30</option>
-                                    <option value="19:00">19:00</option>
-                                    <option value="19:30">19:30</option>
-                                    <option value="20:00">20:00</option>
-                                </select>
-                                <div className="grid grid-cols-2 gap-4">
-                                    {selectedRestaurant?.tables
-                                        //.filter((table) => table.seats >= selectedGuests)
-                                        .map((table) => (
-                                            <button
-                                                key={table.tableId}
-                                                type="button"
-                                                disabled={
-                                                    !selectedDate || !selectedTime //|| table.isBooked
-                                                }
-                                                onClick={() => handleTableSelect(table.tableId)}
-                                                className={`p-4 border rounded ${//table.isBooked
-                                                    //? "bg-gray-200 cursor-not-allowed"
-                                                    //:
-                                    selectedTable === table.tableId
-                                                        ? "bg-[#2c1810] text-white"
-                                                        : "hover:bg-[#f5f1e9]"
-                                                    }`}
-                                            >
-                                                <div className="text-center">
-                                                    <i className="fas fa-chair text-xl mb-2"></i>
-                                                    <p>Tisch {table.id}</p>
-                                                    <p>{table.seats} Plätze</p>
-                                                    {table.isBooked && (
-                                                        <p className="text-red-500">Besetzt</p>
-                                                    )}
-                                                </div>
-                                            </button>
-                                        ))}
+                                {/* Von Uhrzeit */}
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <label htmlFor="startTime" className="block text-sm text-[#5c3d2e] mb-1">
+                                            Von:
+                                        </label>
+                                        <input
+                                            id="startTime"
+                                            type="time"
+                                            className="w-full p-2 border rounded"
+                                            value={startTime}
+                                            onChange={(e) => setStartTime(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    {/* Bis Uhrzeit */}
+                                    <div className="flex-1">
+                                        <label htmlFor="endTime" className="block text-sm text-[#5c3d2e] mb-1">
+                                            Bis:
+                                        </label>
+                                        <input
+                                            id="endTime"
+                                            type="time"
+                                            className="w-full p-2 border rounded"
+                                            value={endTime}
+                                            onChange={(e) => setEndTime(e.target.value)}
+                                            required
+                                        />
+                                    </div>
                                 </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    {selectedRestaurant?.tables.length > 0 ? (
+                                        selectedRestaurant.tables.map((table) => {
+                                            const isReserved = reservedTables.some(
+                                                (reservation) => reservation.tableId === table.tableId
+                                            ); // Prüfen, ob der Tisch reserviert ist
+                                            return (
+                                                <button
+                                                    key={table.tableId}
+                                                    type="button"
+                                                    disabled={!selectedDate || !startTime || !endTime || isReserved} // Deaktivieren, wenn reserviert
+                                                    onClick={() => handleTableSelect(table.tableId)}
+                                                    className={`p-4 border rounded ${selectedTable === table.tableId
+                                                            ? "bg-[#2c1810] text-white" // Hervorhebung für den ausgewählten Tisch
+                                                            : isReserved
+                                                                ? "bg-gray-200 cursor-not-allowed" // Deaktivierter Zustand für reservierte Tische
+                                                                : "hover:bg-[#f5f1e9]" // Standard-Hover-Effekt
+                                                        }`}
+                                                >
+                                                    <div className="text-center">
+                                                        <i className="fas fa-chair text-xl mb-2"></i>
+                                                        <p>Tisch {table.tableNr}</p>
+                                                        <p>{table.capacity} Plätze</p>
+                                                        <p>Bereich: {table.area}</p>
+                                                        {isReserved && <p className="text-red-500">Reserviert</p>}
+                                                    </div>
+                                                </button>
+                                            );
+                                        })
+                                    ) : (
+                                        <p>Keine Tische verfügbar.</p>
+                                    )}
+                                </div>
+
+
+
+
+                                {/*<div className="grid grid-cols-2 gap-4">*/}
+                                {/*    {selectedRestaurant?.tables*/}
+                                {/*        //.filter((table) => table.seats >= selectedGuests)*/}
+                                {/*        .map((table) => (*/}
+                                {/*            <button*/}
+                                {/*                key={table.tableId}*/}
+                                {/*                type="button"*/}
+                                {/*                disabled={*/}
+                                {/*                    !selectedDate || !selectedTime //|| table.isBooked*/}
+                                {/*                }*/}
+                                {/*                onClick={() => handleTableSelect(table.tableId)}*/}
+                                {/*                className={`p-4 border rounded ${//table.isBooked*/}
+                                {/*                    //? "bg-gray-200 cursor-not-allowed"*/}
+                                {/*                    //:*/}
+                                {/*    selectedTable === table.tableId*/}
+                                {/*                        ? "bg-[#2c1810] text-white"*/}
+                                {/*                        : "hover:bg-[#f5f1e9]"*/}
+                                {/*                    }`}*/}
+                                {/*            >*/}
+                                {/*                <div className="text-center">*/}
+                                {/*                    <i className="fas fa-chair text-xl mb-2"></i>*/}
+                                {/*                    <p>Tisch {table.id}</p>*/}
+                                {/*                    <p>{table.seats} Plätze</p>*/}
+                                {/*                    {table.isBooked && (*/}
+                                {/*                        <p className="text-red-500">Besetzt</p>*/}
+                                {/*                    )}*/}
+                                {/*                </div>*/}
+                                {/*            </button>*/}
+                                {/*        ))}*/}
+                                {/*</div>*/}
+
+
+
+
                                 {/*<input*/}
                                 {/*    type="text"*/}
                                 {/*    placeholder="Name"*/}

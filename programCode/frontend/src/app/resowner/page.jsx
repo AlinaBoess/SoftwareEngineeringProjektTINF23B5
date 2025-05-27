@@ -215,22 +215,28 @@ function AddRestaurantForm() {
             return;
         }
 
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("address", address);
-        formData.append("openingHours", openingHours);
-        formData.append("website", website);
-        if (image) formData.append("image", image);
-
-        try {
-            const response = await fetch(`${API_URL}/api/restaurants`, {
+	const requestBody = {
+	    name: name,
+	    adress: address,
+	    openingHours: openingHours,
+	    website: website
+	    // Image sobald verfügbar
+	//
+	//
+        };
+	try {
+            const response = await fetch(`${API_URL}/api/Restaurant`, {
                 method: "POST",
-                body: formData,
+                headers: {
+		    "Content-Type": "application/json",
+		    Authorization: `Bearer ${user?.token}`,
+		},
+		body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || "Fehler beim Hinzufügen des Restaurants");
+		    throw new Error(errorData.message || "Fehler beim Hinzufügen des Restaurants");
             }
 
             setMessage("Restaurant erfolgreich hinzugefügt!");
