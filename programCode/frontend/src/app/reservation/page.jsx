@@ -403,7 +403,12 @@ function MainComponent() {
                     <div className="flex items-center gap-4">
                         {user ? (
                             <>
-                                <span className="text-[#e6b17e]">Willkommen, {user.user.firstName}</span>
+                                <span
+                                    onClick={() => router.push("/my-reservations")}
+                                    className="text-[#e6b17e] cursor-pointer hover:text-[#f5f1e9]"
+                                >
+                                    Willkommen, {user.user.firstName}
+                                </span>
                                 <button
                                     onClick={handleLogout}
                                     className="text-[#e6b17e] hover:text-[#f5f1e9]"
