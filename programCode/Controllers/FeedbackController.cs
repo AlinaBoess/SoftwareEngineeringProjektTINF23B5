@@ -25,26 +25,23 @@ namespace RestaurantReservierung.Controllers
         }
 
         [Authorize]
-        [HttpPost("{restaurantId}/{reservationId}")]
-        public async Task<IActionResult> CreateFeedback([FromBody] FeedbackFormModel model, int restaurantId, int reservationId)
+        [HttpPost("{reservationId}")]
+        public async Task<IActionResult> CreateFeedback([FromBody] FeedbackFormModel model, int reservationId)
         {
             var user = await _userService.GetLoggedInUser();
 
             var reservation = await _reservationSystem.GetReservationById(reservationId);
 
-            var restaurant = await _ownerService.GetRestaurantById(restaurantId);
+            var restaurant = reservation.Table.Restaurant;
 
-            if (model.Rating > 5 || model.Rating < 0)
+            if (model.Rating > 5 || model.Rating < 1) 
                 return BadRequest(new { Message = "Illegal Rating Interval!" });
-
-            if(restaurant == null)
-                return NotFound(new { Message = $"The restaurant with the id {restaurantId} does not exist!"});
 
             if (reservation == null)
                 return Unauthorized( new { Message = "You have not made a reservation at this restaurant, therefore you cant't give feedback!"});
 
             if (await _feedbackService.CreateFeedback(user, model, restaurant, reservation))
-                return Ok("The Feedback has been created successfully!");
+                return Ok(new { Message = "The Feedback has been created successfully!" });
 
             return BadRequest( new { Message = "The Feedback could not be created" });
         }
@@ -80,7 +77,7 @@ namespace RestaurantReservierung.Controllers
     
     public class FeedbackFormModel
     {
-        public int Rating { get; set; }
+        public byte Rating { get; set; }
 
         public string? Comment { get; set; }
     }

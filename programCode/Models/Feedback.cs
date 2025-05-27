@@ -11,7 +11,7 @@ public partial class Feedback
 
     public int ReservationId { get; set; }
 
-    public int Rating { get; set; }
+    public byte Rating { get; set; }
 
     public string? Comment { get; set; }
 
