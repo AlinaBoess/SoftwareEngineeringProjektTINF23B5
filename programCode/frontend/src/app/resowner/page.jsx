@@ -20,14 +20,14 @@ function AddRestaurantForm() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
 
     // Authentifizierten Benutzer aus dem lokalen speicher laden
-    //useEffect(() => {
-    //   let isMounted = true;
+    useEffect(() => {
+       let isMounted = true;
 
-    //    const storedUser = localStorage.getItem("authUser");
-    //    if (storedUser && isMounted) {
-    //        setUser(JSON.parse(storedUser));
-    //    }
-    //}, []);
+        const storedUser = localStorage.getItem("authUser");
+        if (storedUser && isMounted) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
     useEffect(() => {
         let isMounted = true;
 
@@ -64,64 +64,80 @@ function AddRestaurantForm() {
 
         return () => { isMounted = false; };
     }, []);
-    // Authentifizierungstatus mit den Server Synchronisieren
+    // Listen for cross-tab login/logout
     useEffect(() => {
-
-        const checkAuth = async () => {
-            if (!localStorage.getItem('authUser') || localStorage.getItem('authUser') == "null") return
-            try {
-                const res = await fetch(`${API_URL}/api/User/Me`, {
-
-                    credentials: "include",
-                    headers: {
-                        Accept: "application/json",
-                        Authorization: `Bearer ${JSON.parse(localStorage.getItem('authUser')).token}`
-                                        },
-                });
-
-                //if (!isMounted) return;
-
-                if (res.ok) {
-                    const data = await res.json();
-                    setUser(data);
-                    localStorage.setItem("authUser", JSON.stringify(data));
-                } else {
-                    setUser(null);
-                    localStorage.removeItem("authUser");
-                }
-            } catch (err) {
-                //if (isMounted) {
-                console.error("Auth check failed:", err);
-                setUser(null);
-                localStorage.removeItem("authUser");
-                //}
-            }
+        const syncAuth = () => {
+            const stored = localStorage.getItem('authUser');
+            setUser(stored ? JSON.parse(stored) : null);
         };
-
-        checkAuth();
+        window.addEventListener('storage', syncAuth);
+        return () => window.removeEventListener('storage', syncAuth);
     }, []);
+
+    // Persist latest user object in localStorage for quick boot-up
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('authState', JSON.stringify(user));
+        }
+    }, [user]);
+    //// Authentifizierungstatus mit den Server Synchronisieren
+    //useEffect(() => {
+
+    //    const checkAuth = async () => {
+    //        if (!localStorage.getItem('authUser') || localStorage.getItem('authUser') == "null") return
+    //        try {
+    //            const res = await fetch(`${API_URL}/api/User/Me`, {
+
+    //                credentials: "include",
+    //                headers: {
+    //                    Accept: "application/json",
+    //                    Authorization: `Bearer ${JSON.parse(localStorage.getItem('authUser')).token}`
+    //                                    },
+    //            });
+
+    //            //if (!isMounted) return;
+
+    //            if (res.ok) {
+    //                const data = await res.json();
+    //                setUser(data);
+    //                localStorage.setItem("authUser", JSON.stringify(data));
+    //            } else {
+    //                setUser(null);
+    //                localStorage.removeItem("authUser");
+    //            }
+    //        } catch (err) {
+    //            //if (isMounted) {
+    //            console.error("Auth check failed:", err);
+    //            setUser(null);
+    //            localStorage.removeItem("authUser");
+    //            //}
+    //        }
+    //    };
+
+    //    checkAuth();
+    //}, []);
 
         //return () => {
             //isMounted = false;
         //};
     //}, []);
 
-    // Authentifizierungsstatus bei änderungen synchronisieren
-    useEffect(() => {
-        const syncAuthState = () => {
-            const storedUser = localStorage.getItem("authUser");
-            setUser(storedUser ? JSON.parse(storedUser) : null);
-        };
+    //// Authentifizierungsstatus bei änderungen synchronisieren
+    //useEffect(() => {
+    //    const syncAuthState = () => {
+    //        const storedUser = localStorage.getItem("authUser");
+    //        setUser(storedUser ? JSON.parse(storedUser) : null);
+    //    };
 
-        window.addEventListener("storage", syncAuthState);
-        return () => window.removeEventListener("storage", syncAuthState);
-    }, []);
+    //    window.addEventListener("storage", syncAuthState);
+    //    return () => window.removeEventListener("storage", syncAuthState);
+    //}, []);
 
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('authUser', JSON.stringify(user));
-        }
-    }, [user]);
+    //useEffect(() => {
+    //    if (typeof window !== 'undefined') {
+    //        localStorage.setItem('authUser', JSON.stringify(user));
+    //    }
+    //}, [user]);
 
    
     //useEffect(() => {
