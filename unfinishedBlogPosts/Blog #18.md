@@ -5,6 +5,10 @@
 
 In dieser Woche stand unsere Retrospektive im Mittelpunkt. Wir haben uns gemeinsam Zeit genommen, um auf die bisherige Zusammenarbeit zurückzublicken und organisatorische Aspekte unseres Projekts zu reflektieren.
 
+
+![Retrospektive - Team Restaurant Reservierung x](https://github.com/user-attachments/assets/3d5f2c45-e4a6-4dfa-80e8-91a44b7d596b)
+
+
 ## Gute Zusammenarbeit und Teamdynamik  
 Besonders positiv hervorgehoben wurde die entspannte und offene Teamatmosphäre. Jede*r bringt sich aktiv ein, das Feedback ist konstruktiv, und die Aufgabenverteilung verlief bisher ohne größere Probleme. Die gute Projektorganisation und die enge Abstimmung untereinander haben maßgeblich dazu beigetragen, dass wir gut vorankamen.
 
