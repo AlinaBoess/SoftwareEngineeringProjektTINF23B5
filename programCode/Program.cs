@@ -22,6 +22,7 @@ builder.Services.AddScoped<ReservationSystem>();
 builder.Services.AddScoped<RestaurantOwnerService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TableService>();
+builder.Services.AddScoped<FeedbackService>();
 
 
 builder.Services.AddEndpointsApiExplorer();
