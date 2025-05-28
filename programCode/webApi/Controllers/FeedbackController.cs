@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantReservierung.Dtos;
-using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 
 

@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservierung.Controllers;
 using RestaurantReservierung.Data;
-using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
-using System;
 
 namespace RestaurantReservierung.Services
 {

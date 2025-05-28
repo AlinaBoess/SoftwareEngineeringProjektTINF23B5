@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservierung.Controllers;
 using RestaurantReservierung.Data;
 using RestaurantReservierung.Models;

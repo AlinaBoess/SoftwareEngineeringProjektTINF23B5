@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RestaurantReservierung.Dtos;
-using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
-using System.Collections.Immutable;
 
 namespace RestaurantReservierung.Controllers
 {

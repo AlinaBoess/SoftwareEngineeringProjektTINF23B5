@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace RestaurantReservierung.Controllers
 {
