@@ -13,15 +13,15 @@ namespace RestaurantReservierung.Controllers
     [ApiController]
     public class ReservationController : ControllerBase
     {
-        private readonly ReservationSystem _reservationSystem;
+        private readonly ReservationService _reservationService;
         private readonly UserService _userService;
         private readonly TableService _tableService;
         private readonly RestaurantOwnerService _restaurantOwnerService;
 
-        public ReservationController(ReservationSystem reservationSystem, UserService userService, TableService tableService, RestaurantOwnerService restaurantOwnerService)
+        public ReservationController(ReservationService reservationSystem, UserService userService, TableService tableService, RestaurantOwnerService restaurantOwnerService)
         {
             // Initialisiere das ReservationSystem im Konstruktor
-            _reservationSystem = reservationSystem;
+            _reservationService = reservationSystem;
             _userService = userService;
             _tableService = tableService;
             _restaurantOwnerService = restaurantOwnerService;
@@ -47,17 +47,17 @@ namespace RestaurantReservierung.Controllers
             if (model.EndTime <= model.StartTime)
                 return BadRequest(new { Message = "Illegal time interval!" });
 
-            if (!_reservationSystem.IsGreaterThenMinTimeInterval(model))
-                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationSystem.MinReservationTime.ToString() + "." });
+            if (!_reservationService.IsGreaterThenMinTimeInterval(model))
+                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationService.MinReservationTime.ToString() + "." });
 
-            if (_reservationSystem.IsInPast(model))
+            if (_reservationService.IsInPast(model))
                 return BadRequest(new { Message = "The given Time interval is in the past!" });
 
-            if ((await _reservationSystem.GetReservationsForTimeInterval(model, table)).Count > 0)
+            if ((await _reservationService.GetReservationsForTimeInterval(model, table)).Count > 0)
                 return BadRequest(new { Message = "There already exists a reservation in the given time interval!" });
 
 
-            if (await _reservationSystem.Reserve(model, table, user))
+            if (await _reservationService.Reserve(model, table, user))
                 return Ok(new { Message = "The reservation was successfull!" });
 
             return BadRequest(new { Message = "Reservation was not successfull!" });
@@ -77,7 +77,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("Admin")] 
         public async Task<ActionResult> GetAllReservations([FromQuery] ReservationFilterModel model)
         {         
-            return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+            return Ok(ReservationDto.MapToDtos(await _reservationService.GetReservations(model)));
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace RestaurantReservierung.Controllers
             {
                 if (await _restaurantOwnerService.OwnsRestaurant(user, (int)model.RestaurantId))
                 {
-                    return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+                    return Ok(ReservationDto.MapToDtos(await _reservationService.GetReservations(model)));
                 }
                 else
                 {
@@ -113,7 +113,7 @@ namespace RestaurantReservierung.Controllers
             {           
                 var restaurants = await _restaurantOwnerService.GetUserRestaurants(user);
 
-                return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservationsForRestaurants(restaurants, model)));
+                return Ok(ReservationDto.MapToDtos(await _reservationService.GetReservationsForRestaurants(restaurants, model)));
 
             }
         }
@@ -136,7 +136,7 @@ namespace RestaurantReservierung.Controllers
         {
             model.UserId = (await _userService.GetLoggedInUser()).UserId;
 
-            return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+            return Ok(ReservationDto.MapToDtos(await _reservationService.GetReservations(model)));
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("Public")]
         public async Task<IActionResult> GetAnonymousReservations([FromQuery] ReservationFilterModel model)
         {
-            return Ok(ReservationDto.MapToPublicDtos(await _reservationSystem.GetReservations(model)));
+            return Ok(ReservationDto.MapToPublicDtos(await _reservationService.GetReservations(model)));
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace RestaurantReservierung.Controllers
         public async Task<IActionResult> UpdateReservation(int reservationId, ReservationFormModel model)
         {
             var user = await _userService.GetLoggedInUser();
-            var reservation = await _reservationSystem.GetReservationById(reservationId);
+            var reservation = await _reservationService.GetReservationById(reservationId);
 
 
             if(user.UserId != reservation.UserId && user.Role != "ADMIN")
@@ -177,17 +177,17 @@ namespace RestaurantReservierung.Controllers
             if (model.EndTime <= model.StartTime)
                 return BadRequest(new { Message = "Illegal time interval!" });
 
-            if (!_reservationSystem.IsGreaterThenMinTimeInterval(model))
-                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationSystem.MinReservationTime.ToString() + "." });
+            if (!_reservationService.IsGreaterThenMinTimeInterval(model))
+                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationService.MinReservationTime.ToString() + "." });
 
-            if (_reservationSystem.IsInPast(model))
+            if (_reservationService.IsInPast(model))
                 return BadRequest(new { Message = "The given Time interval is in the past!" });
 
-            if (! await _reservationSystem.CanUpdateReservation(reservation, model))
+            if (! await _reservationService.CanUpdateReservation(reservation, model))
                 return BadRequest(new { Message = "There already exists a reservation in the given time interval!" });
 
 
-            if (await _reservationSystem.UpdateReservation(model, reservation))
+            if (await _reservationService.UpdateReservation(model, reservation))
                 return Ok(new { Message = "The reservation was successfull!" });
 
             return BadRequest(new { Message = "Reservation was not successfull!" });
@@ -205,12 +205,12 @@ namespace RestaurantReservierung.Controllers
         {
             var user = await _userService.GetLoggedInUser();
 
-            var reservation = await _reservationSystem.GetReservationById(reservationId);
+            var reservation = await _reservationService.GetReservationById(reservationId);
 
             if (user != reservation.User && user.Role != "ADMIN" && user != reservation.Table.Restaurant.User)
                 return Unauthorized(new { Message = "Your dont have permissions to perform this action!" });
 
-            if (await _reservationSystem.DeleteReservation(reservation))
+            if (await _reservationService.DeleteReservation(reservation))
                 return Ok(new { Message = "The Reservation has been canceled successfully!" });
 
             return BadRequest( new { Message = "The Reservation could not be canceled"});

@@ -13,14 +13,14 @@ namespace RestaurantReservierung.Controllers
     {
         private readonly FeedbackService _feedbackService;
         private readonly UserService _userService;
-        private readonly ReservationSystem _reservationSystem;
+        private readonly ReservationService _reservationService;
         private readonly RestaurantOwnerService _ownerService;
 
-        public FeedbackController(FeedbackService feedbackService, UserService userService, ReservationSystem reservationSystem, RestaurantOwnerService ownerService)
+        public FeedbackController(FeedbackService feedbackService, UserService userService, ReservationService reservationSystem, RestaurantOwnerService ownerService)
         {
             _feedbackService = feedbackService;
             _userService = userService;
-            _reservationSystem = reservationSystem;
+            _reservationService = reservationSystem;
             _ownerService = ownerService;
         }
 
@@ -30,7 +30,7 @@ namespace RestaurantReservierung.Controllers
         {
             var user = await _userService.GetLoggedInUser();
 
-            var reservation = await _reservationSystem.GetReservationById(reservationId);
+            var reservation = await _reservationService.GetReservationById(reservationId);
 
             var restaurant = reservation.Table.Restaurant;
 
