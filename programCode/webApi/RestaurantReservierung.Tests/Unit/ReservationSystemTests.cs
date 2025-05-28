@@ -32,7 +32,7 @@ public class ReservationSystemTests
         _system = new ReservationSystem(inMemoryDBContext);
 
 
-        _user = new User() { AdminActions = new List<AdminAction>(), Email = "a@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 0 };
+        _user = new User() {  Email = "a@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 0 };
         _restaurant = new Restaurant() { Address = "Am Weg", Name = "Zum Restaurant", OpeningHours = "8-9 Uhr", RestaurantId = 1, Tables = new List<Table>(), User = _user, UserId = 0, Website = "google.com" };
         _table = new Table()
         {
