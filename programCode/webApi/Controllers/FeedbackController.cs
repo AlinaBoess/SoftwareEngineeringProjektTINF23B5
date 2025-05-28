@@ -24,6 +24,12 @@ namespace RestaurantReservierung.Controllers
             _restaurantService = ownerService;
         }
 
+        /// <summary>
+        /// Create a feedback for a restaurant. The user has to have a valid reservation
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="reservationId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("{reservationId}")]
         public async Task<IActionResult> CreateFeedback([FromBody] FeedbackFormModel model, int reservationId)
@@ -46,6 +52,11 @@ namespace RestaurantReservierung.Controllers
             return BadRequest( new { Message = "The Feedback could not be created" });
         }
 
+        /// <summary>
+        /// Delete any feedback. Only Admins use this endpoint
+        /// </summary>
+        /// <param name="feedbackId"></param>
+        /// <returns></returns>
         [Authorize(Roles = "ADMIN")]
         [HttpDelete("{feedbackId}")]
         public async Task<IActionResult> DeleteFeedback(int feedbackId)
@@ -61,6 +72,11 @@ namespace RestaurantReservierung.Controllers
             return BadRequest( new { Message = "The reservation could not be deleted!"});
         }
 
+        /// <summary>
+        /// Get all Feedbacks for a restaurant
+        /// </summary>
+        /// <param name="restaurantId"></param>
+        /// <returns></returns>
         [HttpGet("{restaurantId}")]
         public async Task<IActionResult> GetFeedback(int restaurantId)
         {

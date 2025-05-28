@@ -69,16 +69,12 @@ namespace RestaurantReservierung.Services
 
         public string HashPasswordForRegistration(string password)
         {
-            // Schritt 1: Konvertiere das Passwort in ein Byte-Array
             byte[] rawPassword = System.Text.Encoding.UTF8.GetBytes(password);
-
-            // Schritt 2: Berechne den SHA-256-Hash des Passworts
+        
             byte[] hashBytes = System.Security.Cryptography.SHA256.HashData(rawPassword);
 
-            // Schritt 3: Konvertiere den Hash in eine Hexadezimalzeichenkette
             string passwordHash = Convert.ToHexString(hashBytes).ToLower();
 
-            // Rückgabe des Hashs
             return passwordHash;
         }
     }

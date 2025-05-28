@@ -119,20 +119,6 @@ namespace RestaurantReservierung.Controllers
             }
         }
 
-        /*
-        /// <summary>
-        /// Get Restaurants
-        /// </summary>
-        /// <returns>A List of All Restaurants</returns>
-        [HttpGet]
-        public async Task<IActionResult> GetAllRestaurants()
-        {
-            var restaurants = await _ownerService.GetManyRestaurants();
-
-            return Ok(restaurants);
-        }
-        */
-
         /// <summary>
         /// Get one Restaurant by id.
         /// </summary>
@@ -180,6 +166,11 @@ namespace RestaurantReservierung.Controllers
             return Ok(RestaurantDto.MapToDtos(restaurants));
         }
 
+        /// <summary>
+        /// Returns the average rating, calculated by all reservations for the restaurant
+        /// </summary>
+        /// <param name="restaurantId"></param>
+        /// <returns></returns>
         [HttpGet("Rating/{restaurantId}")]
         public async Task<IActionResult> GetRestaurantRating(int restaurantId)
         {
@@ -193,6 +184,12 @@ namespace RestaurantReservierung.Controllers
             return Ok(new { rating });
         }
         
+        /// <summary>
+        /// Change the Image of an restaurant
+        /// </summary>
+        /// <param name="restaurantId"></param>
+        /// <param name="picture"></param>
+        /// <returns></returns>
         [Authorize(Roles = "ADMIN,RESTAURANT_OWNER")]
         [HttpPut("Image/{restaurantId}")]
         public async Task<IActionResult> ChangeImage(int restaurantId, IFormFile picture)
@@ -212,6 +209,11 @@ namespace RestaurantReservierung.Controllers
 
         }
 
+        /// <summary>
+        /// Get the image thumbnail of a restaurant
+        /// </summary>
+        /// <param name="restaurantId"></param>
+        /// <returns></returns>
         [HttpGet("Image/{restaurantId}")]
         public async Task<IActionResult> GetImage(int restaurantId)
         {
@@ -223,6 +225,11 @@ namespace RestaurantReservierung.Controllers
             return File(image.Data, image.MimeType);
         }
         
+        /// <summary>
+        /// Delete a image thumbnail for a restaurant
+        /// </summary>
+        /// <param name="restaurantId"></param>
+        /// <returns></returns>
         [Authorize(Roles = "ADMIN,RESTAURANT_OWNER")]
         [HttpDelete("Image/{restaurantId}")]
         public async Task<IActionResult> DeleteImage(int restaurantId)

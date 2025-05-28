@@ -81,21 +81,6 @@ namespace RestaurantReservierung.Controllers
             return Ok(await _userService.DeleteUserAsync(user));
         }
 
-        /*
-        /// <summary>
-        /// Allows Admins to create new Users without the Authentication Process.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns>Deletion Status</returns>
-        [Authorize(Roles = "ADMIN")]
-        [HttpPost]
-        public ActionResult CreateUser([FromBody] User model)
-        {
-            // TODO
-            return Ok();
-        }
-        */
-
 
         /// <summary>
         /// Updates the Role of an user. Only Admins can use this endpoint
