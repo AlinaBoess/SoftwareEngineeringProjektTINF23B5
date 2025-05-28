@@ -1,127 +1,99 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+// AuthContext.js
+import React, { createContext, useState, useEffect, useContext } from 'react';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
 
 const AuthContext = createContext();
-export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const router = useRouter();
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
+    const [isLoading, setIsLoading] = useState(true); // Start true on initial load
 
-    // Initialize axios defaults
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        }
-    }, []);
-
-    const setAuthHeader = (token) => {
-        if (token) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            localStorage.setItem('token', token);
-        } else {
-            delete axios.defaults.headers.common['Authorization'];
-            localStorage.removeItem('token');
-            log.console("help")
-
-        }
-    };
-
-    const fetchUser = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                setLoading(false);
-                return;
+        // This is your initial auth check logic, moved here
+        let isMounted = true;
+        setIsLoading(true);
+        const storedUser = localStorage.getItem('authUser');
+        if (storedUser) {
+            try {
+                setUser(JSON.parse(storedUser));
+            } catch (e) {
+                localStorage.removeItem('authUser');
             }
-
-            const res = await axios.get(`${API_URL}/api/User/Me`);
-            setUser({
-                id: res.data.id,
-                name: res.data.name,
-                email: res.data.email
-            });
-        } catch (err) {
-            console.error("User fetch error:", err);
-            setAuthHeader(null);
-            setUser(null);
-        } finally {
-            setLoading(false);
         }
-    };
 
-    useEffect(() => {
-        fetchUser();
+        fetch(`${API_URL}/api/User`, { credentials: 'include', headers: { Accept: 'application/json' } })
+            .then(res => {
+                if (!isMounted) return null;
+                if (res.ok) return res.json();
+                // More careful removal: only on explicit unauth, or if no prior storedUser
+                if (res.status === 401 || res.status === 403 || !storedUser) {
+                    localStorage.removeItem('authUser');
+                    setUser(null);
+                }
+                return null; // Or throw an error to be caught
+            })
+            .then(data => {
+                if (data && isMounted) {
+                    setUser(data);
+                    localStorage.setItem('authUser', JSON.stringify(data));
+                }
+            })
+            .catch(err => {
+                if (isMounted) {
+                    console.error('Auth check failed:', err);
+                    if (!storedUser) { // Or always if fetch fails
+                        localStorage.removeItem('authUser');
+                        setUser(null);
+                    }
+                }
+            })
+            .finally(() => {
+                if (isMounted) setIsLoading(false);
+            });
+
+        return () => { isMounted = false; };
     }, []);
 
-    const login = async (email, password) => {
-        try {
-            const res = await axios.post(`${API_URL}/api/Auth/login`, {
-                email,
-                password
-            });
-
-            setAuthHeader(res.data.token);
-            await fetchUser();
-            return { success: true };
-        } catch (err) {
-            console.error("Login error:", err);
-            return {
-                success: false,
-                message: err.response?.data?.message || 'Login failed'
-            };
-        }
-    };
-
-    const register = async (firstName, lastName, email, password) => {
-        try {
-            const res = await axios.post(`${API_URL}/api/Auth/register`, {
-                firstName,
-                lastName,
-                email,
-                password
-            });
-            return {
-                success: true,
-                message: res.data.message || 'Registration successful'
-            };
-        } catch (err) {
-            console.error("Registration error:", err);
-            return {
-                success: false,
-                message: err.response?.data?.message || 'Registration failed'
-            };
+    const login = async (credentials) => {
+        // Your login logic: fetch, setUser, localStorage.setItem
+        // Example:
+        const res = await fetch(`${API_URL}/api/Auth/login`, { /* ... */ body: JSON.stringify(credentials) });
+        const data = await res.json();
+        if (res.ok) {
+            setUser(data);
+            localStorage.setItem('authUser', JSON.stringify(data));
+            return data;
+        } else {
+            throw new Error(data.message || 'Login failed');
         }
     };
 
     const logout = async () => {
-        try {
-            await axios.post(`${API_URL}/api/Auth/logout`);
-            setAuthHeader(null);
-            setUser(null);
-            router.push('/');
-        } catch (err) {
-            console.error("Logout error:", err);
-        }
+        // Your logout logic: fetch, setUser(null), localStorage.removeItem
+        await fetch(`${API_URL}/api/Auth/logout`, { method: 'POST', credentials: 'include' });
+        setUser(null);
+        localStorage.removeItem('authUser');
     };
 
-    const value = {
-        user,
-        loading,
-        login,
-        register,
-        logout,
-        fetchUser
-    };
+    // Listen for storage events for cross-tab sync
+    useEffect(() => {
+        const syncAuth = (event) => {
+            if (event.key === 'authUser') {
+                const newStoredUser = localStorage.getItem('authUser');
+                setUser(newStoredUser ? JSON.parse(newStoredUser) : null);
+            }
+        };
+        window.addEventListener('storage', syncAuth);
+        return () => window.removeEventListener('storage', syncAuth);
+    }, []);
+
 
     return (
-        <AuthContext.Provider value={value}>
+        <AuthContext.Provider value={{ user, setUser, isLoading, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
 };
+
+export const useAuth = () => useContext(AuthContext);

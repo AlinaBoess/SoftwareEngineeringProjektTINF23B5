@@ -5,6 +5,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/context/AuthContext';
 
 
 // ────────────────────────────────────────────────────────────
