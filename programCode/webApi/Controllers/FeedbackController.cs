@@ -57,7 +57,7 @@ namespace RestaurantReservierung.Controllers
         /// <param name="feedbackId"></param>
         /// <returns></returns>
         [Authorize(Roles = "ADMIN")]
-        [HttpDelete("{feedbackId}")]
+        [HttpDelete("Admin/{feedbackId}")]
         public async Task<IActionResult> DeleteFeedback(int feedbackId)
         {
             var feedback = await _feedbackService.GetFeedbackByIdAsync(feedbackId);
@@ -87,6 +87,28 @@ namespace RestaurantReservierung.Controllers
             var feedbacks = await _feedbackService.GetFeedbacksForRestaurantAsync(restaurant);
 
             return Ok(FeedbackDto.MapToDtos(feedbacks));
+        }
+
+        /// <summary>
+        /// Delete a feedback which was made by the logged in User
+        /// </summary>
+        /// <param name="feedbackId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("{feedbackId}")]
+        public async Task<IActionResult> DeleteOwnFeedback(int feedbackId)
+        {
+            var user = await _userService.GetLoggedInUserAsync();
+
+            var feedback = await _feedbackService.GetFeedbackByIdAsync(feedbackId);
+
+            if (!_feedbackService.OwnsFeedback(user, feedback))
+                return Unauthorized("You do not own the feedback!");
+
+            if (await _feedbackService.DeleteFeedbackAsync(feedback))
+                return Ok(new { Message = "The Feedback has been deleted successfully!" });
+
+            return BadRequest(new { Message = "The Feedback could not be deleted!" });
         }
     }
     

@@ -124,6 +124,7 @@ app.UseAuthorization();
 app.UseHttpMetrics();          // Prometheus-Middleware (nach Routing, vor Endpoints)
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<UserExistsMiddleware>();
 
 app.UseEndpoints(endpoints =>
 {
