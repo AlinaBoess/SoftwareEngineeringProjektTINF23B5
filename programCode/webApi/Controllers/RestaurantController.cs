@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Abstractions;
 using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Services;
 using System.ComponentModel.DataAnnotations;
@@ -143,9 +144,9 @@ namespace RestaurantReservierung.Controllers
         /// <param name="start">Starting at:</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetManyRestaurants([FromQuery] int count = -1, [FromQuery] int start = 0)
+        public async Task<IActionResult> GetManyRestaurants([FromQuery] GetManyRestaurantFormModel model)
         {
-            var restaurants = await _restaurantService.GetManyRestaurantsAsync(start, count);    
+            var restaurants = await _restaurantService.GetManyRestaurantsAsync(model);    
 
             return Ok(RestaurantDto.MapToDtos(restaurants));
         }
@@ -258,5 +259,14 @@ namespace RestaurantReservierung.Controllers
 
         public string Website {  get; set; }
 
+    }
+
+    public class GetManyRestaurantFormModel
+    {
+        public int start { get; set; } = 0;
+
+        public int count { get; set; } = -1;
+
+        public string? name { get; set; }
     }
 }

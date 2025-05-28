@@ -80,13 +80,16 @@ namespace RestaurantReservierung.Services
             return false;
         }
 
-        public async Task<List<Restaurant>> GetManyRestaurantsAsync(int start = 0, int count = -1)
+        public async Task<List<Restaurant>> GetManyRestaurantsAsync(GetManyRestaurantFormModel model)
         {
             var query = _context.Restaurants.AsQueryable();         
            
-            query = query.Skip(start);
-            if (count > 0)
-                query = query.Take(count);
+            if(model.name != null)
+                query = query.Where(r => r.Name.Contains(model.name));
+
+            query = query.Skip(model.start);
+            if (model.count > 0)
+                query = query.Take(model.count);
 
             return await query.ToListAsync();
         }
