@@ -11,14 +11,14 @@ namespace RestaurantReservierung.Controllers
     [ApiController]
     public class RestaurantController : ControllerBase
     {
-        private readonly RestaurantOwnerService _ownerService;
+        private readonly RestaurantService _restaurantService;
         
         private readonly UserService _userService;
 
         private readonly FeedbackService _feedbackService;
-        public RestaurantController(RestaurantOwnerService ownerService, UserService userService, FeedbackService feedbackService)
+        public RestaurantController(RestaurantService ownerService, UserService userService, FeedbackService feedbackService)
         {
-            _ownerService = ownerService;
+            _restaurantService = ownerService;
             _userService = userService;
             _feedbackService = feedbackService;
         }
@@ -38,7 +38,7 @@ namespace RestaurantReservierung.Controllers
                 return BadRequest();
             }
 
-            if (await _ownerService.AddRestaurant(restaurantModel, user))
+            if (await _restaurantService.AddRestaurant(restaurantModel, user))
             {
                 return Ok(new { Message = "The restaurant has been created successfully" });
             }
@@ -62,7 +62,7 @@ namespace RestaurantReservierung.Controllers
                 return BadRequest();
             }
 
-            var restaurant = await _ownerService.GetRestaurantById(id);
+            var restaurant = await _restaurantService.GetRestaurantById(id);
             if(restaurant == null)
             {
                 return NotFound(new { Message = "The Restaurant with the id " + id + " does not exist!" });
@@ -71,7 +71,7 @@ namespace RestaurantReservierung.Controllers
 
             if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
             {
-                if (await _ownerService.UpdateRestaurant(restaurant, restaurantModel))
+                if (await _restaurantService.UpdateRestaurant(restaurant, restaurantModel))
                 {
                     return Ok(new { Message = "The restaurant has been updated successfully" });
                 }
@@ -98,7 +98,7 @@ namespace RestaurantReservierung.Controllers
                 return BadRequest();
             }
 
-            var restaurant = await _ownerService.GetRestaurantById(id);
+            var restaurant = await _restaurantService.GetRestaurantById(id);
             if (restaurant == null)
             {
                 return NotFound(new { Message = "The Restaurant with the id " + id + " does not exist!" });
@@ -107,7 +107,7 @@ namespace RestaurantReservierung.Controllers
 
             if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
             {
-                if (await _ownerService.DeleteRestaurant(restaurant))
+                if (await _restaurantService.DeleteRestaurant(restaurant))
                 {
                     return Ok(new { Message = "The restaurant has been deleted successfully" });
                 }
@@ -141,7 +141,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRestaurants(int id)
         {
-            var restaurant = await _ownerService.GetRestaurantById(id);
+            var restaurant = await _restaurantService.GetRestaurantById(id);
             var restaurantDto = RestaurantDto.MapToDto(restaurant);
             if (restaurantDto != null)
             {
@@ -160,7 +160,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet]
         public async Task<IActionResult> GetManyRestaurants([FromQuery] int count = -1, [FromQuery] int start = 0)
         {
-            var restaurants = await _ownerService.GetManyRestaurants(start, count);    
+            var restaurants = await _restaurantService.GetManyRestaurants(start, count);    
 
             return Ok(RestaurantDto.MapToDtos(restaurants));
         }
@@ -175,7 +175,7 @@ namespace RestaurantReservierung.Controllers
         {
             var user = await _userService.GetLoggedInUser();
 
-            var restaurants = await _ownerService.GetUserRestaurants(user);
+            var restaurants = await _restaurantService.GetUserRestaurants(user);
 
             return Ok(RestaurantDto.MapToDtos(restaurants));
         }
@@ -183,7 +183,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("Rating/{restaurantId}")]
         public async Task<IActionResult> GetRestaurantRating(int restaurantId)
         {
-            var restaurant = await _ownerService.GetRestaurantById(restaurantId);
+            var restaurant = await _restaurantService.GetRestaurantById(restaurantId);
 
             if (restaurant == null)
                 return NotFound(new { Message = $"The restaurant with the id {restaurantId} does not exist!" });
@@ -199,13 +199,13 @@ namespace RestaurantReservierung.Controllers
         {
             var user = await _userService.GetLoggedInUser();
 
-            if(!await _ownerService.OwnsRestaurant(user, restaurantId))
+            if(!await _restaurantService.OwnsRestaurant(user, restaurantId))
                 return Unauthorized();
 
             if (picture == null || picture.Length == 0)
                 return BadRequest( new { Message = "No File was uploaded"});
 
-            if (await _ownerService.UploadImage(restaurantId, picture))
+            if (await _restaurantService.UploadImage(restaurantId, picture))
                 return Ok(new { Message = "The picture has been uploaded successfully!" });
 
             return BadRequest( new { Message = "The picture could not be uploaded!"});
@@ -215,7 +215,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("Image/{restaurantId}")]
         public async Task<IActionResult> GetImage(int restaurantId)
         {
-            var image = await _ownerService.GetImageByRestaurantId(restaurantId);
+            var image = await _restaurantService.GetImageByRestaurantId(restaurantId);
 
             if(image == null)
                 return NoContent();
@@ -229,10 +229,10 @@ namespace RestaurantReservierung.Controllers
         {
             var user = await _userService.GetLoggedInUser();
 
-            if (!await _ownerService.OwnsRestaurant(user, restaurantId))
+            if (!await _restaurantService.OwnsRestaurant(user, restaurantId))
                 return Unauthorized();
 
-            if (await _ownerService.DeleteImageByRestaurantId(restaurantId))
+            if (await _restaurantService.DeleteImageByRestaurantId(restaurantId))
                 return Ok(new { Message = "The Image has been deleted successfully!"});
 
             return BadRequest( new { Message = "The Image could not be deleted!"});

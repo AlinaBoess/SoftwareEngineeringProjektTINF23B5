@@ -14,14 +14,14 @@ namespace RestaurantReservierung.Controllers
         private readonly FeedbackService _feedbackService;
         private readonly UserService _userService;
         private readonly ReservationService _reservationService;
-        private readonly RestaurantOwnerService _ownerService;
+        private readonly RestaurantService _restaurantService;
 
-        public FeedbackController(FeedbackService feedbackService, UserService userService, ReservationService reservationSystem, RestaurantOwnerService ownerService)
+        public FeedbackController(FeedbackService feedbackService, UserService userService, ReservationService reservationSystem, RestaurantService ownerService)
         {
             _feedbackService = feedbackService;
             _userService = userService;
             _reservationService = reservationSystem;
-            _ownerService = ownerService;
+            _restaurantService = ownerService;
         }
 
         [Authorize]
@@ -64,7 +64,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("{restaurantId}")]
         public async Task<IActionResult> GetFeedback(int restaurantId)
         {
-            var restaurant = await _ownerService.GetRestaurantById(restaurantId);
+            var restaurant = await _restaurantService.GetRestaurantById(restaurantId);
 
             if(restaurant == null)
                 return BadRequest(new { Message = $"The restaurant wit the id '{restaurantId}' does not exist!" });

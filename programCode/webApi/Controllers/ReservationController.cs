@@ -16,15 +16,15 @@ namespace RestaurantReservierung.Controllers
         private readonly ReservationService _reservationService;
         private readonly UserService _userService;
         private readonly TableService _tableService;
-        private readonly RestaurantOwnerService _restaurantOwnerService;
+        private readonly RestaurantService _restaurantService;
 
-        public ReservationController(ReservationService reservationSystem, UserService userService, TableService tableService, RestaurantOwnerService restaurantOwnerService)
+        public ReservationController(ReservationService reservationSystem, UserService userService, TableService tableService, RestaurantService restaurantOwnerService)
         {
             // Initialisiere das ReservationSystem im Konstruktor
             _reservationService = reservationSystem;
             _userService = userService;
             _tableService = tableService;
-            _restaurantOwnerService = restaurantOwnerService;
+            _restaurantService = restaurantOwnerService;
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace RestaurantReservierung.Controllers
 
             if (model.RestaurantId.HasValue)
             {
-                if (await _restaurantOwnerService.OwnsRestaurant(user, (int)model.RestaurantId))
+                if (await _restaurantService.OwnsRestaurant(user, (int)model.RestaurantId))
                 {
                     return Ok(ReservationDto.MapToDtos(await _reservationService.GetReservations(model)));
                 }
@@ -111,7 +111,7 @@ namespace RestaurantReservierung.Controllers
             }
             else
             {           
-                var restaurants = await _restaurantOwnerService.GetUserRestaurants(user);
+                var restaurants = await _restaurantService.GetUserRestaurants(user);
 
                 return Ok(ReservationDto.MapToDtos(await _reservationService.GetReservationsForRestaurants(restaurants, model)));
 

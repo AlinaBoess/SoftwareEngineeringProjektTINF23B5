@@ -7,11 +7,11 @@ using System;
 
 namespace RestaurantReservierung.Services
 {
-    public class RestaurantOwnerService
+    public class RestaurantService
     {
         private readonly AppDbContext _context;
 
-        public RestaurantOwnerService(AppDbContext context)
+        public RestaurantService(AppDbContext context)
         {
             _context = context;
         }

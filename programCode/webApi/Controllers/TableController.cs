@@ -12,13 +12,13 @@ namespace RestaurantReservierung.Controllers
     {
         private readonly TableService _tableService;
         private readonly UserService _userService;
-        private readonly RestaurantOwnerService _ownerService;
+        private readonly RestaurantService _restaurantService;
 
-        public TableController(TableService tableService, UserService userService, RestaurantOwnerService ownerService)
+        public TableController(TableService tableService, UserService userService, RestaurantService ownerService)
         {
             _tableService = tableService;
             _userService = userService;
-            _ownerService = ownerService;
+            _restaurantService = ownerService;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace RestaurantReservierung.Controllers
         {
             var user = await _userService.GetLoggedInUser();
 
-            var restaurant = await _ownerService.GetRestaurantById(restaurantId);
+            var restaurant = await _restaurantService.GetRestaurantById(restaurantId);
             if (restaurant == null)
             {
                 return NotFound(new { Message = "The Restaurant with the id " + restaurantId + " does not exist!" });
@@ -81,7 +81,7 @@ namespace RestaurantReservierung.Controllers
             var table = await _tableService.GetTableById(tableId);
             var user = await _userService.GetLoggedInUser();
 
-            if(!await _ownerService.OwnsRestaurant(user, table.RestaurantId) && user.Role != "ADMIN")
+            if(!await _restaurantService.OwnsRestaurant(user, table.RestaurantId) && user.Role != "ADMIN")
                 return Unauthorized(new { Message = "You are not owner of the restaurant"});
 
             if (await _tableService.RemoveTable(table))
@@ -103,7 +103,7 @@ namespace RestaurantReservierung.Controllers
             var table = await _tableService.GetTableById(tableId);
             var user = await _userService.GetLoggedInUser();
 
-            if (!await _ownerService.OwnsRestaurant(user, table.RestaurantId) && user.Role != "ADMIN")
+            if (!await _restaurantService.OwnsRestaurant(user, table.RestaurantId) && user.Role != "ADMIN")
                 return Unauthorized(new { Message = "You are not owner of the restaurant" });
 
             if (await _tableService.UpdateTable(table, model))

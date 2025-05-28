@@ -9,7 +9,7 @@ namespace RestaurantReservierung.Tests.Unit;
 [TestFixture]
 public class ReservationSystemTests
 {
-    private ReservationSystem _system;
+    private ReservationService _system;
     private AppDbContext inMemoryDBContext;
 
     private Restaurant _restaurant;
@@ -29,7 +29,7 @@ public class ReservationSystemTests
         inMemoryDBContext = new AppDbContext(options);
 
         // fresh instances before each test
-        _system = new ReservationSystem(inMemoryDBContext);
+        _system = new ReservationService(inMemoryDBContext);
 
 
         _user = new User() {  Email = "a@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 0 };
