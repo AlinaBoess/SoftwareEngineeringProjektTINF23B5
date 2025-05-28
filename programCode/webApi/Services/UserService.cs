@@ -42,16 +42,19 @@ namespace RestaurantReservierung.Services
 
             // Prüfen, ob ein Benutzer mit dieser E-Mail bereits existiert
             if (await _context.Users.AnyAsync(u => u.Email == user.Email))
-                return false;
+                throw new BadHttpRequestException("There already exists an user with the given email");
 
             if (!Regex.IsMatch(user.Email, emailRegex))
-                return false;
+                throw new BadHttpRequestException("The given email is not in a valid format");
 
-            if(!Regex.IsMatch(user.Password, passwordRegex))
-                return false;
+            if (!Regex.IsMatch(user.Password, passwordRegex))
+                throw new BadHttpRequestException("The email or the password is not correct");
 
             if (user.Email.Length > 255)
-                return false;
+                throw new BadHttpRequestException("The given email is to long");
+
+            if (user.Password.Length > 255)
+                throw new BadHttpRequestException("The password is to long");
 
             user.Email = user.Email.ToLower();
 

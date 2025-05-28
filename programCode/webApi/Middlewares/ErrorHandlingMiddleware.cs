@@ -20,6 +20,27 @@ namespace RestaurantReservierung.Middlewares
             {
                 await _next(context);
             }
+            catch (BadHttpRequestException ex)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                context.Response.ContentType = "application/json";
+
+                await context.Response.WriteAsJsonAsync(new { ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                context.Response.ContentType = "application/json";
+
+                await context.Response.WriteAsJsonAsync(new { ex.Message });
+            }
+            catch (FileNotFoundException ex)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                context.Response.ContentType = "application/json";
+
+                await context.Response.WriteAsJsonAsync(new { ex.Message });
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unhandled exception");
