@@ -18,8 +18,8 @@ builder.Services.AddControllers();
     .AddJsonOptions(x =>
         x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve);*/
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<ReservationSystem>();
-builder.Services.AddScoped<RestaurantOwnerService>();
+builder.Services.AddScoped<ReservationService>();
+builder.Services.AddScoped<RestaurantService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TableService>();
 builder.Services.AddScoped<FeedbackService>();

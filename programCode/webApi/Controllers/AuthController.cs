@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace RestaurantReservierung.Controllers
 {
@@ -29,6 +24,7 @@ namespace RestaurantReservierung.Controllers
         /// Register a new User. 
         /// The Email has to be valid and unique email. 
         /// The Password has to be at least 6 characters.
+        /// A successfull registration returns the jwt token
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -45,12 +41,18 @@ namespace RestaurantReservierung.Controllers
 
 
             if (await _userService.RegisterAsync(user))
-                return Ok(new { message = "User registered successfully." });
-
+            {
+                var token = _authService.GenerateJwtToken(user);
+                return Ok(new { message = "User registered successfully.", token });
+            }
             return BadRequest(new { message = "User could not be registered!" });
         }
 
-        // logs a new user in and sets a oidc token
+        /// <summary>
+        /// Login User. Return userinfo and token
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {

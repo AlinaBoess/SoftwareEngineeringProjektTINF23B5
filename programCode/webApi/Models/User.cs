@@ -17,8 +17,6 @@ public partial class User
 
     public string Role { get; set; } = null!;
 
-    public virtual ICollection<AdminAction> AdminActions { get; set; } = new List<AdminAction>();
-
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
