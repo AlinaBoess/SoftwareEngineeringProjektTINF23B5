@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using RestaurantReservierung.Services;
+﻿using RestaurantReservierung.Services;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace RestaurantReservierung.Middlewares
 {
@@ -49,7 +45,7 @@ namespace RestaurantReservierung.Middlewares
                         }
                     }
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error parsing JWT token.");
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
