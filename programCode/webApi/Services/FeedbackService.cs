@@ -62,5 +62,10 @@ namespace RestaurantReservierung.Services
                 .Where(f => f.Restaurant == restaurant)
                 .ToListAsync();
         }
+
+        public bool OwnsFeedback(User user, Feedback feedback)
+        {
+            return (feedback.User  == user);
+        }
     }
 }
