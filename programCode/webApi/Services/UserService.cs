@@ -101,7 +101,7 @@ namespace RestaurantReservierung.Services
             }
         }
 
-        public async Task<User> GetLoggedInUser()
+        public async Task<User> GetLoggedInUserAsync()
         {
             var email = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
             Console.WriteLine(email);

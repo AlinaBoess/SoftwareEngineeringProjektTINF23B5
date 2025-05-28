@@ -31,9 +31,9 @@ namespace RestaurantReservierung.Controllers
         [HttpPost("{restaurantId}")]
         public async Task<IActionResult> CreateTable([FromBody] TableFormModel tableForm, int restaurantId)
         {
-            var user = await _userService.GetLoggedInUser();
+            var user = await _userService.GetLoggedInUserAsync();
 
-            var restaurant = await _restaurantService.GetRestaurantById(restaurantId);
+            var restaurant = await _restaurantService.GetRestaurantByIdAsync(restaurantId);
             if (restaurant == null)
             {
                 return NotFound(new { Message = "The Restaurant with the id " + restaurantId + " does not exist!" });
@@ -42,7 +42,7 @@ namespace RestaurantReservierung.Controllers
 
             if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
             {
-                if (await _tableService.AddTable(tableForm, restaurantId))
+                if (await _tableService.AddTableAsync(tableForm, restaurantId))
                 {
                     return Ok(new { Message = "The table has been created successfully!" });
                 }
@@ -63,7 +63,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("{restuarantId}")]
         public async Task<IActionResult> GetTables(int restuarantId)
         {
-            var tables = await _tableService.GetAllTables(restuarantId);
+            var tables = await _tableService.GetAllTablesAsync(restuarantId);
 
             return Ok(TableDto.MapToDtos(tables));
         }
@@ -78,13 +78,13 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete("{tableId}")]
         public async Task<IActionResult> DeleteTable(int tableId)
         {
-            var table = await _tableService.GetTableById(tableId);
-            var user = await _userService.GetLoggedInUser();
+            var table = await _tableService.GetTableByIdAsync(tableId);
+            var user = await _userService.GetLoggedInUserAsync();
 
-            if(!await _restaurantService.OwnsRestaurant(user, table.RestaurantId) && user.Role != "ADMIN")
+            if(!await _restaurantService.OwnsRestaurantAsync(user, table.RestaurantId) && user.Role != "ADMIN")
                 return Unauthorized(new { Message = "You are not owner of the restaurant"});
 
-            if (await _tableService.RemoveTable(table))
+            if (await _tableService.RemoveTableAsync(table))
                 return Ok( new { Messsage = "The Table has been deleted successfully!"});
 
             return BadRequest( new { Message = "The table could not be deleted"});
@@ -100,13 +100,13 @@ namespace RestaurantReservierung.Controllers
         [HttpPut("{tableId}")]
         public async Task<IActionResult> UpdateTable(int tableId, TableFormModel model)
         {
-            var table = await _tableService.GetTableById(tableId);
-            var user = await _userService.GetLoggedInUser();
+            var table = await _tableService.GetTableByIdAsync(tableId);
+            var user = await _userService.GetLoggedInUserAsync();
 
-            if (!await _restaurantService.OwnsRestaurant(user, table.RestaurantId) && user.Role != "ADMIN")
+            if (!await _restaurantService.OwnsRestaurantAsync(user, table.RestaurantId) && user.Role != "ADMIN")
                 return Unauthorized(new { Message = "You are not owner of the restaurant" });
 
-            if (await _tableService.UpdateTable(table, model))
+            if (await _tableService.UpdateTableAsync(table, model))
                 return Ok(new { Message = "The Table has been updated successfully!"});
             
             return BadRequest(new { Message = "The table could not be updated" });

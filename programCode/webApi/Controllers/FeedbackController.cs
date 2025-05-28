@@ -34,9 +34,9 @@ namespace RestaurantReservierung.Controllers
         [HttpPost("{reservationId}")]
         public async Task<IActionResult> CreateFeedback([FromBody] FeedbackFormModel model, int reservationId)
         {
-            var user = await _userService.GetLoggedInUser();
+            var user = await _userService.GetLoggedInUserAsync();
 
-            var reservation = await _reservationService.GetReservationById(reservationId);
+            var reservation = await _reservationService.GetReservationByIdAsync(reservationId);
 
             var restaurant = reservation.Table.Restaurant;
 
@@ -46,7 +46,7 @@ namespace RestaurantReservierung.Controllers
             if (reservation == null)
                 return Unauthorized( new { Message = "You have not made a reservation at this restaurant, therefore you cant't give feedback!"});
 
-            if (await _feedbackService.CreateFeedback(user, model, restaurant, reservation))
+            if (await _feedbackService.CreateFeedbackAsync(user, model, restaurant, reservation))
                 return Ok(new { Message = "The Feedback has been created successfully!" });
 
             return BadRequest( new { Message = "The Feedback could not be created" });
@@ -61,12 +61,12 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete("{feedbackId}")]
         public async Task<IActionResult> DeleteFeedback(int feedbackId)
         {
-            var feedback = await _feedbackService.GetFeedbackById(feedbackId);
+            var feedback = await _feedbackService.GetFeedbackByIdAsync(feedbackId);
 
             if(feedback == null)
                 return BadRequest( new { Message = $"The feedback wit the id '{feedbackId}' does not exist!"});
 
-            if (await _feedbackService.DeleteFeedback(feedback))
+            if (await _feedbackService.DeleteFeedbackAsync(feedback))
                 return Ok(new { Message = "The reservation has been deleted successfully!" });
 
             return BadRequest( new { Message = "The reservation could not be deleted!"});
@@ -80,12 +80,12 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("{restaurantId}")]
         public async Task<IActionResult> GetFeedback(int restaurantId)
         {
-            var restaurant = await _restaurantService.GetRestaurantById(restaurantId);
+            var restaurant = await _restaurantService.GetRestaurantByIdAsync(restaurantId);
 
             if(restaurant == null)
                 return BadRequest(new { Message = $"The restaurant wit the id '{restaurantId}' does not exist!" });
 
-            var feedbacks = await _feedbackService.GetFeedbacksForRestaurant(restaurant);
+            var feedbacks = await _feedbackService.GetFeedbacksForRestaurantAsync(restaurant);
 
             return Ok(FeedbackDto.MapToDtos(feedbacks));
         }

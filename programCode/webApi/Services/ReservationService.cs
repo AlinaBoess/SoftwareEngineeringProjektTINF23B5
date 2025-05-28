@@ -22,7 +22,7 @@ namespace RestaurantReservierung.Services
             _context = context;
         }
 
-        public async Task<bool> Reserve(ReservationFormModel model, Table table, User user)
+        public async Task<bool> ReserveAsync(ReservationFormModel model, Table table, User user)
         {
 
             var reservation = new Reservation
@@ -41,7 +41,7 @@ namespace RestaurantReservierung.Services
             return false;
         }
 
-        public async Task<List<Reservation>> GetReservationsForTimeInterval(ReservationFormModel model, Table table)
+        public async Task<List<Reservation>> GetReservationsForTimeIntervalAsync(ReservationFormModel model, Table table)
         {
             var reservations = await _context.Reservations
                 .Where(r => r.TableId == table.TableId && (
@@ -65,7 +65,7 @@ namespace RestaurantReservierung.Services
             return model.StartTime < DateTime.Now;
         }
 
-        public async Task<List<Reservation>> GetReservations(ReservationFilterModel model)
+        public async Task<List<Reservation>> GetReservationsAsync(ReservationFilterModel model)
         {
             var query = _context.Reservations.AsQueryable();
 
@@ -97,26 +97,26 @@ namespace RestaurantReservierung.Services
 
         }
 
-        public async Task<List<Reservation>> GetReservationsForRestaurants(List<Restaurant> restaurants, ReservationFilterModel model)
+        public async Task<List<Reservation>> GetReservationsForRestaurantsAsync(List<Restaurant> restaurants, ReservationFilterModel model)
         {
             var reservations = new List<Reservation>();
 
             foreach (var restaurant in restaurants)
             {
                 model.RestaurantId = restaurant.RestaurantId;
-                reservations = [.. reservations, .. await GetReservations(model)];
+                reservations = [.. reservations, .. await GetReservationsAsync(model)];
             }
             return reservations;
         }
 
-        public async Task<Reservation> GetReservationById(int reservationId)
+        public async Task<Reservation> GetReservationByIdAsync(int reservationId)
         {
             return await _context.Reservations.FirstAsync(r => r.ReservationId == reservationId);
         }
 
-        public async Task<bool> CanUpdateReservation(Reservation reservation, ReservationFormModel model)
+        public async Task<bool> CanUpdateReservationAsync(Reservation reservation, ReservationFormModel model)
         {
-            var reservationsInInterval = await GetReservationsForTimeInterval(model, reservation.Table);
+            var reservationsInInterval = await GetReservationsForTimeIntervalAsync(model, reservation.Table);
 
             if (reservationsInInterval.Contains(reservation) && reservationsInInterval.Count == 1)
                 return true;
@@ -127,7 +127,7 @@ namespace RestaurantReservierung.Services
             return false;
         }
 
-        public async Task<bool> UpdateReservation(ReservationFormModel model, Reservation reservation)
+        public async Task<bool> UpdateReservationAsync(ReservationFormModel model, Reservation reservation)
         {
             reservation.StartTime = model.StartTime;
             reservation.EndTime = model.EndTime;
@@ -137,7 +137,7 @@ namespace RestaurantReservierung.Services
 
         }
 
-        public async Task<bool> DeleteReservation(Reservation reservation)
+        public async Task<bool> DeleteReservationAsync(Reservation reservation)
         {
             _context.Reservations.Remove(reservation);
 

@@ -17,7 +17,7 @@ namespace RestaurantReservierung.Services
         }
 
 
-        public async Task<bool> AddRestaurant(RestaurantFormModel restaurantModel, User user)
+        public async Task<bool> AddRestaurantAsync(RestaurantFormModel restaurantModel, User user)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace RestaurantReservierung.Services
             }
         }
 
-        public async Task<bool> UpdateRestaurant(Restaurant restaurant, RestaurantFormModel restaurantModel)
+        public async Task<bool> UpdateRestaurantAsync(Restaurant restaurant, RestaurantFormModel restaurantModel)
         {
             restaurant.Name = restaurantModel.Name;
             restaurant.Address = restaurantModel.Adress;
@@ -60,7 +60,7 @@ namespace RestaurantReservierung.Services
             return false;
         }
 
-        public async Task<Restaurant> GetRestaurantById(int id)
+        public async Task<Restaurant> GetRestaurantByIdAsync(int id)
         {
             var restaurant = await _context.Restaurants.FirstOrDefaultAsync(r => r.RestaurantId  == id);
 
@@ -71,9 +71,9 @@ namespace RestaurantReservierung.Services
             return null;
         }
 
-        public async Task<bool> DeleteRestaurant(Restaurant restaurant)
+        public async Task<bool> DeleteRestaurantAsync(Restaurant restaurant)
         {
-            await DeleteImageByRestaurantId(restaurant.RestaurantId);
+            await DeleteImageByRestaurantIdAsync(restaurant.RestaurantId);
             _context.Restaurants.Remove(restaurant);
 
             if (await _context.SaveChangesAsync() > 0) {  
@@ -82,7 +82,7 @@ namespace RestaurantReservierung.Services
             return false;
         }
 
-        public async Task<List<Restaurant>> GetManyRestaurants(int start = 0, int count = -1)
+        public async Task<List<Restaurant>> GetManyRestaurantsAsync(int start = 0, int count = -1)
         {
             var query = _context.Restaurants.AsQueryable();         
            
@@ -93,12 +93,12 @@ namespace RestaurantReservierung.Services
             return await query.ToListAsync();
         }
 
-        public async Task<List<Restaurant>> GetUserRestaurants(User user)
+        public async Task<List<Restaurant>> GetUserRestaurantsAsync(User user)
         {
             return await _context.Restaurants.Where(r => r.User == user).ToListAsync();
         }
 
-        public async Task<bool> OwnsRestaurant(User user, int restaurantId)
+        public async Task<bool> OwnsRestaurantAsync(User user, int restaurantId)
         {
             var restaurant = await _context.Restaurants
                 .Where(r => r.RestaurantId == restaurantId)
@@ -108,14 +108,14 @@ namespace RestaurantReservierung.Services
             return restaurant != null;
         }
 
-        public async Task<bool> UploadImage(int restaurantId, IFormFile picture)
+        public async Task<bool> UploadImageAsync(int restaurantId, IFormFile picture)
         {
 
             using var memoryStream = new MemoryStream();
             await picture.CopyToAsync(memoryStream);
             byte[] imageBytes = memoryStream.ToArray();
 
-            var restaurant = await GetRestaurantById(restaurantId);
+            var restaurant = await GetRestaurantByIdAsync(restaurantId);
 
             if (restaurant == null) return false;
 
@@ -138,17 +138,17 @@ namespace RestaurantReservierung.Services
         }
 
         
-        public async Task<Image> GetImageByRestaurantId(int restaurantId)
+        public async Task<Image> GetImageByRestaurantIdAsync(int restaurantId)
         {
-            var restaurant = await GetRestaurantById(restaurantId);
+            var restaurant = await GetRestaurantByIdAsync(restaurantId);
             if (restaurant == null) return null;
 
             return await _context.Images.FirstOrDefaultAsync(i => i.ImageId == restaurant.ImageId);
         }
 
-        public async Task<bool> DeleteImageByRestaurantId(int restaurantId)
+        public async Task<bool> DeleteImageByRestaurantIdAsync(int restaurantId)
         {
-            var restaurant = await GetRestaurantById(restaurantId);
+            var restaurant = await GetRestaurantByIdAsync(restaurantId);
 
             if (restaurant.ImageId == null)
                 return true;   

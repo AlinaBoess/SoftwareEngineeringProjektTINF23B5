@@ -153,7 +153,7 @@ public class ReservationSystemTests
     [Test]
     public void GetReservationById_ShouldReturnExisting()
     {
-        var reservation = _system.GetReservationById(1);
+        var reservation = _system.GetReservationByIdAsync(1);
 
         Assert.That(reservation, Is.Not.Null, "Returned restaurant should not be null");
         Assert.That(reservation.Result, Is.Not.Null);
@@ -164,7 +164,7 @@ public class ReservationSystemTests
     [Test]
     public void GetReservationForRestaurants_ShouldReturnExisting()
     {
-        var reservation = _system.GetReservationsForRestaurants(new List<Restaurant>() { _restaurant }, new Controllers.ReservationFilterModel() { RestaurantId = _restaurant.RestaurantId });
+        var reservation = _system.GetReservationsForRestaurantsAsync(new List<Restaurant>() { _restaurant }, new Controllers.ReservationFilterModel() { RestaurantId = _restaurant.RestaurantId });
 
         Assert.That(reservation, Is.Not.Null, "Returned restaurant should not be null");
         Assert.That(reservation.Result, Is.Not.Null);
@@ -174,7 +174,7 @@ public class ReservationSystemTests
     [Test]
     public void GetReservationsForTimeInterval_ShouldReturnExisting()
     {
-        var reservation = _system.GetReservationsForTimeInterval(new Controllers.ReservationFormModel() { StartTime = DateTime.Now.Subtract(TimeSpan.FromMinutes(5)), EndTime = DateTime.Now.Add(TimeSpan.FromMinutes(5)) }, _table);
+        var reservation = _system.GetReservationsForTimeIntervalAsync(new Controllers.ReservationFormModel() { StartTime = DateTime.Now.Subtract(TimeSpan.FromMinutes(5)), EndTime = DateTime.Now.Add(TimeSpan.FromMinutes(5)) }, _table);
 
         Assert.That(reservation, Is.Not.Null, "Returned restaurant should not be null");
         Assert.That(reservation.Result, Is.Not.Null);

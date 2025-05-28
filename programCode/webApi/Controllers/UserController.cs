@@ -30,7 +30,7 @@ namespace RestaurantReservierung.Controllers
         /// <returns>All Users</returns>
         [Authorize(Roles = "ADMIN")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetAllUsersAsync()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
             var users = await _userService.GetAllUsersAsync();
 
@@ -58,7 +58,7 @@ namespace RestaurantReservierung.Controllers
         /// <returns>Deletion Status</returns>
         [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUserByIdAsync(int id) {
+        public async Task<ActionResult> DeleteUserById(int id) {
             if (await _userService.DeleteUserAsync(await _userService.getUserByIdAsync(id)))
             {
                 return Ok(new {Message = "User deleted successfully"});
@@ -76,7 +76,7 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteCurrentUser()
         {
-            var user = await _userService.GetLoggedInUser();
+            var user = await _userService.GetLoggedInUserAsync();
 
             return Ok(await _userService.DeleteUserAsync(user));
         }
@@ -113,7 +113,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("Me")]
         public async Task<IActionResult> GetLoggedInUser()
         {
-            var user = await _userService.GetLoggedInUser();
+            var user = await _userService.GetLoggedInUserAsync();
 
             return Ok(new { user = UserDto.MapToDto(user) });
         }
