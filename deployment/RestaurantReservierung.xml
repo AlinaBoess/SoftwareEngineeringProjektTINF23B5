@@ -9,8 +9,45 @@
             Register a new User. 
             The Email has to be valid and unique email. 
             The Password has to be at least 6 characters.
+            A successfull registration returns the jwt token
             </summary>
             <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.AuthController.Login(RestaurantReservierung.Controllers.AuthController.LoginModel)">
+            <summary>
+            Login User. Return userinfo and token
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.FeedbackController.CreateFeedback(RestaurantReservierung.Controllers.FeedbackFormModel,System.Int32)">
+            <summary>
+            Create a feedback for a restaurant. The user has to have a valid reservation
+            </summary>
+            <param name="model"></param>
+            <param name="reservationId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.FeedbackController.DeleteFeedback(System.Int32)">
+            <summary>
+            Delete any feedback. Only Admins use this endpoint
+            </summary>
+            <param name="feedbackId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.FeedbackController.GetFeedback(System.Int32)">
+            <summary>
+            Get all Feedbacks for a restaurant
+            </summary>
+            <param name="restaurantId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.FeedbackController.DeleteOwnFeedback(System.Int32)">
+            <summary>
+            Delete a feedback which was made by the logged in User
+            </summary>
+            <param name="feedbackId"></param>
             <returns></returns>
         </member>
         <member name="M:RestaurantReservierung.Controllers.ReservationController.makeReservation(RestaurantReservierung.Controllers.ReservationFormModel,System.Int32)">
@@ -90,7 +127,7 @@
             <param name="reservationId"></param>
             <returns></returns>
         </member>
-        <member name="M:RestaurantReservierung.Controllers.RestaurantController.createRestaurant(RestaurantReservierung.Controllers.RestaurantFormModel)">
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.CreateRestaurant(RestaurantReservierung.Controllers.RestaurantFormModel)">
             <summary>
             Creates a new restaurant. Only a user of Role restaurant_owner or an admin can delete a restaurant.
             </summary>
@@ -119,7 +156,7 @@
             <param name="id"></param>
             <returns>One Restaurant</returns>
         </member>
-        <member name="M:RestaurantReservierung.Controllers.RestaurantController.GetManyRestaurants(System.Int32,System.Int32)">
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.GetManyRestaurants(RestaurantReservierung.Controllers.GetManyRestaurantFormModel)">
             <summary>
             Get many Restaurants. If no Url-Parameters are added, the Endpoint will return all Restaurants. 
             </summary>
@@ -131,6 +168,35 @@
             <summary>
             Returns a list of the restaurants from a restaurant owner.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.GetRestaurantRating(System.Int32)">
+            <summary>
+            Returns the average rating, calculated by all reservations for the restaurant
+            </summary>
+            <param name="restaurantId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.ChangeImage(System.Int32,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Change the Image of an restaurant
+            </summary>
+            <param name="restaurantId"></param>
+            <param name="picture"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.GetImage(System.Int32)">
+            <summary>
+            Get the image thumbnail of a restaurant
+            </summary>
+            <param name="restaurantId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestaurantReservierung.Controllers.RestaurantController.DeleteImage(System.Int32)">
+            <summary>
+            Delete a image thumbnail for a restaurant
+            </summary>
+            <param name="restaurantId"></param>
             <returns></returns>
         </member>
         <member name="M:RestaurantReservierung.Controllers.TableController.CreateTable(RestaurantReservierung.Controllers.TableFormModel,System.Int32)">
@@ -163,7 +229,7 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:RestaurantReservierung.Controllers.UserController.GetAllUsersAsync">
+        <member name="M:RestaurantReservierung.Controllers.UserController.GetAllUsers">
             <summary>
             Returns all Users that exist. Only Admins can use this Endpoint.
             </summary>
@@ -176,7 +242,7 @@
             <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="M:RestaurantReservierung.Controllers.UserController.DeleteUserByIdAsync(System.Int32)">
+        <member name="M:RestaurantReservierung.Controllers.UserController.DeleteUserById(System.Int32)">
             <summary>
             Deletes a User specified by ID. Only Admins can use this Endpoint.
             </summary>
