@@ -23,13 +23,13 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore programCode/RestaurantReservierung.sln
+      run: dotnet restore programCode/webApi/RestaurantReservierung.sln
     - name: Build
-      run: dotnet build programCode/RestaurantReservierung.sln --no-restore 
+      run: dotnet build programCode/webApi/RestaurantReservierung.sln --no-restore 
     - name: Test
-      run: dotnet test programCode/RestaurantReservierung.sln --no-build --verbosity normal
+      run: dotnet test programCode/webApi/RestaurantReservierung.sln --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish programCode/RestaurantReservierung.sln -c Release -o publish
+      run: dotnet publish programCode/webApi/RestaurantReservierung.sln -c Release -o publish
     - name: Move files to deployment folder
       run: |
         rm -rf deployment
@@ -41,7 +41,11 @@ jobs:
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
         git add deployment
-        git commit -m "Deploy: Add latest build output"
-        git push
+        if git diff --cached --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Deploy: Add latest build output"
+          git push
+        fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
