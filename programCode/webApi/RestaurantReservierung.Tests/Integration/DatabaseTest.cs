@@ -14,9 +14,10 @@ namespace RestaurantReservierung.RestaurantReservierung.Tests.Integration
         [SetUp]
         public void Setup()
         {
-            // Load configuration from appsettings.Development.json
+            string webApiDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..")); 
+
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) // where your test runs
+                .SetBasePath(webApiDirectory)
                 .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: false)
                 .Build();
 

@@ -28,7 +28,7 @@ jobs:
           \"ConnectionStrings\": {
             \"DefaultConnection\": \"${{ secrets.DB_CONNECTION_STRING }}\"
           }
-        }" > programCode/webApi/appsettings.json
+        }" > programCode/webApi/appsettings.Development.json
     - name: Restore dependencies
       run: dotnet restore programCode/webApi/RestaurantReservierung.sln
     - name: Build
