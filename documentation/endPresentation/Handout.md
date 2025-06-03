@@ -13,11 +13,11 @@ Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminf
 ### Arbeitsstunden pro Person
 | Teammitglied | Arbeitsstunden | Hauptbeitrag                             |
 |--------------|---------------|-------------------------------------------|
-| Alina        | 55:20 Stunden    | Frontend-Entwicklung und Dokumentation    |
-| Alex         | 52:00 Stunden    | Backend-Entwicklung & CI/CD               |
-| Lukas        | 37:45 Stunden    | Backend-Entwicklung & Testing             |
-| Moumen       | 48:00 Stunden    | Datenbank & Frontend-Entwicklung          |
-| Yahya        | 29:45 Stunden    | Frontend-Entwicklung & Projektmanagement  |
+| Alina        | 55:20 (h,min)    | Frontend-Entwicklung und Dokumentation    |
+| Alex         | 52:00 (h,min)    | Backend-Entwicklung & CI/CD               |
+| Lukas        | 37:45 (h,min)    | Backend-Entwicklung & Testing             |
+| Moumen       | 48:00 (h,min)    | Datenbank & Frontend-Entwicklung          |
+| Yahya        | 29:45 (h,min)    | Frontend-Entwicklung & Projektmanagement  |
 
 ### Arbeitsstunden pro Workflow
 ![image](https://github.com/user-attachments/assets/ac768959-f01e-4ecd-a882-4c5d167bac08)
@@ -33,11 +33,61 @@ Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminf
 
 ---
 
-## Highlights unserer Demo
+## Highlights der Live-Demo
 
-**TODO**
+Unsere Live-Demo zeigt zentrale Funktionen unserer Restaurant-Reservierungsplattform anhand ausgewählter Screenshots.
+
+### Startseite
+- Begrüßung mit „Willkommen auf unserer Homepage“.
+- Von hier aus kann direkt auf die Reservierungsfunktion zugegriffen werden.
+- Zusätzlich gibt es oben einen Button, über den Restaurantbesitzer ein Formular zur Registrierung ihres Restaurants aufrufen können.
+
+![Startseite](Home.jpg)
 
 ---
+
+### Partner-Restaurant-Übersicht
+- Darstellung aller registrierten Partner-Restaurants.
+- Einfache Navigation zur Auswahl eines Restaurants.
+
+![Partner-Restaurants](restaurantuebersicht.jpg)
+
+---
+
+### Tischreservierung
+- Anzeige einer Tischübersicht mit belegten und freien Tischen.
+- Reservierungsformular:
+  - Auswahl von Datum und Uhrzeit.
+  - Dynamische Anzeige der verfügbaren Tische.
+  - Möglichkeit zur Auswahl und Buchung eines freien Tisches.
+
+![Tischreservierung](reservierung.jpg)
+
+---
+
+### Übersicht eigener Reservierungen (User)
+- Auflistung der eigenen Reservierungen:
+  - Restaurantname, Tischnummer, Kapazität, Datum und Uhrzeit, Website.
+- Reservierungen können hier bei Bedarf gelöscht werden.
+
+![Eigene Reservierungen](userReservierungsuebersicht.jpg)
+
+---
+
+### Übersicht der Reservierungen (Restaurant-Owner)
+- Restaurantbesitzer sehen alle Reservierungen ihrer Tische:
+  - Inklusive Restaurantname, Tischnummer, Kapazität, Datum und Zeitrahmen.
+- Es wird nach Restaurants gruppiert, falls der Besitzer mehrere hat.
+
+![Owner-Reservierungsübersicht](ownerReservierungsuebersicht.jpg)
+
+---
+
+### Weitere Funktionen (nicht gezeigt)
+- Login für Kund*innen und Restaurantbesitzer.
+- Formular zur Restaurantregistrierung.
+- Rollenbasierte Zugriffskontrolle im System.
+
 
 ## Highlights unseres Projekts
 
