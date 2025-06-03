@@ -219,11 +219,22 @@ function AddRestaurantForm() {
 	    name: name,
 	    adress: address,
 	    openingHours: openingHours,
-	    website: website
+        website: website,
+        image: image
+
 	    // Image sobald verfügbar
 	//
 	//
         };
+        //const formData = new FormData();
+        //formData.append("name", name);
+        //formData.append("adress", address);
+        //formData.append("openingHours", openingHours);
+        //formData.append("website", website);
+        //if (image) {
+        //    formData.append("image", image);
+        //}
+
 	try {
             const response = await fetch(`${API_URL}/api/Restaurant`, {
                 method: "POST",
@@ -231,7 +242,8 @@ function AddRestaurantForm() {
 		    "Content-Type": "application/json",
 		    Authorization: `Bearer ${user?.token}`,
 		},
-		body: JSON.stringify(requestBody)
+                body: JSON.stringify(requestBody)
+                //body: formData
             });
 
             if (!response.ok) {
