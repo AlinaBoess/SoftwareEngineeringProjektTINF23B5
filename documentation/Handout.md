@@ -4,6 +4,7 @@
 
 ## Projektnamen
 **Restaurant-Reservierungssystem**
+Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminfunktionen.
 
 ---
 
@@ -19,36 +20,19 @@
 | Yahya        | XX Stunden    | Frontend-Entwicklung & Projektmanagement  |
 
 ### Arbeitsstunden pro Workflow
-| Workflow              | Stunden |
-|-----------------------|---------|
-| Requirement Analysis  | XX      |
-| Project Management    | XX      |
-| Design & Architektur  | XX      |
-| Implementation       | XX      |
-| Testing              | XX      |
-| Deployment & CI/CD   | XX      |
+(Grafik einfügen)
 
-### Arbeitsstunden pro Phase
-| Phase       | Stunden |
-|-------------|---------|
-| Inception   | XX      |
-| Elaboration | XX      |
-| Construction| XX      |
-| Transition  | XX      |
+### Arbeitsstunden pro Sprint
+(Grafik einfügen)
+
+### Arbeitsstunden pro Person pro Sprint
+(Grafik einfügen)
 
 ---
 
 ## Highlights unserer Demo
 
-- **Beschreibung:**  
-  Kurze Erklärung der wichtigsten Funktionen, z. B. Tischreservierung, Feedbacksystem, Benutzerverwaltung.
-
-- **Screenshots:**  
-  ![Screenshot 1](pfad/zu/screenshot1.png)  
-  *Tischreservierung – Benutzeroberfläche*  
-
-  ![Screenshot 2](pfad/zu/screenshot2.png)  
-  *Reservierungsübersicht für Administratoren*
+**TODO**
 
 ---
 
@@ -67,27 +51,42 @@
 - Versionskontrolle: Git + GitHub  
 - Projektmanagement: Jira  
 - Entwicklungsumgebung: Visual Studio 2022  
-- CI/CD: GitHub Actions  
+- CI/CD: GitHub Actions
+- Monitoring: Prometheus
 
 ### Datenbank Design
 - Relationale Tabellen für Benutzer, Tische, Reservierungen und Feedback  
-- ACID-konforme Transaktionen und Indexierung zur Optimierung der Performance  
+- ACID-konforme Transaktionen und Indexierung zur Optimierung der Performance
+(ER Diagramm!)
 
 ### Testing
-- Unit-Tests für Backend-Komponenten  
-- Integrationstests zur Sicherstellung der Funktionalität  
-- Manuelle Usability-Tests für das Frontend  
+- Unit Tests zur Validierung einzelner Komponenten
+  - Benutzung einer In-Memory Datenbank durch Mocking-Techniken
+  - Etwa bei: Authentifizierungs-Service, Reservierungs-Service
+- Integration Tests zur Validierung des Gesamtsystems
+  - Testen des Systems unter Realbedingungen mit Anfragen anMariaDB-Datenbanksystem
+  - Etwa bei: Validierung der Datenbankverfügbarkeit
+- Frontend-Tests sind aktuell noch nicht automatisiert umgesetzt
 
 ### Metriken
-- Gesamtarbeitsstunden: XX  
-- Durchschnittliche Antwortzeit der API: < 2 Sekunden  
-- Erfolgsrate der Reservierungen: XX %  
-- Abdeckung Unit Tests: XX %  
+
+Erfasst mit Prometheus über die ASP.NET Core Middleware (`prometheus-net.AspNetCore`), abrufbar unter `/metrics`.
+
+**Verwendete Metriken:**
+- Anzahl der HTTP-Requests pro Endpoint (Request Rate)
+- Antwortzeit (Response Time)
+- Aktive Verbindungen (Active Connections)
 
 ### CI/CD
-- Automatisiertes Build- und Deployment-System über GitHub Actions  
-- Automatisierte Tests vor jedem Deployment  
-- Monitoring der Anwendung nach dem Deployment  
+- CI/CD umgesetzt mit GitHub Actions
+- Auslöser: Push auf `main`-Branch
+- Schritte:
+  - .NET-Umgebung konfigurieren
+  - Abhängigkeiten installieren
+  - Backend bauen
+  - Unit- und Integrationstests ausführen
+  - Buildartefakte erzeugen und in das Repository hochladen
+- Gesamtlaufzeit: ca. 30–40 Sekunden
 
 ---
 
@@ -101,4 +100,3 @@
 
 ---
 
-*Ende des Handouts*
