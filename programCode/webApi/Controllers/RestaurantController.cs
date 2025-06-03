@@ -196,7 +196,7 @@ namespace RestaurantReservierung.Controllers
         {
             var user = await _userService.GetLoggedInUserAsync();
 
-            if(!await _restaurantService.OwnsRestaurantAsync(user, restaurantId))
+            if(!await _restaurantService.OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
                 return Unauthorized();
 
             if (picture == null || picture.Length == 0)
@@ -236,7 +236,7 @@ namespace RestaurantReservierung.Controllers
         {
             var user = await _userService.GetLoggedInUserAsync();
 
-            if (!await _restaurantService.OwnsRestaurantAsync(user, restaurantId))
+            if (!await _restaurantService.OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
                 return Unauthorized();
 
             if (await _restaurantService.DeleteImageByRestaurantIdAsync(restaurantId))
