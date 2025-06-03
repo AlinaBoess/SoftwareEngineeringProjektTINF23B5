@@ -3,7 +3,7 @@
 ---
 
 ## Projektnamen
-**Restaurant-Reservierungssystem**
+**Restaurant-Reservierungssystem**  
 Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminfunktionen.
 
 ---
