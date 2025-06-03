@@ -82,12 +82,20 @@ Zusätzlich ein generiertes Datenbankschema aus der tatsächlichen Implementieru
 
 ### Metriken
 
-Erfasst mit Prometheus über die ASP.NET Core Middleware (`prometheus-net.AspNetCore`), abrufbar unter `/metrics`.
+Im Backend werden sowohl Code-Metriken als auch Laufzeit-Metriken erfasst. 
 
-**Verwendete Metriken:**
+**Code-Metriken:**
+
+![Code Metriken](https://raw.githubusercontent.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/main/documentation/endPresentation/Code-Metriken.png)
+
+**Laufzeit-Metriken**
+Die Laufzeit-Metriken werden mithilfe von Prometheus über die ASP.NET Core Middleware (`prometheus-net.AspNetCore`) erfasst. Sie sind unter dem Endpunkt `/metrics` abrufbar.
+
+Erfasste Metriken sind unter anderem:
 - Anzahl der HTTP-Requests pro Endpoint (Request Rate)
 - Antwortzeit (Response Time)
 - Aktive Verbindungen (Active Connections)
+
 
 ### CI/CD
 - CI/CD umgesetzt mit GitHub Actions
