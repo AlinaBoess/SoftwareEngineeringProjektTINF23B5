@@ -92,55 +92,71 @@ function MainComponent() {
 
     // Ruft Restaurants ab 
     useEffect(() => {
-    const fetchRestaurants = async () => {
-        try {
-            // Fetch restaurant data
-            const response = await fetch(`${API_URL}/api/Restaurant`);
-            if (!response.ok) throw new Error("Fehler beim Laden der Restaurants");
-            const data = await response.json();
-            
-            // Fetch images for each restaurant
-            const restaurantsWithImages = await Promise.all(
-                data.map(async (restaurant) => {
-                    try {
-                        const imageResponse = await fetch(
-                            `${API_URL}/api/Restaurant/Image/${restaurant.restaurantId}`
-                        );
-                        
-                        if (imageResponse.ok) {
-                            const imageBlob = await imageResponse.blob();
-                            return {
-                                ...restaurant,
-                                imageUrl: URL.createObjectURL(imageBlob)
-                            };
-                        }
-                        return restaurant; // Return restaurant without image if fetch fails
-                    } catch (error) {
-                        console.error(`Error fetching image for restaurant ${restaurant.restaurantId}:`, error);
-                        return restaurant; // Return restaurant without image if error occurs
-                    }
-                })
-            );
-            
-            setRestaurants(restaurantsWithImages);
-        } catch (error) {
-            console.error("Fehler beim Laden der Restaurants:", error);
-            alert("Die Restaurants konnten nicht geladen werden.");
-        }
-    };
+        const fetchRestaurants = async () => {
+            try {
+                // Fetch restaurant data
+                const response = await fetch(`${API_URL}/api/Restaurant`);
+                if (!response.ok) throw new Error("Fehler beim Laden der Restaurants");
+                const data = await response.json();
 
-    fetchRestaurants();
-}, []);
-useEffect(() => {
-    return () => {
-        // Clean up object URLs to prevent memory leaks
-        restaurants.forEach(restaurant => {
-            if (restaurant.imageUrl) {
-                URL.revokeObjectURL(restaurant.imageUrl);
+                // Fetch images and feedback for each restaurant
+                const restaurantsWithDetails = await Promise.all(
+                    data.map(async (restaurant) => {
+                        try {
+                            // Fetch image
+                            const imageResponse = await fetch(
+                                `${API_URL}/api/Restaurant/Image/${restaurant.restaurantId}`
+                            );
+
+                            // Fetch feedback
+                            const feedbackResponse = await fetch(
+                                `${API_URL}/api/Feedback/${restaurant.restaurantId}`
+                            );
+                            const feedbackData = feedbackResponse.ok
+                                ? await feedbackResponse.json()
+                                : [];
+                            const averageRating = feedbackData.length
+                                ? (
+                                    feedbackData.reduce((sum, feedback) => sum + feedback.rating, 0) /
+                                    feedbackData.length
+                                ).toFixed(1)
+                                : "Keine Bewertungen";
+
+                            if (imageResponse.ok) {
+                                const imageBlob = await imageResponse.blob();
+                                return {
+                                    ...restaurant,
+                                    imageUrl: URL.createObjectURL(imageBlob),
+                                    averageRating,
+                                };
+                            }
+                            return { ...restaurant, averageRating }; // Rückgabe ohne Bild bei Fehler
+                        } catch (error) {
+                            console.error(`Fehler bei Details für Restaurant ${restaurant.restaurantId}:`, error);
+                            return restaurant; // Rückgabe ohne Bild und Bewertung bei Fehler
+                        }
+                    })
+                );
+
+                setRestaurants(restaurantsWithDetails);
+            } catch (error) {
+                console.error("Fehler beim Laden der Restaurants:", error);
+                alert("Die Restaurants konnten nicht geladen werden.");
             }
-        });
-    };
-}, [restaurants]);
+        };
+
+        fetchRestaurants();
+    }, []);
+    useEffect(() => {
+        return () => {
+            // Clean up object URLs to prevent memory leaks
+            restaurants.forEach(restaurant => {
+                if (restaurant.imageUrl) {
+                    URL.revokeObjectURL(restaurant.imageUrl);
+                }
+            });
+        };
+    }, [restaurants]);
 
     // Ruft schon besetzte Tische ab
     useEffect(() => {
@@ -235,7 +251,7 @@ useEffect(() => {
             setIsLoading(false);
         }
     };
-    
+
 
 
     // Restaurant Auswahl
@@ -405,25 +421,33 @@ useEffect(() => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {restaurants.map((restaurant) => (
                         <div
-            key={restaurant.restaurantId}
-            className="bg-white rounded-lg shadow-lg overflow-hidden"
-        >
-            {restaurant.imageUrl && (
-                <img
-                    src={restaurant.imageUrl}
-                    alt={restaurant.name}
-                    className="w-full h-48 object-cover"
-                /> )}
+                            key={restaurant.restaurantId}
+                            className="bg-white rounded-lg shadow-lg overflow-hidden"
+                        >
+                            {restaurant.imageUrl && (
+                                <img
+                                    src={restaurant.imageUrl}
+                                    alt={restaurant.name}
+                                    className="w-full h-48 object-cover"
+                                />)}
                             <div className="p-6">
                                 <h3 className="text-xl font-playfair text-[#2c1810] mb-2">
                                     {restaurant.name}
                                 </h3>
                                 <p className="text-[#5c3d2e] mb-4">{restaurant.address}</p>
                                 <p className="text-[#5c3d2e] mb-4">{restaurant.openingHours}</p>
-                                <div className="flex items-center mb-4">
-                                    <i className="fas fa-star text-yellow-400 mr-1"></i>
-                                    <span>
-                                        {restaurant.rating} ({restaurant.reviews} Bewertungen)
+                                <div className="flex items-center">
+                                    {[...Array(5)].map((_, index) => (
+                                        <div
+                                            key={index}
+                                            className={`w-6 h-6 ${index < Math.round(restaurant.averageRating) ? "bg-yellow-400" : "bg-gray-300"}`}
+                                            style={{
+                                                clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+                                            }}
+                                        ></div>
+                                    ))}
+                                    <span className="ml-2 text-[#5c3d2e]">
+                                        {restaurant.averageRating} ({restaurant.reviews || 0})
                                     </span>
                                 </div>
                                 <button
@@ -511,10 +535,10 @@ useEffect(() => {
                                                     disabled={!selectedDate || !startTime || !endTime || isReserved} // Deaktivieren, wenn reserviert
                                                     onClick={() => handleTableSelect(table.tableId)}
                                                     className={`p-4 border rounded ${selectedTable === table.tableId
-                                                            ? "bg-[#2c1810] text-white" // Hervorhebung für den ausgewählten Tisch
-                                                            : isReserved
-                                                                ? "bg-gray-200 cursor-not-allowed" // Deaktivierter Zustand für reservierte Tische
-                                                                : "hover:bg-[#f5f1e9]" // Standard-Hover-Effekt
+                                                        ? "bg-[#2c1810] text-white" // Hervorhebung für den ausgewählten Tisch
+                                                        : isReserved
+                                                            ? "bg-gray-200 cursor-not-allowed" // Deaktivierter Zustand für reservierte Tische
+                                                            : "hover:bg-[#f5f1e9]" // Standard-Hover-Effekt
                                                         }`}
                                                 >
                                                     <div className="text-center">
