@@ -3,7 +3,7 @@
 ---
 
 ## Projektnamen
-**Restaurant-Reservierungssystem**
+**Restaurant-Reservierungssystem**  
 Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminfunktionen.
 
 ---
@@ -13,28 +13,81 @@ Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminf
 ### Arbeitsstunden pro Person
 | Teammitglied | Arbeitsstunden | Hauptbeitrag                             |
 |--------------|---------------|-------------------------------------------|
-| Alina        | XX Stunden    | Frontend-Entwicklung und Dokumentation    |
-| Alex         | XX Stunden    | Backend-Entwicklung & CI/CD               |
-| Lukas        | XX Stunden    | Backend-Entwicklung & Testing             |
-| Moumen       | XX Stunden    | Datenbank & Frontend-Entwicklung          |
-| Yahya        | XX Stunden    | Frontend-Entwicklung & Projektmanagement  |
+| Alina        | 55:20 (h,min)    | Frontend-Entwicklung und Dokumentation    |
+| Alex         | 52:00 (h,min)    | Backend-Entwicklung & CI/CD               |
+| Lukas        | 37:45 (h,min)    | Backend-Entwicklung & Testing             |
+| Moumen       | 48:00 (h,min)    | Datenbank & Frontend-Entwicklung          |
+| Yahya        | 29:45 (h,min)    | Frontend-Entwicklung & Projektmanagement  |
 
 ### Arbeitsstunden pro Workflow
-(Grafik einfügen)
+![image](https://github.com/user-attachments/assets/ac768959-f01e-4ecd-a882-4c5d167bac08)
+
 
 ### Arbeitsstunden pro Sprint
-(Grafik einfügen)
+
+![image](https://github.com/user-attachments/assets/9b5ce034-d995-4981-aa25-28be8e0d5d4f)
+
 
 ### Arbeitsstunden pro Person pro Sprint
-(Grafik einfügen)
+![image](https://github.com/user-attachments/assets/44722d26-bbc3-4c67-a820-ce265bba0948)
 
 ---
 
-## Highlights unserer Demo
+## Highlights der Live-Demo
 
-**TODO**
+Unsere Live-Demo zeigt zentrale Funktionen unserer Restaurant-Reservierungsplattform anhand ausgewählter Screenshots.
+
+### Startseite
+- Begrüßung mit „Willkommen auf unserer Homepage“.
+- Von hier aus kann direkt auf die Reservierungsfunktion zugegriffen werden.
+- Zusätzlich gibt es oben einen Button, über den Restaurantbesitzer ein Formular zur Registrierung ihres Restaurants aufrufen können.
+
+![Startseite](Home.jpg)
 
 ---
+
+### Partner-Restaurant-Übersicht
+- Darstellung aller registrierten Partner-Restaurants.
+- Einfache Navigation zur Auswahl eines Restaurants.
+
+![Partner-Restaurants](restaurantuebersicht.jpg)
+
+---
+
+### Tischreservierung
+- Anzeige einer Tischübersicht mit belegten und freien Tischen.
+- Reservierungsformular:
+  - Auswahl von Datum und Uhrzeit.
+  - Dynamische Anzeige der verfügbaren Tische.
+  - Möglichkeit zur Auswahl und Buchung eines freien Tisches.
+
+![Tischreservierung](reservierung.jpg)
+
+---
+
+### Übersicht eigener Reservierungen (User)
+- Auflistung der eigenen Reservierungen:
+  - Restaurantname, Tischnummer, Kapazität, Datum und Uhrzeit, Website.
+- Reservierungen können hier bei Bedarf gelöscht werden.
+
+![Eigene Reservierungen](userReservierungsuebersicht.jpg)
+
+---
+
+### Übersicht der Reservierungen (Restaurant-Owner)
+- Restaurantbesitzer sehen alle Reservierungen ihrer Tische:
+  - Inklusive Restaurantname, Tischnummer, Kapazität, Datum und Zeitrahmen.
+- Es wird nach Restaurants gruppiert, falls der Besitzer mehrere hat.
+
+![Owner-Reservierungsübersicht](ownerReservierungsuebersicht.jpg)
+
+---
+
+### Weitere Funktionen (nicht gezeigt)
+- Login für Kund*innen und Restaurantbesitzer.
+- Formular zur Restaurantregistrierung.
+- Rollenbasierte Zugriffskontrolle im System.
+
 
 ## Highlights unseres Projekts
 
@@ -46,7 +99,8 @@ Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminf
 ### Software Tools / Plattform / Technik / Libraries
 - Frontend: React.js, CSS  
 - Backend: C# mit ASP.NET Core Web API  
-- Datenbank: MariaDB  
+- Datenbank: MariaDB
+- Datenbank-Backend Kommunikation: EF Core 
 - API-Dokumentation: Swagger  
 - Versionskontrolle: Git + GitHub  
 - Projektmanagement: Jira  
@@ -57,7 +111,19 @@ Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminf
 ### Datenbank Design
 - Relationale Tabellen für Benutzer, Tische, Reservierungen und Feedback  
 - ACID-konforme Transaktionen und Indexierung zur Optimierung der Performance
-(ER Diagramm!)
+#### ER-Diagramm
+
+Dieses ER-Diagramm zeigt die Entitäten und ihre Beziehungen im System.
+
+![ER-Diagramm Draw.io](https://raw.githubusercontent.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/main/documentation/endPresentation/ER-Diagramm.drawio.png)
+
+#### Datenbankstruktur (aus phpMyAdmin)
+
+Zusätzlich ein generiertes Datenbankschema aus der tatsächlichen Implementierung:
+
+![Datenbankdiagramm](https://raw.githubusercontent.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/main/documentation/endPresentation/DatabaseDiagramm.png)
+
+
 
 ### Testing
 - Unit Tests zur Validierung einzelner Komponenten
@@ -70,12 +136,20 @@ Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminf
 
 ### Metriken
 
-Erfasst mit Prometheus über die ASP.NET Core Middleware (`prometheus-net.AspNetCore`), abrufbar unter `/metrics`.
+Im Backend werden sowohl Code-Metriken als auch Laufzeit-Metriken erfasst. 
 
-**Verwendete Metriken:**
+**Code-Metriken:**
+
+![Code Metriken](https://raw.githubusercontent.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/main/documentation/endPresentation/Code-Metriken.png)
+
+**Laufzeit-Metriken**
+Die Laufzeit-Metriken werden mithilfe von Prometheus über die ASP.NET Core Middleware (`prometheus-net.AspNetCore`) erfasst. Sie sind unter dem Endpunkt `/metrics` abrufbar.
+
+Erfasste Metriken sind unter anderem:
 - Anzahl der HTTP-Requests pro Endpoint (Request Rate)
 - Antwortzeit (Response Time)
 - Aktive Verbindungen (Active Connections)
+
 
 ### CI/CD
 - CI/CD umgesetzt mit GitHub Actions
@@ -96,7 +170,6 @@ Erfasst mit Prometheus über die ASP.NET Core Middleware (`prometheus-net.AspNet
 - Effektives Projektmanagement mit Jira und Scrum-Methodik  
 - Saubere, gut dokumentierte Codebasis  
 - Flexible und erweiterbare Systemarchitektur für zukünftige Features  
-- Umsetzung strenger Datenschutz- und Sicherheitsanforderungen (DSGVO-konform)  
-
+- Saubere Datenstruktur
 ---
 

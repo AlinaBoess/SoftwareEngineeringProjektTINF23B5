@@ -38,9 +38,11 @@ namespace RestaurantReservierung.Controllers
                 return BadRequest();
             }
 
-            if (await _restaurantService.AddRestaurantAsync(restaurantModel, user))
+            var restaurant = await _restaurantService.AddRestaurantAsync(restaurantModel, user);
+
+            if (restaurant != null)
             {
-                return Ok(new { Message = "The restaurant has been created successfully" });
+                return Ok(new { Message = "The restaurant has been created successfully" , restaurant = RestaurantDto.MapToDto(restaurant)});
             }
             return BadRequest(new { Message = "Restaurant could not be created"});
 
@@ -196,7 +198,7 @@ namespace RestaurantReservierung.Controllers
         {
             var user = await _userService.GetLoggedInUserAsync();
 
-            if(!await _restaurantService.OwnsRestaurantAsync(user, restaurantId))
+            if(!await _restaurantService.OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
                 return Unauthorized();
 
             if (picture == null || picture.Length == 0)
@@ -236,7 +238,7 @@ namespace RestaurantReservierung.Controllers
         {
             var user = await _userService.GetLoggedInUserAsync();
 
-            if (!await _restaurantService.OwnsRestaurantAsync(user, restaurantId))
+            if (!await _restaurantService.OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
                 return Unauthorized();
 
             if (await _restaurantService.DeleteImageByRestaurantIdAsync(restaurantId))
