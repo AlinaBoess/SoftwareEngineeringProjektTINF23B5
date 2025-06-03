@@ -13,20 +13,23 @@ Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminf
 ### Arbeitsstunden pro Person
 | Teammitglied | Arbeitsstunden | Hauptbeitrag                             |
 |--------------|---------------|-------------------------------------------|
-| Alina        | XX Stunden    | Frontend-Entwicklung und Dokumentation    |
-| Alex         | XX Stunden    | Backend-Entwicklung & CI/CD               |
-| Lukas        | XX Stunden    | Backend-Entwicklung & Testing             |
-| Moumen       | XX Stunden    | Datenbank & Frontend-Entwicklung          |
-| Yahya        | XX Stunden    | Frontend-Entwicklung & Projektmanagement  |
+| Alina        | 55:20 Stunden    | Frontend-Entwicklung und Dokumentation    |
+| Alex         | 52:00 Stunden    | Backend-Entwicklung & CI/CD               |
+| Lukas        | 37:45 Stunden    | Backend-Entwicklung & Testing             |
+| Moumen       | 48:00 Stunden    | Datenbank & Frontend-Entwicklung          |
+| Yahya        | 29:45 Stunden    | Frontend-Entwicklung & Projektmanagement  |
 
 ### Arbeitsstunden pro Workflow
-(Grafik einfügen)
+![image](https://github.com/user-attachments/assets/ac768959-f01e-4ecd-a882-4c5d167bac08)
+
 
 ### Arbeitsstunden pro Sprint
-(Grafik einfügen)
+
+![image](https://github.com/user-attachments/assets/9b5ce034-d995-4981-aa25-28be8e0d5d4f)
+
 
 ### Arbeitsstunden pro Person pro Sprint
-(Grafik einfügen)
+![image](https://github.com/user-attachments/assets/44722d26-bbc3-4c67-a820-ce265bba0948)
 
 ---
 
