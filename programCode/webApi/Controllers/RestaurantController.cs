@@ -38,9 +38,11 @@ namespace RestaurantReservierung.Controllers
                 return BadRequest();
             }
 
-            if (await _restaurantService.AddRestaurantAsync(restaurantModel, user))
+            var restaurant = await _restaurantService.AddRestaurantAsync(restaurantModel, user);
+
+            if (restaurant != null)
             {
-                return Ok(new { Message = "The restaurant has been created successfully" });
+                return Ok(new { Message = "The restaurant has been created successfully" , restaurant = RestaurantDto.MapToDto(restaurant)});
             }
             return BadRequest(new { Message = "Restaurant could not be created"});
 

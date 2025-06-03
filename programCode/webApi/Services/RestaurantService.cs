@@ -15,7 +15,7 @@ namespace RestaurantReservierung.Services
         }
 
 
-        public async Task<bool> AddRestaurantAsync(RestaurantFormModel restaurantModel, User user)
+        public async Task<Restaurant> AddRestaurantAsync(RestaurantFormModel restaurantModel, User user)
         {
             try
             {
@@ -33,14 +33,14 @@ namespace RestaurantReservierung.Services
                     _context.Restaurants.Add(restaurant);
                     if (await _context.SaveChangesAsync() > 0)
                     {
-                        return true;
+                        return restaurant;
                     }
                 }
-                return false;
+                return null;
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
         }
 
