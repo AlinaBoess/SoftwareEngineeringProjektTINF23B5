@@ -57,7 +57,19 @@ Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminf
 ### Datenbank Design
 - Relationale Tabellen für Benutzer, Tische, Reservierungen und Feedback  
 - ACID-konforme Transaktionen und Indexierung zur Optimierung der Performance
-(ER Diagramm!)
+#### ER-Diagramm
+
+Dieses ER-Diagramm zeigt die Entitäten und ihre Beziehungen im System.
+
+![ER-Diagramm Draw.io](https://raw.githubusercontent.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/main/documentation/endPresentation/ER-Diagramm.drawio.png)
+
+#### Datenbankstruktur (aus phpMyAdmin)
+
+Zusätzlich ein generiertes Datenbankschema aus der tatsächlichen Implementierung:
+
+![Datenbankdiagramm](https://raw.githubusercontent.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/main/documentation/endPresentation/DatabaseDiagramm.png)
+
+
 
 ### Testing
 - Unit Tests zur Validierung einzelner Komponenten
