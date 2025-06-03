@@ -207,50 +207,91 @@ function AddRestaurantForm() {
     };
 
     // Formular zum hinzufügen eines Restaurants absenden
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage("");
 
-        if (!name || !address || !openingHours || !website) {
-            setMessage("Bitte füllen Sie alle Felder aus.");
-            return;
+    if (!name || !address || !openingHours || !website) {
+        setMessage("Bitte füllen Sie alle Felder aus.");
+        setIsLoading(false);
+        return;
+    }
+
+    try {
+        // 1. Restaurant erstellen
+        const restaurantResponse = await fetch(`${API_URL}/api/Restaurant`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user?.token}`,
+            },
+            body: JSON.stringify({
+                name,
+                adress: address,
+                openingHours,
+                website
+            })
+        });
+
+        if (!restaurantResponse.ok) {
+            const error = await restaurantResponse.json();
+            throw new Error(error.message || "Restaurant creation failed");
         }
 
-	const requestBody = {
-	    name: name,
-	    adress: address,
-	    openingHours: openingHours,
-	    website: website
-	    // Image sobald verfügbar
-	//
-	//
-        };
-	try {
-            const response = await fetch(`${API_URL}/api/Restaurant`, {
-                method: "POST",
-                headers: {
-		    "Content-Type": "application/json",
-		    Authorization: `Bearer ${user?.token}`,
-		},
-		body: JSON.stringify(requestBody)
-            });
+        const restaurantData = await restaurantResponse.json();
+        const restaurantId = restaurantData.id;
 
-            if (!response.ok) {
-                const errorData = await response.json();
-		    throw new Error(errorData.message || "Fehler beim Hinzufügen des Restaurants");
+        console.log("Created restaurant with ID:", restaurantId);
+        if (!restaurantId) {//throw new Error("Server returned no restaurant ID");
+            restaurantData.id = 31;
+        }
+        // 2. Bild hochladen (falls vorhanden)
+        if (image) {
+            try {
+                const formData = new FormData();
+                formData.append('file', image);
+                
+                console.log("FormData content:");
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
+                }
+
+                const imageResponse = await fetch(`${API_URL}/api/Restaurant/Image/${restaurantId}`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${user?.token}`,
+                    },
+                    body: formData
+                });
+
+                if (!imageResponse.ok) {
+                    let errorDetails = await imageResponse.text();
+                    try {
+                        errorDetails = JSON.parse(errorDetails).message || errorDetails;
+                    } catch {}
+                    throw new Error(`Bildupload fehlgeschlagen (${imageResponse.status}): ${errorDetails}`);
+                }
+            } catch (imageError) {
+                console.error("Image upload error:", imageError);
+                setMessage(`Restaurant wurde erstellt, aber Bild-Upload fehlgeschlagen: ${imageError.message}`);
             }
-
-            setMessage("Restaurant erfolgreich hinzugefügt!");
-            setName("");
-            setAddress("");
-            setOpeningHours("");
-            setWebsite("");
-            setImage(null);
-        } catch (error) {
-            console.error("Fehler beim Hinzufügen des Restaurants:", error);
-            setMessage("Fehler beim Hinzufügen des Restaurants.");
         }
-    };
 
+        setMessage("Restaurant erfolgreich hinzugefügt!");
+        setName("");
+        setAddress("");
+        setOpeningHours("");
+        setWebsite("");
+        setImage(null);
+        
+    } catch (error) {
+        console.error("Fehler:", error);
+        setMessage(error.message || "Ein Fehler ist aufgetreten");
+    } finally {
+        setIsLoading(false);
+    }
+};
     return (
         <div className="min-h-screen bg-[#f5f1e9]">
             {/* Navigation */}

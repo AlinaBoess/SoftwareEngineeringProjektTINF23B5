@@ -34,17 +34,8 @@ function MainComponent() {
     const [reservedTables, setReservedTables] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
 
-    //const [name, setName] = useState('');
-    //const [email, setEmail] = useState('');
-    //const [phone, setPhone] = useState('');
-
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
-
-
-    // ────────────────────────────────────────────────────────────
-    // Effects
-    // ────────────────────────────────────────────────────────────
 
     // Authentifizierungslogik
     useEffect(() => {
@@ -103,11 +94,51 @@ function MainComponent() {
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
+                // Fetch restaurant data
                 const response = await fetch(`${API_URL}/api/Restaurant`);
                 if (!response.ok) throw new Error("Fehler beim Laden der Restaurants");
                 const data = await response.json();
-                setRestaurants(data);
-                console.log(data);
+
+                // Fetch images and feedback for each restaurant
+                const restaurantsWithDetails = await Promise.all(
+                    data.map(async (restaurant) => {
+                        try {
+                            // Fetch image
+                            const imageResponse = await fetch(
+                                `${API_URL}/api/Restaurant/Image/${restaurant.restaurantId}`
+                            );
+
+                            // Fetch feedback
+                            const feedbackResponse = await fetch(
+                                `${API_URL}/api/Feedback/${restaurant.restaurantId}`
+                            );
+                            const feedbackData = feedbackResponse.ok
+                                ? await feedbackResponse.json()
+                                : [];
+                            const averageRating = feedbackData.length
+                                ? (
+                                    feedbackData.reduce((sum, feedback) => sum + feedback.rating, 0) /
+                                    feedbackData.length
+                                ).toFixed(1)
+                                : "Keine Bewertungen";
+
+                            if (imageResponse.ok) {
+                                const imageBlob = await imageResponse.blob();
+                                return {
+                                    ...restaurant,
+                                    imageUrl: URL.createObjectURL(imageBlob),
+                                    averageRating,
+                                };
+                            }
+                            return { ...restaurant, averageRating }; // Rückgabe ohne Bild bei Fehler
+                        } catch (error) {
+                            console.error(`Fehler bei Details für Restaurant ${restaurant.restaurantId}:`, error);
+                            return restaurant; // Rückgabe ohne Bild und Bewertung bei Fehler
+                        }
+                    })
+                );
+
+                setRestaurants(restaurantsWithDetails);
             } catch (error) {
                 console.error("Fehler beim Laden der Restaurants:", error);
                 alert("Die Restaurants konnten nicht geladen werden.");
@@ -116,6 +147,16 @@ function MainComponent() {
 
         fetchRestaurants();
     }, []);
+    useEffect(() => {
+        return () => {
+            // Clean up object URLs to prevent memory leaks
+            restaurants.forEach(restaurant => {
+                if (restaurant.imageUrl) {
+                    URL.revokeObjectURL(restaurant.imageUrl);
+                }
+            });
+        };
+    }, [restaurants]);
 
     // Ruft schon besetzte Tische ab
     useEffect(() => {
@@ -210,104 +251,7 @@ function MainComponent() {
             setIsLoading(false);
         }
     };
-    //const restaurants = [
-    //    {
-    //        id: 1,
-    //        name: "Café Gemütlich",
-    //        cuisine: "Café & Konditorei",
-    //        rating: 4.5,
-    //        reviews: 128,
-    //        image: "/images/r-it.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: false },
-    //            { id: 2, seats: 2, isBooked: true },
-    //            { id: 3, seats: 4, isBooked: false },
-    //            { id: 4, seats: 4, isBooked: false },
-    //            { id: 5, seats: 6, isBooked: true },
-    //            { id: 6, seats: 8, isBooked: false },
-    //        ],
-    //    },
-    //    {
-    //        id: 2,
-    //        name: "La Cucina",
-    //        cuisine: "Italienisch",
-    //        rating: 4.7,
-    //        reviews: 256,
-    //        image: "/images/r-cui.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: false },
-    //            { id: 2, seats: 2, isBooked: false },
-    //            { id: 3, seats: 4, isBooked: true },
-    //            { id: 4, seats: 4, isBooked: false },
-    //            { id: 5, seats: 6, isBooked: false },
-    //            { id: 6, seats: 8, isBooked: true },
-    //        ],
-    //    },
-    //    {
-    //        id: 3,
-    //        name: "Sushi Master",
-    //        cuisine: "Japanisch",
-    //        rating: 4.6,
-    //        reviews: 189,
-    //        image: "/images/r-sushi2.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: true },
-    //            { id: 2, seats: 2, isBooked: false },
-    //            { id: 3, seats: 4, isBooked: false },
-    //            { id: 4, seats: 4, isBooked: true },
-    //            { id: 5, seats: 6, isBooked: false },
-    //            { id: 6, seats: 8, isBooked: false },
-    //        ],
-    //    },
-    //    {
-    //        id: 4,
-    //        name: "Damaskino",
-    //        cuisine: "Syrian",
-    //        rating: 4.9,
-    //        reviews: 367,
-    //        image: "/images/syr2.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: false },
-    //            { id: 2, seats: 2, isBooked: true },
-    //            { id: 3, seats: 4, isBooked: false },
-    //            { id: 4, seats: 4, isBooked: false },
-    //            { id: 5, seats: 6, isBooked: true },
-    //            { id: 6, seats: 8, isBooked: false },
-    //        ],
-    //    },
-    //    {
-    //        id: 5,
-    //        name: "Taj Mahal",
-    //        cuisine: "Indisch",
-    //        rating: 4.8,
-    //        reviews: 234,
-    //        image: "/images/r-taj.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: true },
-    //            { id: 2, seats: 2, isBooked: false },
-    //            { id: 3, seats: 4, isBooked: false },
-    //            { id: 4, seats: 4, isBooked: true },
-    //            { id: 5, seats: 6, isBooked: false },
-    //            { id: 6, seats: 8, isBooked: true },
-    //        ],
-    //    },
-    //    {
-    //        id: 6,
-    //        name: "Zum Goldenen Hirsch",
-    //        cuisine: "Deutsch",
-    //        rating: 4.3,
-    //        reviews: 145,
-    //        image: "/images/r-hirsch.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: false },
-    //            { id: 2, seats: 2, isBooked: true },
-    //            { id: 3, seats: 4, isBooked: false },
-    //            { id: 4, seats: 4, isBooked: true },
-    //            { id: 5, seats: 6, isBooked: false },
-    //            { id: 6, seats: 8, isBooked: false },
-    //        ],
-    //    },
-    //];
+
 
 
     // Restaurant Auswahl
@@ -480,21 +424,30 @@ function MainComponent() {
                             key={restaurant.restaurantId}
                             className="bg-white rounded-lg shadow-lg overflow-hidden"
                         >
-                            <img
-                                src={restaurant.image}
-                                alt={restaurant.name}
-                                className="w-full h-48 object-cover"
-                            />
+                            {restaurant.imageUrl && (
+                                <img
+                                    src={restaurant.imageUrl}
+                                    alt={restaurant.name}
+                                    className="w-full h-48 object-cover"
+                                />)}
                             <div className="p-6">
                                 <h3 className="text-xl font-playfair text-[#2c1810] mb-2">
                                     {restaurant.name}
                                 </h3>
                                 <p className="text-[#5c3d2e] mb-4">{restaurant.address}</p>
                                 <p className="text-[#5c3d2e] mb-4">{restaurant.openingHours}</p>
-                                <div className="flex items-center mb-4">
-                                    <i className="fas fa-star text-yellow-400 mr-1"></i>
-                                    <span>
-                                        {restaurant.rating} ({restaurant.reviews} Bewertungen)
+                                <div className="flex items-center">
+                                    {[...Array(5)].map((_, index) => (
+                                        <div
+                                            key={index}
+                                            className={`w-6 h-6 ${index < Math.round(restaurant.averageRating) ? "bg-yellow-400" : "bg-gray-300"}`}
+                                            style={{
+                                                clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+                                            }}
+                                        ></div>
+                                    ))}
+                                    <span className="ml-2 text-[#5c3d2e]">
+                                        {restaurant.averageRating} ({restaurant.reviews || 0})
                                     </span>
                                 </div>
                                 <button
@@ -582,10 +535,10 @@ function MainComponent() {
                                                     disabled={!selectedDate || !startTime || !endTime || isReserved} // Deaktivieren, wenn reserviert
                                                     onClick={() => handleTableSelect(table.tableId)}
                                                     className={`p-4 border rounded ${selectedTable === table.tableId
-                                                            ? "bg-[#2c1810] text-white" // Hervorhebung für den ausgewählten Tisch
-                                                            : isReserved
-                                                                ? "bg-gray-200 cursor-not-allowed" // Deaktivierter Zustand für reservierte Tische
-                                                                : "hover:bg-[#f5f1e9]" // Standard-Hover-Effekt
+                                                        ? "bg-[#2c1810] text-white" // Hervorhebung für den ausgewählten Tisch
+                                                        : isReserved
+                                                            ? "bg-gray-200 cursor-not-allowed" // Deaktivierter Zustand für reservierte Tische
+                                                            : "hover:bg-[#f5f1e9]" // Standard-Hover-Effekt
                                                         }`}
                                                 >
                                                     <div className="text-center">
