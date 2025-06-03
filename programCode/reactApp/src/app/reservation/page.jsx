@@ -34,17 +34,8 @@ function MainComponent() {
     const [reservedTables, setReservedTables] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
 
-    //const [name, setName] = useState('');
-    //const [email, setEmail] = useState('');
-    //const [phone, setPhone] = useState('');
-
     const router = useRouter();
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7038";
-
-
-    // ────────────────────────────────────────────────────────────
-    // Effects
-    // ────────────────────────────────────────────────────────────
 
     // Authentifizierungslogik
     useEffect(() => {
@@ -101,21 +92,55 @@ function MainComponent() {
 
     // Ruft Restaurants ab 
     useEffect(() => {
-        const fetchRestaurants = async () => {
-            try {
-                const response = await fetch(`${API_URL}/api/Restaurant`);
-                if (!response.ok) throw new Error("Fehler beim Laden der Restaurants");
-                const data = await response.json();
-                setRestaurants(data);
-                console.log(data);
-            } catch (error) {
-                console.error("Fehler beim Laden der Restaurants:", error);
-                alert("Die Restaurants konnten nicht geladen werden.");
-            }
-        };
+    const fetchRestaurants = async () => {
+        try {
+            // Fetch restaurant data
+            const response = await fetch(`${API_URL}/api/Restaurant`);
+            if (!response.ok) throw new Error("Fehler beim Laden der Restaurants");
+            const data = await response.json();
+            
+            // Fetch images for each restaurant
+            const restaurantsWithImages = await Promise.all(
+                data.map(async (restaurant) => {
+                    try {
+                        const imageResponse = await fetch(
+                            `${API_URL}/api/Restaurant/Image/${restaurant.restaurantId}`
+                        );
+                        
+                        if (imageResponse.ok) {
+                            const imageBlob = await imageResponse.blob();
+                            return {
+                                ...restaurant,
+                                imageUrl: URL.createObjectURL(imageBlob)
+                            };
+                        }
+                        return restaurant; // Return restaurant without image if fetch fails
+                    } catch (error) {
+                        console.error(`Error fetching image for restaurant ${restaurant.restaurantId}:`, error);
+                        return restaurant; // Return restaurant without image if error occurs
+                    }
+                })
+            );
+            
+            setRestaurants(restaurantsWithImages);
+        } catch (error) {
+            console.error("Fehler beim Laden der Restaurants:", error);
+            alert("Die Restaurants konnten nicht geladen werden.");
+        }
+    };
 
-        fetchRestaurants();
-    }, []);
+    fetchRestaurants();
+}, []);
+useEffect(() => {
+    return () => {
+        // Clean up object URLs to prevent memory leaks
+        restaurants.forEach(restaurant => {
+            if (restaurant.imageUrl) {
+                URL.revokeObjectURL(restaurant.imageUrl);
+            }
+        });
+    };
+}, [restaurants]);
 
     // Ruft schon besetzte Tische ab
     useEffect(() => {
@@ -210,104 +235,7 @@ function MainComponent() {
             setIsLoading(false);
         }
     };
-    //const restaurants = [
-    //    {
-    //        id: 1,
-    //        name: "Café Gemütlich",
-    //        cuisine: "Café & Konditorei",
-    //        rating: 4.5,
-    //        reviews: 128,
-    //        image: "/images/r-it.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: false },
-    //            { id: 2, seats: 2, isBooked: true },
-    //            { id: 3, seats: 4, isBooked: false },
-    //            { id: 4, seats: 4, isBooked: false },
-    //            { id: 5, seats: 6, isBooked: true },
-    //            { id: 6, seats: 8, isBooked: false },
-    //        ],
-    //    },
-    //    {
-    //        id: 2,
-    //        name: "La Cucina",
-    //        cuisine: "Italienisch",
-    //        rating: 4.7,
-    //        reviews: 256,
-    //        image: "/images/r-cui.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: false },
-    //            { id: 2, seats: 2, isBooked: false },
-    //            { id: 3, seats: 4, isBooked: true },
-    //            { id: 4, seats: 4, isBooked: false },
-    //            { id: 5, seats: 6, isBooked: false },
-    //            { id: 6, seats: 8, isBooked: true },
-    //        ],
-    //    },
-    //    {
-    //        id: 3,
-    //        name: "Sushi Master",
-    //        cuisine: "Japanisch",
-    //        rating: 4.6,
-    //        reviews: 189,
-    //        image: "/images/r-sushi2.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: true },
-    //            { id: 2, seats: 2, isBooked: false },
-    //            { id: 3, seats: 4, isBooked: false },
-    //            { id: 4, seats: 4, isBooked: true },
-    //            { id: 5, seats: 6, isBooked: false },
-    //            { id: 6, seats: 8, isBooked: false },
-    //        ],
-    //    },
-    //    {
-    //        id: 4,
-    //        name: "Damaskino",
-    //        cuisine: "Syrian",
-    //        rating: 4.9,
-    //        reviews: 367,
-    //        image: "/images/syr2.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: false },
-    //            { id: 2, seats: 2, isBooked: true },
-    //            { id: 3, seats: 4, isBooked: false },
-    //            { id: 4, seats: 4, isBooked: false },
-    //            { id: 5, seats: 6, isBooked: true },
-    //            { id: 6, seats: 8, isBooked: false },
-    //        ],
-    //    },
-    //    {
-    //        id: 5,
-    //        name: "Taj Mahal",
-    //        cuisine: "Indisch",
-    //        rating: 4.8,
-    //        reviews: 234,
-    //        image: "/images/r-taj.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: true },
-    //            { id: 2, seats: 2, isBooked: false },
-    //            { id: 3, seats: 4, isBooked: false },
-    //            { id: 4, seats: 4, isBooked: true },
-    //            { id: 5, seats: 6, isBooked: false },
-    //            { id: 6, seats: 8, isBooked: true },
-    //        ],
-    //    },
-    //    {
-    //        id: 6,
-    //        name: "Zum Goldenen Hirsch",
-    //        cuisine: "Deutsch",
-    //        rating: 4.3,
-    //        reviews: 145,
-    //        image: "/images/r-hirsch.jpg",
-    //        tables: [
-    //            { id: 1, seats: 2, isBooked: false },
-    //            { id: 2, seats: 2, isBooked: true },
-    //            { id: 3, seats: 4, isBooked: false },
-    //            { id: 4, seats: 4, isBooked: true },
-    //            { id: 5, seats: 6, isBooked: false },
-    //            { id: 6, seats: 8, isBooked: false },
-    //        ],
-    //    },
-    //];
+    
 
 
     // Restaurant Auswahl
@@ -477,14 +405,15 @@ function MainComponent() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {restaurants.map((restaurant) => (
                         <div
-                            key={restaurant.restaurantId}
-                            className="bg-white rounded-lg shadow-lg overflow-hidden"
-                        >
-                            <img
-                                src={restaurant.image}
-                                alt={restaurant.name}
-                                className="w-full h-48 object-cover"
-                            />
+            key={restaurant.restaurantId}
+            className="bg-white rounded-lg shadow-lg overflow-hidden"
+        >
+            {restaurant.imageUrl && (
+                <img
+                    src={restaurant.imageUrl}
+                    alt={restaurant.name}
+                    className="w-full h-48 object-cover"
+                /> )}
                             <div className="p-6">
                                 <h3 className="text-xl font-playfair text-[#2c1810] mb-2">
                                     {restaurant.name}
