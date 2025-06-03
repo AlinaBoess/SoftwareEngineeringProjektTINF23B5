@@ -46,7 +46,8 @@ Ein webbasiertes System zur digitalen Tischreservierung mit Benutzer- und Adminf
 ### Software Tools / Plattform / Technik / Libraries
 - Frontend: React.js, CSS  
 - Backend: C# mit ASP.NET Core Web API  
-- Datenbank: MariaDB  
+- Datenbank: MariaDB
+- Datenbank-Backend Kommunikation: EF Core 
 - API-Dokumentation: Swagger  
 - Versionskontrolle: Git + GitHub  
 - Projektmanagement: Jira  
@@ -116,7 +117,6 @@ Erfasste Metriken sind unter anderem:
 - Effektives Projektmanagement mit Jira und Scrum-Methodik  
 - Saubere, gut dokumentierte Codebasis  
 - Flexible und erweiterbare Systemarchitektur für zukünftige Features  
-- Umsetzung strenger Datenschutz- und Sicherheitsanforderungen (DSGVO-konform)  
-
+- Saubere Datenstruktur
 ---
 
