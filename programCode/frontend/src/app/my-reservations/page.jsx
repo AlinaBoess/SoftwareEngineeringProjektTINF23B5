@@ -1,6 +1,7 @@
 ﻿"use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import "../globals.css";
 
 function MyReservations() {
     const [reservations, setReservations] = useState([]);
@@ -96,39 +97,61 @@ function MyReservations() {
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
     return (
-        <div className="container mx-auto py-16 px-4">
-            <h2 className="text-3xl font-playfair text-center text-[#2c1810] mb-8">
-                Meine Reservierungen
-            </h2>
-            {reservations.length === 0 ? (
-                <p className="text-center text-[#5c3d2e]">Keine Reservierungen gefunden.</p>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {reservations.map((reservation) => (
-                        <div
-                            key={reservation.id}
-                            className="bg-white rounded-lg shadow-lg p-6"
-                        >
-                            <h3 className="text-xl font-playfair text-[#2c1810] mb-2">
-                                {reservation.restaurantName}
-                            </h3>
-                            <p className="text-[#5c3d2e] mb-2">
-                                Datum: {new Date(reservation.startTime).toLocaleDateString()}
-                            </p>
-                            <p className="text-[#5c3d2e] mb-2">
-                                Zeit: {new Date(reservation.startTime).toLocaleTimeString()} -{" "}
-                                {new Date(reservation.endTime).toLocaleTimeString()}
-                            </p>
-                            <button
-                                onClick={() => handleDelete(reservation.id)}
-                                className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600"
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div className="bg-white p-8 rounded-lg max-w-4xl w-full">
+                <h2 className="text-3xl font-playfair text-center text-[#2c1810] mb-8">
+                    Meine Reservierungen
+                </h2>
+                {reservations.length === 0 ? (
+                    <p className="text-center text-[#5c3d2e]">Keine Reservierungen gefunden.</p>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {reservations.map((reservation) => (
+                            <div
+                                key={reservation.reservationId}
+                                className="border rounded-lg p-6 hover:bg-[#f5f1e9]"
                             >
-                                Löschen
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            )}
+                                <h3 className="text-xl font-playfair text-[#2c1810] mb-2">
+                                    Restaurant: {reservation.restaurant.name}
+                                </h3>
+                                <p className="text-[#5c3d2e] mb-2">
+                                    Adresse: {reservation.restaurant.address}
+                                </p>
+                                <p className="text-[#5c3d2e] mb-2">
+                                    Webseite:{" "}
+                                    <a
+                                        href={reservation.restaurant.website}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-500 underline"
+                                    >
+                                        {reservation.restaurant.website}
+                                    </a>
+                                </p>
+                                <p className="text-[#5c3d2e] mb-2">
+                                    Tischnummer: {reservation.table.tableNr}
+                                </p>
+                                <p className="text-[#5c3d2e] mb-2">
+                                    Kapazität: {reservation.table.capacity} Personen
+                                </p>
+                                <p className="text-[#5c3d2e] mb-2">
+                                    Datum: {new Date(reservation.startTime).toLocaleDateString()}
+                                </p>
+                                <p className="text-[#5c3d2e] mb-2">
+                                    Zeit: {new Date(reservation.startTime).toLocaleTimeString()} -{" "}
+                                    {new Date(reservation.endTime).toLocaleTimeString()}
+                                </p>
+                                <button
+                                    onClick={() => handleDelete(reservation.reservationId)}
+                                    className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600"
+                                >
+                                    Löschen
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
