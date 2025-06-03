@@ -17,8 +17,6 @@ public partial class AppDbContext : DbContext
     {
     }
 
-    public virtual DbSet<AdminAction> AdminActions { get; set; }
-
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
     public virtual DbSet<Image> Images { get; set; }
@@ -36,42 +34,14 @@ public partial class AppDbContext : DbContext
         if (optionsBuilder.IsConfigured)
             return;
 
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=185.228.137.229;port=3306;database=RestaurantReservierung;user=RRes;password=DBRRes23B5", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.11.11-mariadb"));
+        optionsBuilder.UseMySql("server=185.228.137.229;port=3306;database=RestaurantReservierung;user=RRes;password=DBRRes23B5", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.11.11-mariadb"));
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
             .UseCollation("utf8mb4_general_ci")
             .HasCharSet("utf8mb4");
-
-        modelBuilder.Entity<AdminAction>(entity =>
-        {
-            entity.HasKey(e => e.EventId).HasName("PRIMARY");
-
-            entity.HasIndex(e => e.AdminId, "adminId");
-
-            entity.Property(e => e.EventId)
-                .HasColumnType("int(11)")
-                .HasColumnName("eventId");
-            entity.Property(e => e.ActionDescription)
-                .HasMaxLength(511)
-                .HasColumnName("actionDescription");
-            entity.Property(e => e.ActionPerformed)
-                .HasDefaultValueSql("current_timestamp()")
-                .HasColumnType("timestamp")
-                .HasColumnName("actionPerformed");
-            entity.Property(e => e.ActionType)
-                .HasColumnType("enum('ADD','MODIFIY','DELETE')")
-                .HasColumnName("actionType");
-            entity.Property(e => e.AdminId)
-                .HasColumnType("int(11)")
-                .HasColumnName("adminId");
-
-            entity.HasOne(d => d.Admin).WithMany(p => p.AdminActions)
-                .HasForeignKey(d => d.AdminId)
-                .HasConstraintName("AdminActions_ibfk_1");
-        });
 
         modelBuilder.Entity<Feedback>(entity =>
         {

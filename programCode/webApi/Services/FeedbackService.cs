@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservierung.Controllers;
 using RestaurantReservierung.Data;
 using RestaurantReservierung.Models;
@@ -15,7 +14,7 @@ namespace RestaurantReservierung.Services
             _context = context;
         }
 
-        public async Task<bool> CreateFeedback(User user, FeedbackFormModel model, Restaurant restaurant, Reservation reservation)
+        public async Task<bool> CreateFeedbackAsync(User user, FeedbackFormModel model, Restaurant restaurant, Reservation reservation)
         {
             var feedback = new Feedback
             {
@@ -36,19 +35,19 @@ namespace RestaurantReservierung.Services
 
         }
 
-        public async Task<bool> DeleteFeedback(Feedback feedback)
+        public async Task<bool> DeleteFeedbackAsync(Feedback feedback)
         {
             _context.Feedbacks.Remove(feedback);
 
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<Feedback> GetFeedbackById(int feedbackId)
+        public async Task<Feedback> GetFeedbackByIdAsync(int feedbackId)
         {
             return await _context.Feedbacks.FirstAsync(f => f.FeedbackId == feedbackId);
         }
         
-        public async Task<double> CalcRestaurantRating(Restaurant restaurant)
+        public async Task<double> CalcRestaurantRatingAsync(Restaurant restaurant)
         {
             var averageRating = await _context.Feedbacks
             .Where(f => f.Restaurant == restaurant)
@@ -57,11 +56,16 @@ namespace RestaurantReservierung.Services
             return averageRating;
         }
 
-        public async Task<List<Feedback>> GetFeedbacksForRestaurant(Restaurant restaurant)
+        public async Task<List<Feedback>> GetFeedbacksForRestaurantAsync(Restaurant restaurant)
         {
             return await _context.Feedbacks
                 .Where(f => f.Restaurant == restaurant)
                 .ToListAsync();
+        }
+
+        public bool OwnsFeedback(User user, Feedback feedback)
+        {
+            return (feedback.User  == user);
         }
     }
 }

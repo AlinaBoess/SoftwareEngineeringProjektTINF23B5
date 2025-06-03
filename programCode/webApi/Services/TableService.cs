@@ -14,7 +14,7 @@ namespace RestaurantReservierung.Services
             _context = context;
         }
 
-        public async Task<bool> AddTable(TableFormModel model, int restaurantId)
+        public async Task<bool> AddTableAsync(TableFormModel model, int restaurantId)
         {
             var table = new Table
             {
@@ -34,7 +34,7 @@ namespace RestaurantReservierung.Services
             return false;
         }
 
-        public async Task<List<Table>> GetAllTables(int restaurantId)
+        public async Task<List<Table>> GetAllTablesAsync(int restaurantId)
         {
             return await _context.Tables
                 .Where(t => t.RestaurantId == restaurantId)
@@ -42,19 +42,19 @@ namespace RestaurantReservierung.Services
 
         }
 
-        public async Task<Table> GetTableById(int tableId)
+        public async Task<Table> GetTableByIdAsync(int tableId)
         {
             return await _context.Tables.FirstOrDefaultAsync(t => t.TableId == tableId);
         }
 
-        public async Task<bool> RemoveTable(Table table)
+        public async Task<bool> RemoveTableAsync(Table table)
         {
             _context.Tables.Remove(table);
 
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> UpdateTable(Table table, TableFormModel model)
+        public async Task<bool> UpdateTableAsync(Table table, TableFormModel model)
         {
             table.TableNr = model.TableNr;
             table.Area = model.Area;

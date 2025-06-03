@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservierung.Data;
 using RestaurantReservierung.Models;
-using System.Collections.Concurrent;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
@@ -22,25 +20,21 @@ namespace RestaurantReservierung.Services
             _authService = authService;
         }
 
-        // Alle Benutzer abrufen
         public async Task<List<User>> GetAllUsersAsync()
         {
             return await _context.Users.ToListAsync();
         }
 
-        // Benutzer nach E-Mail suchen
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        // Benutzer nach E-Mail suchen
         public async Task<User> GetUserByIdAsync(int id)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
         }
 
-        // Benutzer registrieren
         public async Task<bool> RegisterAsync(User user)
         {
             string emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
@@ -48,16 +42,19 @@ namespace RestaurantReservierung.Services
 
             // Prüfen, ob ein Benutzer mit dieser E-Mail bereits existiert
             if (await _context.Users.AnyAsync(u => u.Email == user.Email))
-                return false;
+                throw new BadHttpRequestException("There already exists an user with the given email");
 
             if (!Regex.IsMatch(user.Email, emailRegex))
-                return false;
+                throw new BadHttpRequestException("The given email is not in a valid format");
 
-            if(!Regex.IsMatch(user.Password, passwordRegex))
-                return false;
+            if (!Regex.IsMatch(user.Password, passwordRegex))
+                throw new BadHttpRequestException("The email or the password is not correct");
 
             if (user.Email.Length > 255)
-                return false;
+                throw new BadHttpRequestException("The given email is to long");
+
+            if (user.Password.Length > 255)
+                throw new BadHttpRequestException("The password is to long");
 
             user.Email = user.Email.ToLower();
 
@@ -106,9 +103,8 @@ namespace RestaurantReservierung.Services
             }
         }
 
-        public async Task<User> GetLoggedInUser()
+        public async Task<User> GetLoggedInUserAsync()
         {
-            // Hier Problem
             var email = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
             Console.WriteLine(email);
             if (email != null)

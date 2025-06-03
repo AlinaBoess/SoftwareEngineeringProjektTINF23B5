@@ -1,15 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using RestaurantReservierung.Dtos;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace RestaurantReservierung.Controllers
 {
@@ -30,7 +23,7 @@ namespace RestaurantReservierung.Controllers
         /// <returns>All Users</returns>
         [Authorize(Roles = "ADMIN")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetAllUsersAsync()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
             var users = await _userService.GetAllUsersAsync();
 
@@ -58,7 +51,7 @@ namespace RestaurantReservierung.Controllers
         /// <returns>Deletion Status</returns>
         [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUserByIdAsync(int id) {
+        public async Task<ActionResult> DeleteUserById(int id) {
             if (await _userService.DeleteUserAsync(await _userService.getUserByIdAsync(id)))
             {
                 return Ok(new {Message = "User deleted successfully"});
@@ -76,25 +69,10 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteCurrentUser()
         {
-            var user = await _userService.GetLoggedInUser();
+            var user = await _userService.GetLoggedInUserAsync();
 
             return Ok(await _userService.DeleteUserAsync(user));
         }
-
-        /*
-        /// <summary>
-        /// Allows Admins to create new Users without the Authentication Process.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns>Deletion Status</returns>
-        [Authorize(Roles = "ADMIN")]
-        [HttpPost]
-        public ActionResult CreateUser([FromBody] User model)
-        {
-            // TODO
-            return Ok();
-        }
-        */
 
 
         /// <summary>
@@ -128,7 +106,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("Me")]
         public async Task<IActionResult> GetLoggedInUser()
         {
-            var user = await _userService.GetLoggedInUser();
+            var user = await _userService.GetLoggedInUserAsync();
 
             return Ok(new { user = UserDto.MapToDto(user) });
         }

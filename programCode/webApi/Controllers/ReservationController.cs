@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RestaurantReservierung.Dtos;
-using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
-using System.Collections.Immutable;
 
 namespace RestaurantReservierung.Controllers
 {
@@ -13,18 +9,18 @@ namespace RestaurantReservierung.Controllers
     [ApiController]
     public class ReservationController : ControllerBase
     {
-        private readonly ReservationSystem _reservationSystem;
+        private readonly ReservationService _reservationService;
         private readonly UserService _userService;
         private readonly TableService _tableService;
-        private readonly RestaurantOwnerService _restaurantOwnerService;
+        private readonly RestaurantService _restaurantService;
 
-        public ReservationController(ReservationSystem reservationSystem, UserService userService, TableService tableService, RestaurantOwnerService restaurantOwnerService)
+        public ReservationController(ReservationService reservationSystem, UserService userService, TableService tableService, RestaurantService restaurantOwnerService)
         {
             // Initialisiere das ReservationSystem im Konstruktor
-            _reservationSystem = reservationSystem;
+            _reservationService = reservationSystem;
             _userService = userService;
             _tableService = tableService;
-            _restaurantOwnerService = restaurantOwnerService;
+            _restaurantService = restaurantOwnerService;
         }
 
         /// <summary>
@@ -37,9 +33,9 @@ namespace RestaurantReservierung.Controllers
         [HttpPost("{tableId}")]
         public async Task<IActionResult> makeReservation([FromBody] ReservationFormModel model, int tableId)
         {
-            var user = await _userService.GetLoggedInUser();
+            var user = await _userService.GetLoggedInUserAsync();
 
-            var table = await _tableService.GetTableById(tableId);
+            var table = await _tableService.GetTableByIdAsync(tableId);
             if (table == null)
                 return NotFound(new { Message = "The table does not exist." });
 
@@ -47,17 +43,17 @@ namespace RestaurantReservierung.Controllers
             if (model.EndTime <= model.StartTime)
                 return BadRequest(new { Message = "Illegal time interval!" });
 
-            if (!_reservationSystem.IsGreaterThenMinTimeInterval(model))
-                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationSystem.MinReservationTime.ToString() + "." });
+            if (!_reservationService.IsGreaterThenMinTimeInterval(model))
+                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationService.MinReservationTime.ToString() + "." });
 
-            if (_reservationSystem.IsInPast(model))
+            if (_reservationService.IsInPast(model))
                 return BadRequest(new { Message = "The given Time interval is in the past!" });
 
-            if ((await _reservationSystem.GetReservationsForTimeInterval(model, table)).Count > 0)
+            if ((await _reservationService.GetReservationsForTimeIntervalAsync(model, table)).Count > 0)
                 return BadRequest(new { Message = "There already exists a reservation in the given time interval!" });
 
 
-            if (await _reservationSystem.Reserve(model, table, user))
+            if (await _reservationService.ReserveAsync(model, table, user))
                 return Ok(new { Message = "The reservation was successfull!" });
 
             return BadRequest(new { Message = "Reservation was not successfull!" });
@@ -77,7 +73,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("Admin")] 
         public async Task<ActionResult> GetAllReservations([FromQuery] ReservationFilterModel model)
         {         
-            return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+            return Ok(ReservationDto.MapToDtos(await _reservationService.GetReservationsAsync(model)));
         }
 
         /// <summary>
@@ -96,13 +92,13 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("Owner")] 
         public async Task<ActionResult> GetAllReservationsForOwner([FromQuery] ReservationFilterModel model)
         {
-            var user = await _userService.GetLoggedInUser();
+            var user = await _userService.GetLoggedInUserAsync();
 
             if (model.RestaurantId.HasValue)
             {
-                if (await _restaurantOwnerService.OwnsRestaurant(user, (int)model.RestaurantId))
+                if (await _restaurantService.OwnsRestaurantAsync(user, (int)model.RestaurantId))
                 {
-                    return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+                    return Ok(ReservationDto.MapToDtos(await _reservationService.GetReservationsAsync(model)));
                 }
                 else
                 {
@@ -111,9 +107,9 @@ namespace RestaurantReservierung.Controllers
             }
             else
             {           
-                var restaurants = await _restaurantOwnerService.GetUserRestaurants(user);
+                var restaurants = await _restaurantService.GetUserRestaurantsAsync(user);
 
-                return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservationsForRestaurants(restaurants, model)));
+                return Ok(ReservationDto.MapToDtos(await _reservationService.GetReservationsForRestaurantsAsync(restaurants, model)));
 
             }
         }
@@ -134,9 +130,9 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("User")]
         public async Task<IActionResult> GetReservationsForUser([FromQuery] ReservationFilterModel model)
         {
-            model.UserId = (await _userService.GetLoggedInUser()).UserId;
+            model.UserId = (await _userService.GetLoggedInUserAsync()).UserId;
 
-            return Ok(ReservationDto.MapToDtos(await _reservationSystem.GetReservations(model)));
+            return Ok(ReservationDto.MapToDtos(await _reservationService.GetReservationsAsync(model)));
         }
 
         /// <summary>
@@ -154,7 +150,7 @@ namespace RestaurantReservierung.Controllers
         [HttpGet("Public")]
         public async Task<IActionResult> GetAnonymousReservations([FromQuery] ReservationFilterModel model)
         {
-            return Ok(ReservationDto.MapToPublicDtos(await _reservationSystem.GetReservations(model)));
+            return Ok(ReservationDto.MapToPublicDtos(await _reservationService.GetReservationsAsync(model)));
         }
 
         /// <summary>
@@ -167,8 +163,8 @@ namespace RestaurantReservierung.Controllers
         [HttpPut("{reservationId}")]
         public async Task<IActionResult> UpdateReservation(int reservationId, ReservationFormModel model)
         {
-            var user = await _userService.GetLoggedInUser();
-            var reservation = await _reservationSystem.GetReservationById(reservationId);
+            var user = await _userService.GetLoggedInUserAsync();
+            var reservation = await _reservationService.GetReservationByIdAsync(reservationId);
 
 
             if(user.UserId != reservation.UserId && user.Role != "ADMIN")
@@ -177,17 +173,17 @@ namespace RestaurantReservierung.Controllers
             if (model.EndTime <= model.StartTime)
                 return BadRequest(new { Message = "Illegal time interval!" });
 
-            if (!_reservationSystem.IsGreaterThenMinTimeInterval(model))
-                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationSystem.MinReservationTime.ToString() + "." });
+            if (!_reservationService.IsGreaterThenMinTimeInterval(model))
+                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationService.MinReservationTime.ToString() + "." });
 
-            if (_reservationSystem.IsInPast(model))
+            if (_reservationService.IsInPast(model))
                 return BadRequest(new { Message = "The given Time interval is in the past!" });
 
-            if (! await _reservationSystem.CanUpdateReservation(reservation, model))
+            if (! await _reservationService.CanUpdateReservationAsync(reservation, model))
                 return BadRequest(new { Message = "There already exists a reservation in the given time interval!" });
 
 
-            if (await _reservationSystem.UpdateReservation(model, reservation))
+            if (await _reservationService.UpdateReservationAsync(model, reservation))
                 return Ok(new { Message = "The reservation was successfull!" });
 
             return BadRequest(new { Message = "Reservation was not successfull!" });
@@ -203,14 +199,14 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete("{reservationId}")]
         public async Task<IActionResult> DeleteReservation(int reservationId)
         {
-            var user = await _userService.GetLoggedInUser();
+            var user = await _userService.GetLoggedInUserAsync();
 
-            var reservation = await _reservationSystem.GetReservationById(reservationId);
+            var reservation = await _reservationService.GetReservationByIdAsync(reservationId);
 
             if (user != reservation.User && user.Role != "ADMIN" && user != reservation.Table.Restaurant.User)
                 return Unauthorized(new { Message = "Your dont have permissions to perform this action!" });
 
-            if (await _reservationSystem.DeleteReservation(reservation))
+            if (await _reservationService.DeleteReservationAsync(reservation))
                 return Ok(new { Message = "The Reservation has been canceled successfully!" });
 
             return BadRequest( new { Message = "The Reservation could not be canceled"});
