@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using RestaurantReservierung.Controllers;
 using RestaurantReservierung.Data;
 using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
@@ -7,9 +8,9 @@ using RestaurantReservierung.Services;
 namespace RestaurantReservierung.Tests.Unit;
 
 [TestFixture]
-public class ReservationSystemTests
+public class ReservationServiceTests
 {
-    private ReservationService _system;
+    private ReservationService _service;
     private AppDbContext inMemoryDBContext;
 
     private Restaurant _restaurant;
@@ -23,13 +24,13 @@ public class ReservationSystemTests
     {
         //get in-memory DB context
         var options = new DbContextOptionsBuilder<AppDbContext>()
-           .UseInMemoryDatabase(databaseName: "TestDB_" + Guid.NewGuid())
+           .UseInMemoryDatabase(databaseName: "TestDB2_" + Guid.NewGuid())
            .Options;
 
         inMemoryDBContext = new AppDbContext(options);
 
         // fresh instances before each test
-        _system = new ReservationService(inMemoryDBContext);
+        _service = new ReservationService(inMemoryDBContext);
 
 
         _user = new User() {  Email = "a@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 0 };
@@ -104,7 +105,7 @@ public class ReservationSystemTests
     [TearDown]
     public void TearDown()
     {
-
+        inMemoryDBContext.Dispose();
     }
 
     [Test]
@@ -153,7 +154,7 @@ public class ReservationSystemTests
     [Test]
     public void GetReservationById_ShouldReturnExisting()
     {
-        var reservation = _system.GetReservationByIdAsync(1);
+        var reservation = _service.GetReservationByIdAsync(1);
 
         Assert.That(reservation, Is.Not.Null, "Returned restaurant should not be null");
         Assert.That(reservation.Result, Is.Not.Null);
@@ -164,7 +165,7 @@ public class ReservationSystemTests
     [Test]
     public void GetReservationForRestaurants_ShouldReturnExisting()
     {
-        var reservation = _system.GetReservationsForRestaurantsAsync(new List<Restaurant>() { _restaurant }, new Controllers.ReservationFilterModel() { RestaurantId = _restaurant.RestaurantId });
+        var reservation = _service.GetReservationsForRestaurantsAsync(new List<Restaurant>() { _restaurant }, new Controllers.ReservationFilterModel() { RestaurantId = _restaurant.RestaurantId });
 
         Assert.That(reservation, Is.Not.Null, "Returned restaurant should not be null");
         Assert.That(reservation.Result, Is.Not.Null);
@@ -174,7 +175,7 @@ public class ReservationSystemTests
     [Test]
     public void GetReservationsForTimeInterval_ShouldReturnExisting()
     {
-        var reservation = _system.GetReservationsForTimeIntervalAsync(new Controllers.ReservationFormModel() { StartTime = DateTime.Now.Subtract(TimeSpan.FromMinutes(5)), EndTime = DateTime.Now.Add(TimeSpan.FromMinutes(5)) }, _table);
+        var reservation = _service.GetReservationsForTimeIntervalAsync(new Controllers.ReservationFormModel() { StartTime = DateTime.Now.Subtract(TimeSpan.FromMinutes(5)), EndTime = DateTime.Now.Add(TimeSpan.FromMinutes(5)) }, _table);
 
         Assert.That(reservation, Is.Not.Null, "Returned restaurant should not be null");
         Assert.That(reservation.Result, Is.Not.Null);
@@ -182,5 +183,43 @@ public class ReservationSystemTests
 
         for (int i = 0; i < 2; ++i)
             Assert.That(reservation.Result[i].Table, Is.EqualTo(_table));
+    }
+
+    [Test]
+    public void MinReservationTime_DefaultValue_Is30Minutes()
+    {
+        // Assuming min time is defined as a static value, e.g., TimeSpan.FromMinutes(30)
+        var min = _service.MinReservationTime;
+        Assert.That(min.TotalMinutes, Is.GreaterThanOrEqualTo(30), "MinReservationTime should be at least 30 minutes");
+    }
+
+    [Test]
+    public void IsGreaterThenMinTimeInterval_WithTooShortInterval_ReturnsFalse()
+    {
+        var form = new ReservationFormModel
+        { 
+            StartTime = DateTime.Now.AddMinutes(10),
+        };
+        var result = _service.IsGreaterThenMinTimeInterval(form);
+        Assert.That(result, Is.False, "Should be false when reservation interval is below minimum");
+    }
+
+    [Test]
+    public void IsInPast_WithPastTime_ReturnsTrue()
+    {
+        var form = new ReservationFormModel { StartTime = DateTime.Now.AddHours(-1) };
+        var result = _service.IsInPast(form);
+        Assert.That(result, Is.True, "Should detect past reservation times");
+    }
+
+    [Test]
+    public async Task ReserveAsync()
+    {
+        var _user = new User() { Email = "a@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 1 };
+        var table = new Table { TableId = 10, Area = "X", Capacity = 6, RestaurantId = 100 };
+
+        var form = new ReservationFormModel { StartTime = DateTime.Now.AddHours(-1) };
+        var result = await _service.ReserveAsync(form, table, _user);
+        Assert.That(result, Is.True, "Reservation succeeded");
     }
 }

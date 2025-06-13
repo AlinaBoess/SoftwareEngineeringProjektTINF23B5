@@ -8,6 +8,37 @@
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <ExcludeProjectReference>TestProjectName</ExcludeProjectReference>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Remove="Tests\Tests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="RestaurantReservierung.Tests\**" />
+    <Compile Remove="TestProjects\**" />
+    <Compile Remove="Tests\**" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="RestaurantReservierung.Tests\**" />
+    <Content Remove="TestProjects\**" />
+    <Content Remove="Tests\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="RestaurantReservierung.Tests\**" />
+    <EmbeddedResource Remove="TestProjects\**" />
+    <EmbeddedResource Remove="Tests\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="RestaurantReservierung.Tests\**" />
+    <None Remove="TestProjects\**" />
+    <None Remove="Tests\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="Services\ReservationSystem.cs" />
     <Compile Remove="Services\RestaurantOwnerService.cs" />
@@ -35,12 +66,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.1" />
 
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-    <Folder Include="RestaurantReservierung.Tests\Integration\" />
-    <Folder Include="Tests\" />
   </ItemGroup>
 
 </Project>

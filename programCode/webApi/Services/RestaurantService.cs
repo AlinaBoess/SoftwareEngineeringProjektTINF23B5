@@ -82,7 +82,7 @@ namespace RestaurantReservierung.Services
 
         public async Task<List<Restaurant>> GetManyRestaurantsAsync(GetManyRestaurantFormModel model)
         {
-            var query = _context.Restaurants.AsQueryable();         
+            var query = _context.Restaurants.Include(r => r.User).AsQueryable();         
            
             if(model.name != null)
                 query = query.Where(r => r.Name.Contains(model.name));

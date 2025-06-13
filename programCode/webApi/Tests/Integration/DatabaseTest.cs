@@ -4,7 +4,7 @@ using NUnit.Framework;
 using System.IO;
 using RestaurantReservierung.Data;
 
-namespace RestaurantReservierung.RestaurantReservierung.Tests.Integration
+namespace RestaurantReservierung.Tests.Integration
 {
     [TestFixture]
     public class DatabaseTest
@@ -14,7 +14,7 @@ namespace RestaurantReservierung.RestaurantReservierung.Tests.Integration
         [SetUp]
         public void Setup()
         {
-            string webApiDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..")); 
+            string webApiDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
 
             var config = new ConfigurationBuilder()
                 .SetBasePath(webApiDirectory)

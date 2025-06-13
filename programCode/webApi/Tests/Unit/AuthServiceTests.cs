@@ -2,6 +2,9 @@
 using RestaurantReservierung.Services;
 using Moq;
 using RestaurantReservierung.Models;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace RestaurantReservierung.Tests.Unit
 {
@@ -15,7 +18,7 @@ namespace RestaurantReservierung.Tests.Unit
         public void SetUp()
         {
             _configMock = new Mock<IConfiguration>();
-            _configMock.Setup(c => c["Jwt:Key"]).Returns("MySuperSecretKey");
+            _configMock.Setup(c => c["Jwt:Key"]).Returns("ThisShouldBeARelativelyLongAndSecureSecretKeyString");
             _configMock.Setup(c => c["Jwt:Issuer"]).Returns("TestIssuer");
             _configMock.Setup(c => c["Jwt:Audience"]).Returns("TestAudience");
 
@@ -56,5 +59,28 @@ namespace RestaurantReservierung.Tests.Unit
             Assert.That(_authService.IsCorrectPassword("anything", user), Is.False, "IsCorrectPassword should return false when hashes do not match");
         }
 
+        [Test]
+        public void GenerateJwtToken_ValidUser_ReturnsTokenWithExpectedClaims()
+        {
+            var user = new User { Email = "test@example.com", Role = "User" };
+            var tokenString = _authService.GenerateJwtToken(user);
+            Assert.That(string.IsNullOrEmpty(tokenString), Is.False);
+
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(tokenString);
+
+            var emailClaim = token.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email);
+
+            Assert.That(emailClaim?.Value, Is.EqualTo("test@example.com"));
+            Assert.That(token.Issuer, Is.EqualTo(_configMock.Object["Jwt:Issuer"]));
+            Assert.That(token.Audiences.Contains(_configMock.Object["Jwt:Audience"]), Is.True);
+        }
+
+        [Test]
+        public void GenerateJwtToken_NullUser_ThrowsArgumentNullException()
+        {
+            var ex = Assert.Throws<NullReferenceException>(() => _authService.GenerateJwtToken(null));
+            Assert.That(ex.Message, Is.Not.Null);
+        }
     }
 }
