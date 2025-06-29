@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using RestaurantReservierung.Controllers;
@@ -24,13 +25,14 @@ public class ReservationServiceTests
     {
         //get in-memory DB context
         var options = new DbContextOptionsBuilder<AppDbContext>()
-           .UseInMemoryDatabase(databaseName: "TestDB2_" + Guid.NewGuid())
+           .UseInMemoryDatabase(databaseName: "TestDB22_" + Guid.NewGuid())
            .Options;
 
         inMemoryDBContext = new AppDbContext(options);
 
         // fresh instances before each test
         _service = new ReservationService(inMemoryDBContext);
+
 
 
         _user = new User() {  Email = "a@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 0 };
@@ -222,4 +224,50 @@ public class ReservationServiceTests
         var result = await _service.ReserveAsync(form, table, _user);
         Assert.That(result, Is.True, "Reservation succeeded");
     }
+
+    [Test]
+    public async Task ReserveAsync_OverlappingReservation_Throws()
+    {
+        var user = new User() { Email = "a@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 10 };
+        var user2 = new User() { Email = "a2@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 12 };
+
+        var rest = new Restaurant { RestaurantId = 10, Name = "Rest", User = user, UserId = user.UserId };
+        var table = new Table { TableId = 10, Restaurant = rest, RestaurantId = rest.RestaurantId, Capacity = 4 };
+        var now = DateTime.Now;
+
+        inMemoryDBContext.Users.Add(user);
+        inMemoryDBContext.Users.Add(user2);
+
+        inMemoryDBContext.Restaurants.Add(rest);
+        inMemoryDBContext.Tables.Add(table);
+        inMemoryDBContext.Reservations.Add(new Reservation
+        {
+            ReservationId = 10,
+            Table = table,
+            TableId = table.TableId,
+            User = user,
+            UserId = user.UserId,
+            StartTime = now,
+            EndTime = now.AddMinutes(30)
+        });
+        await inMemoryDBContext.SaveChangesAsync();
+
+        var form = new ReservationFormModel
+        {
+            StartTime = now.AddMinutes(15),
+            EndTime = now.AddMinutes(45)
+        };
+
+        var form2 = new ReservationFormModel
+        {
+            StartTime = now.AddMinutes(35),
+            EndTime = now.AddMinutes(145)
+        };
+
+        await _service.ReserveAsync(form, table, user);
+
+        var ex = Assert.ThrowsAsync<BadHttpRequestException>(() => _service.ReserveAsync(form2, table, user2));
+        Assert.That(ex.Message, Is.EqualTo("Der Tisch ist in diesem Zeitraum bereits reserviert."));
+    }
+
 }
