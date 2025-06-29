@@ -171,7 +171,7 @@ sequenceDiagram
     Frontend-->>Benutzer: Stornierungsbestätigung anzeigen
 ```
 
-#### 6. **Feedback geben**
+#### 6. **Feedback geben** (bisher nur im Backend implementiert)
 ```mermaid
 sequenceDiagram
     participant Benutzer
@@ -195,7 +195,7 @@ sequenceDiagram
     participant Backend
     participant Datenbank
     
-    Benutzer->>Frontend: Anfrage auf Reservierungsübersicht
+    Benutzer->>Frontend: Ruft Reservierungsübersicht auf
     Frontend->>Backend: Anfrage weiterleiten
     Backend->>Datenbank: Reservierungsdaten abrufen
     Datenbank-->>Backend: Daten zurücksenden
