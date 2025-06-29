@@ -150,7 +150,7 @@ sequenceDiagram
     participant Backend
     
     Benutzer->>Frontend: Reservierung abschließen
-    Frontend->>Backend: Bestätigung anfordern
+    Frontend->>Backend: Reservierung beantragen
     Backend-->>Frontend: Reservierungsdetails
     Frontend-->>Benutzer: Pop-up mit Bestätigung anzeigen
 ```
