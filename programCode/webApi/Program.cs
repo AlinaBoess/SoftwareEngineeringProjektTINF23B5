@@ -92,22 +92,28 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactFrontend",
-        policy => policy.WithOrigins("http://localhost:3000")  
-                         .AllowAnyHeader()
-                         .AllowAnyMethod());
-
-    options.AddPolicy("AllowReactFrontend",
-        policy => policy.WithOrigins("https://localhost:3000")  
-                         .AllowAnyHeader()
-                         .AllowAnyMethod());
+        policy => policy.WithOrigins("https://localhost:3443", "http://localhost:3000", "https://localhost:3000", "http://localhost:3002")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials()); // This is crucial for cookies/auth
 });
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromDays(10); 
+    options.SlidingExpiration = true;
+});
+
 
 var app = builder.Build();
 
-app.UseCors("AllowReactFrontend");
+//app.UseCors("AllowReactFrontend");
 
 if (app.Environment.IsDevelopment())
 {
@@ -116,8 +122,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseRouting();              // WICHTIG: Routing aktivieren
+app.UseRouting(); // WICHTIG: Routing aktivieren
+app.UseCors("AllowReactFrontend"); // CORS after Routing, before Auth
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -135,3 +141,6 @@ app.UseEndpoints(endpoints =>
 
 
 app.Run();
+
+
+public partial class Program { }

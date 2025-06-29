@@ -48,16 +48,12 @@ namespace RestaurantReservierung.Services
                 throw new BadHttpRequestException("The given email is not in a valid format");
 
             if (!Regex.IsMatch(user.Password, passwordRegex))
-                throw new BadHttpRequestException("The email or the password is not correct");
+                throw new BadHttpRequestException("The password is shorter than 6 or longer than 64 characters");
 
             if (user.Email.Length > 255)
-                throw new BadHttpRequestException("The given email is to long");
-
-            if (user.Password.Length > 255)
-                throw new BadHttpRequestException("The password is to long");
+                throw new BadHttpRequestException("The given email is too long");
 
             user.Email = user.Email.ToLower();
-
             user.Password = _authService.HashPasswordForRegistration(user.Password);
 
             // if no users exist, the first user is an admin

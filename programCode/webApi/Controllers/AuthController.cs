@@ -73,10 +73,29 @@ namespace RestaurantReservierung.Controllers
             // generate jwt-token
             var token = _authService.GenerateJwtToken(user);
 
-            return Ok(new { token,  user = UserDto.MapToDto(user) });
+            Response.Cookies.Append("auth-token", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, // Ensure this is true in production
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTimeOffset.Now.AddDays(30),
+                Path = "/"
+            });
+            return Ok(new { token, user = UserDto.MapToDto(user) });
         }
 
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("auth-token", new CookieOptions
+            {
+                Path = "/",
+                SameSite = SameSiteMode.Lax,
+                Secure = true
+            });
 
+            return Ok(new { message = "Logged out successfully" });
+        }
 
         // represents the login form in the frontend
         public class LoginModel

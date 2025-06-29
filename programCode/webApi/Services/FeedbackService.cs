@@ -49,11 +49,18 @@ namespace RestaurantReservierung.Services
         
         public async Task<double> CalcRestaurantRatingAsync(Restaurant restaurant)
         {
-            var averageRating = await _context.Feedbacks
-            .Where(f => f.Restaurant == restaurant)
-            .AverageAsync(f => (double)f.Rating);
+            try
+            {
+                var averageRating = await _context.Feedbacks
+                .Where(f => f.Restaurant == restaurant)
+                .AverageAsync(f => (double)f.Rating);
 
-            return averageRating;
+                return averageRating;
+            }
+            catch (InvalidOperationException) //sequence empty or unparsable
+            {
+                return 0;
+            }
         }
 
         public async Task<List<Feedback>> GetFeedbacksForRestaurantAsync(Restaurant restaurant)

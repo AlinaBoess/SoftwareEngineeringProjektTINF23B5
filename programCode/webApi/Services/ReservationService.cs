@@ -24,10 +24,13 @@ namespace RestaurantReservierung.Services
 
         public async Task<bool> ReserveAsync(ReservationFormModel model, Table table, User user)
         {
+            var existingUser = await _context.Users.FindAsync(user.UserId);
+            if (existingUser == null)
+                throw new Exception("User nicht gefunden");
 
             var reservation = new Reservation
             {
-                User = user,
+                User = existingUser,
                 Table = table,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
