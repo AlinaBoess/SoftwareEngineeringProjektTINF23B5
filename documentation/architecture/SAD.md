@@ -203,23 +203,7 @@ sequenceDiagram
     Frontend-->>Benutzer: Übersicht anzeigen
 ```
 
-#### 8. **Anmelden (Administrator)**
-```mermaid
-sequenceDiagram
-    participant Administrator
-    participant Frontend
-    participant Backend
-    participant Datenbank
-    
-    Administrator->>Frontend: Anmeldedaten eingeben
-    Frontend->>Backend: Anmeldedaten senden
-    Backend->>Datenbank: Anmeldedaten validieren
-    Datenbank-->>Backend: Erfolg/Misserfolg
-    Backend-->>Frontend: Antwort senden
-    Frontend-->>Administrator: Erfolg/Fehlermeldung anzeigen
-```
-
-#### 9. **Tischverwaltung**
+#### 8. **Tischverwaltung**
 ```mermaid
 sequenceDiagram
     participant Administrator
@@ -235,7 +219,7 @@ sequenceDiagram
     Frontend-->>Administrator: Änderungen bestätigen
 ```
 
-#### 10. **Reservierungsübersicht (Administrator)**
+#### 9. **Reservierungsübersicht (Administrator)**
 ```mermaid
 sequenceDiagram
     participant Administrator
@@ -251,7 +235,7 @@ sequenceDiagram
     Frontend-->>Administrator: Übersicht anzeigen
 ```
 
-#### 11. **Feedback einsehen (Administrator)**
+#### 10. **Feedback einsehen (Administrator)**
 ```mermaid
 sequenceDiagram
     participant Administrator
