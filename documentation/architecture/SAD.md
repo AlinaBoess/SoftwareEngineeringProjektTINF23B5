@@ -115,14 +115,11 @@ sequenceDiagram
     participant Frontend
     participant Backend
     participant Datenbank
-    participant E-Mail-System
 
     Benutzer->>Frontend: Persönliche Daten eingeben
     Frontend->>Backend: Registrierungsdaten senden
     Backend->>Datenbank: Konto erstellen
     Datenbank-->>Backend: Konto erfolgreich gespeichert
-    Backend->>E-Mail-System: Bestätigungs-E-Mail senden
-    E-Mail-System-->>Benutzer: Bestätigungs-E-Mail erhalten
     Backend-->>Frontend: Registrierungsbestätigung
     Frontend-->>Benutzer: Anzeige der Bestätigung
 ```
@@ -153,7 +150,7 @@ sequenceDiagram
     participant Backend
     
     Benutzer->>Frontend: Reservierung abschließen
-    Frontend->>Backend: Bestätigung anfordern
+    Frontend->>Backend: Reservierung beantragen
     Backend-->>Frontend: Reservierungsdetails
     Frontend-->>Benutzer: Pop-up mit Bestätigung anzeigen
 ```
@@ -166,7 +163,7 @@ sequenceDiagram
     participant Backend
     participant Datenbank
     
-    Benutzer->>Frontend: Stornierungsanfrage senden
+    Benutzer->>Frontend: Reservierung stornieren
     Frontend->>Backend: Stornierungsanfrage weiterleiten
     Backend->>Datenbank: Reservierung löschen
     Datenbank-->>Backend: Löschung erfolgreich
@@ -174,7 +171,7 @@ sequenceDiagram
     Frontend-->>Benutzer: Stornierungsbestätigung anzeigen
 ```
 
-#### 6. **Feedback geben**
+#### 6. **Feedback geben** (bisher nur im Backend implementiert)
 ```mermaid
 sequenceDiagram
     participant Benutzer
@@ -198,7 +195,7 @@ sequenceDiagram
     participant Backend
     participant Datenbank
     
-    Benutzer->>Frontend: Anfrage auf Reservierungsübersicht
+    Benutzer->>Frontend: Ruft Reservierungsübersicht auf
     Frontend->>Backend: Anfrage weiterleiten
     Backend->>Datenbank: Reservierungsdaten abrufen
     Datenbank-->>Backend: Daten zurücksenden
@@ -206,23 +203,7 @@ sequenceDiagram
     Frontend-->>Benutzer: Übersicht anzeigen
 ```
 
-#### 8. **Anmelden (Administrator)**
-```mermaid
-sequenceDiagram
-    participant Administrator
-    participant Frontend
-    participant Backend
-    participant Datenbank
-    
-    Administrator->>Frontend: Anmeldedaten eingeben
-    Frontend->>Backend: Anmeldedaten senden
-    Backend->>Datenbank: Anmeldedaten validieren
-    Datenbank-->>Backend: Erfolg/Misserfolg
-    Backend-->>Frontend: Antwort senden
-    Frontend-->>Administrator: Erfolg/Fehlermeldung anzeigen
-```
-
-#### 9. **Tischverwaltung**
+#### 8. **Tischverwaltung**
 ```mermaid
 sequenceDiagram
     participant Administrator
@@ -238,7 +219,7 @@ sequenceDiagram
     Frontend-->>Administrator: Änderungen bestätigen
 ```
 
-#### 10. **Reservierungsübersicht (Administrator)**
+#### 9. **Reservierungsübersicht (Administrator)**
 ```mermaid
 sequenceDiagram
     participant Administrator
@@ -253,23 +234,6 @@ sequenceDiagram
     Backend-->>Frontend: Daten senden
     Frontend-->>Administrator: Übersicht anzeigen
 ```
-
-#### 11. **Feedback einsehen (Administrator)**
-```mermaid
-sequenceDiagram
-    participant Administrator
-    participant Frontend
-    participant Backend
-    participant Datenbank
-    
-    Administrator->>Frontend: Feedback anfordern
-    Frontend->>Backend: Anfrage weiterleiten
-    Backend->>Datenbank: Feedbackdaten abrufen
-    Datenbank-->>Backend: Daten bereitstellen
-    Backend-->>Frontend: Daten senden
-    Frontend-->>Administrator: Feedback anzeigen
-```
-
 ---
 
 ## 7. Bereitstellungsansicht
