@@ -98,11 +98,13 @@ Der komplette Backend-Stack steht bereit; das Frontend ist ebenfalls nahezu abge
 
 Um die korrekte Funktionsweise bestehender und neuer Funktionalitäten stets sicherzustellen, wurden im Rahmen des in unserem [13. Blogpost](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/discussions/17) beschriebenen [Testplans](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/blob/main/documentation/Testplan.md) sowohl Unit- als auch Integrationstests für unsere Anwendnung realisiert.
 Diese Herangehensweise stellt eine wertvolle Maßnahme zur Entwicklung qualitativ hochwertiger, zuverlässiger Software dar.
+Unsere aktuelle Test-Coverage umfasst etwa 50%.
 
 Zur Laufzeit-Evaluation unserer Anwendung wurden im Rahmen unseres [15. Blogposts](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/discussions/22) einige relevante Metriken definiert und erläutert, welche während des Debug-Betriebs unserer Anwendung gesammelt werden.
-Dies umfasst zudem Code-Metriken: ![](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/blob/main/documentation/endPresentation/Code-Metriken.png)
+Dies umfasst zudem Code-Metriken:
+![](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/blob/main/documentation/endPresentation/Code-Metriken.png)
 
-Im Rahmen unserer Qualitätssicherungsmaßnahmen wurde zudem ein Technical Review durchgeführt, wobei neben den Beurteilungen eigener Te4ammitglieder auch die Expertise einer externen Entwicklerin betrachtet wurde.
+Im Rahmen unserer Qualitätssicherungsmaßnahmen wurde zudem ein Technical Review durchgeführt, wobei neben den Beurteilungen eigener Teammitglieder auch die Expertise einer externen Entwicklerin betrachtet wurde.
 Die Ergebnisse dieses Meetings wurden in unserem [vorletzten Blogeintrag](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/discussions/27) ausführlich dargelegt.
 
 
