@@ -234,23 +234,6 @@ sequenceDiagram
     Backend-->>Frontend: Daten senden
     Frontend-->>Administrator: Übersicht anzeigen
 ```
-
-#### 10. **Feedback einsehen (Administrator)**
-```mermaid
-sequenceDiagram
-    participant Administrator
-    participant Frontend
-    participant Backend
-    participant Datenbank
-    
-    Administrator->>Frontend: Feedback anfordern
-    Frontend->>Backend: Anfrage weiterleiten
-    Backend->>Datenbank: Feedbackdaten abrufen
-    Datenbank-->>Backend: Daten bereitstellen
-    Backend-->>Frontend: Daten senden
-    Frontend-->>Administrator: Feedback anzeigen
-```
-
 ---
 
 ## 7. Bereitstellungsansicht
