@@ -163,7 +163,7 @@ sequenceDiagram
     participant Backend
     participant Datenbank
     
-    Benutzer->>Frontend: Stornierungsanfrage senden
+    Benutzer->>Frontend: Reservierung stornieren
     Frontend->>Backend: Stornierungsanfrage weiterleiten
     Backend->>Datenbank: Reservierung löschen
     Datenbank-->>Backend: Löschung erfolgreich
