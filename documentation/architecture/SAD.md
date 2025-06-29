@@ -115,14 +115,11 @@ sequenceDiagram
     participant Frontend
     participant Backend
     participant Datenbank
-    participant E-Mail-System
 
     Benutzer->>Frontend: Persönliche Daten eingeben
     Frontend->>Backend: Registrierungsdaten senden
     Backend->>Datenbank: Konto erstellen
     Datenbank-->>Backend: Konto erfolgreich gespeichert
-    Backend->>E-Mail-System: Bestätigungs-E-Mail senden
-    E-Mail-System-->>Benutzer: Bestätigungs-E-Mail erhalten
     Backend-->>Frontend: Registrierungsbestätigung
     Frontend-->>Benutzer: Anzeige der Bestätigung
 ```
