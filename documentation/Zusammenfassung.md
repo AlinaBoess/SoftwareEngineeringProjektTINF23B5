@@ -2,7 +2,7 @@
 
 ## 1. Projekthintergrund & Vision
 
-Im Rahmen unseres DHBW-Kurses *TINF23B5* haben wir ein web-basiertes [Restaurant-Rreservierungssystem](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5) für Restaurants entwickelt. 
+Im Rahmen unseres DHBW-Kurses *TINF23B5* haben wir ein web-basiertes [Restaurant-Reservierungssystem](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5) für Restaurants entwickelt. 
 Ziel ist es, dass Nutzer:
 
 - ein Restaurant auswählen,
@@ -99,7 +99,7 @@ Der komplette Backend-Stack steht bereit; das Frontend ist ebenfalls nahezu abge
 Um die korrekte Funktionsweise bestehender und neuer Funktionalitäten stets sicherzustellen, wurden im Rahmen des in unserem [13. Blogpost](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/discussions/17) beschriebenen [Testplans](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/blob/main/documentation/Testplan.md) sowohl Unit- als auch Integrationstests für unsere Anwendnung realisiert.
 Diese Herangehensweise stellt eine wertvolle Maßnahme zur Entwicklung qualitativ hochwertiger, zuverlässiger Software dar.
 
-Zur Laufzeit-Evaluation unserer Anwendung wurden im Rahmen unseres [15. BLogposts](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/discussions/22) einige relevante Metriken definiert und erläutert, welche während des Debug-Betriebs unserer Anwendung gesammelt werden.
+Zur Laufzeit-Evaluation unserer Anwendung wurden im Rahmen unseres [15. Blogposts](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/discussions/22) einige relevante Metriken definiert und erläutert, welche während des Debug-Betriebs unserer Anwendung gesammelt werden.
 Dies umfasst zudem Code-Metriken: ![](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/blob/main/documentation/endPresentation/Code-Metriken.png)
 
 Im Rahmen unserer Qualitätssicherungsmaßnahmen wurde zudem ein Technical Review durchgeführt, wobei neben den Beurteilungen eigener Te4ammitglieder auch die Expertise einer externen Entwicklerin betrachtet wurde.
