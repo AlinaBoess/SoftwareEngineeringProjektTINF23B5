@@ -1,0 +1,17 @@
+{
+  "name": "programcode",
+  "version": "1.0.0",
+  "description": "Für die Kommunikation mit der Datenbank wird EF Core verwendet. Das Tool kann mit den folgenden Befehlen installiert werden:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^15.3.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}

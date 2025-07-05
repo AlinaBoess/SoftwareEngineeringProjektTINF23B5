@@ -50,7 +50,7 @@
             <param name="feedbackId"></param>
             <returns></returns>
         </member>
-        <member name="M:RestaurantReservierung.Controllers.ReservationController.makeReservation(RestaurantReservierung.Controllers.ReservationFormModel,System.Int32)">
+        <member name="M:RestaurantReservierung.Controllers.ReservationController.MakeReservation(RestaurantReservierung.Controllers.ReservationFormModel,System.Int32)">
             <summary>
             Make A Reservation for a table.
             </summary>
