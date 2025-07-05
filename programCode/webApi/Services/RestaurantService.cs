@@ -8,11 +8,9 @@ namespace RestaurantReservierung.Services
     public class RestaurantService
     {
         private readonly AppDbContext _context;
-        private readonly UserService _userService;
-        public RestaurantService(AppDbContext context, UserService userService)
+        public RestaurantService(AppDbContext context)
         {
             _context = context;
-            _userService = userService;
         }
 
 
@@ -45,16 +43,8 @@ namespace RestaurantReservierung.Services
             }
         }
 
-        public async Task<bool> UpdateRestaurantAsync(RestaurantFormModel restaurantModel, int id)
+        public async Task<bool> UpdateRestaurantAsync(RestaurantFormModel restaurantModel, Restaurant restaurant, User user)
         {
-            var user = await _userService.GetLoggedInUserAsync();
-
-            var restaurant = await GetRestaurantByIdAsync(id);
-
-            if (restaurant == null)
-            {
-                throw new BadHttpRequestException("The Restaurant with the id " + id + " does not exist!" );
-            }
 
             if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
             {
@@ -83,15 +73,12 @@ namespace RestaurantReservierung.Services
             return null;
         }
 
-        public async Task<bool> DeleteRestaurantAsync(int restaurantId)
+        public async Task<bool> DeleteRestaurantAsync(Restaurant restaurant, User user)
         {
-            var user = await _userService.GetLoggedInUserAsync();
-
-            var restaurant = await GetRestaurantByIdAsync(restaurantId) ?? throw new BadHttpRequestException("The Restaurant with the id " + restaurantId + " does not exist!" );
             
             if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
             {
-                await DeleteImageByRestaurantIdAsync(restaurant.RestaurantId);
+                await DeleteImageByRestaurantIdAsync(restaurant.RestaurantId, user);
                 _context.Restaurants.Remove(restaurant);
 
                 return await _context.SaveChangesAsync() > 0;
@@ -132,9 +119,9 @@ namespace RestaurantReservierung.Services
             return restaurant != null;
         }
 
-        public async Task<bool> UploadImageAsync(int restaurantId, IFormFile picture)
+        public async Task<bool> UploadImageAsync(int restaurantId, IFormFile picture, User user)
         {
-            var user = await _userService.GetLoggedInUserAsync();
+            
 
             if (!await OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
                 throw new BadHttpRequestException("You do not have permission to perform this action");
@@ -177,10 +164,8 @@ namespace RestaurantReservierung.Services
             return await _context.Images.FirstOrDefaultAsync(i => i.ImageId == restaurant.ImageId);
         }
 
-        public async Task<bool> DeleteImageByRestaurantIdAsync(int restaurantId)
+        public async Task<bool> DeleteImageByRestaurantIdAsync(int restaurantId, User user)
         {
-            var user = await _userService.GetLoggedInUserAsync();
-
             if (!await OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
                 throw new BadHttpRequestException("You are not owner of the restaurant");
 

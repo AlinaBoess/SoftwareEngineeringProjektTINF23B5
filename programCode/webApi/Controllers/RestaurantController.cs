@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Abstractions;
 using RestaurantReservierung.Dtos;
+using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 using System.ComponentModel.DataAnnotations;
 
@@ -54,7 +55,16 @@ namespace RestaurantReservierung.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRestaurant([FromBody] RestaurantFormModel restaurantModel, int id)
         {
-            if(await _restaurantService.UpdateRestaurantAsync(restaurantModel, id)){
+            var user = await _userService.GetLoggedInUserAsync();
+
+            var restaurant = await _restaurantService.GetRestaurantByIdAsync(id);
+
+            if (restaurant == null)
+            {
+                return NotFound(new { Message = "The Restaurant with the id " + id + " does not exist!" });
+            }
+
+            if (await _restaurantService.UpdateRestaurantAsync(restaurantModel, restaurant, user)){
                 return Ok(new { Message = "The restaurant has been updated successfully" });
             }
             return BadRequest(new { Message = "Restaurant could not be updated" });
@@ -69,7 +79,15 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRestaurant(int id)
         {
-            if (await _restaurantService.DeleteRestaurantAsync(id))
+            var user = await _userService.GetLoggedInUserAsync();
+          
+            var restaurant = await _restaurantService.GetRestaurantByIdAsync(id);
+            if (restaurant == null)
+            {
+                return NotFound(new { Message = "The Restaurant with the id " + id + " does not exist!" });
+            }
+
+            if (await _restaurantService.DeleteRestaurantAsync(restaurant, user))
             {
                 return Ok(new { Message = "The restaurant has been deleted successfully" });
             }
@@ -152,7 +170,9 @@ namespace RestaurantReservierung.Controllers
         [HttpPut("Image/{restaurantId}")]
         public async Task<IActionResult> ChangeImage(int restaurantId, IFormFile picture)
         {
-            if (await _restaurantService.UploadImageAsync(restaurantId, picture))
+            var user = await _userService.GetLoggedInUserAsync();
+
+            if (await _restaurantService.UploadImageAsync(restaurantId, picture, user))
                 return Ok(new { Message = "The picture has been uploaded successfully!" });
 
             return BadRequest(new { Message = "The picture could not be uploaded!"});
@@ -184,7 +204,9 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete("Image/{restaurantId}")]
         public async Task<IActionResult> DeleteImage(int restaurantId)
         {
-            if (await _restaurantService.DeleteImageByRestaurantIdAsync(restaurantId))
+            var user = await _userService.GetLoggedInUserAsync();
+
+            if (await _restaurantService.DeleteImageByRestaurantIdAsync(restaurantId, user))
                 return Ok(new { Message = "The Image has been deleted successfully!"});
 
             return BadRequest( new { Message = "The Image could not be deleted!"});

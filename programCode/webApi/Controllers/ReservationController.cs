@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantReservierung.Dtos;
+using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 
 namespace RestaurantReservierung.Controllers
@@ -33,7 +34,10 @@ namespace RestaurantReservierung.Controllers
         [HttpPost("{tableId}")]
         public async Task<IActionResult> MakeReservation([FromBody] ReservationFormModel model, int tableId)
         {
-            if (await _reservationService.ReserveAsync(model, tableId))
+            var user = await _userService.GetLoggedInUserAsync();
+            var table = await _tableService.GetTableByIdAsync(tableId);
+
+            if (await _reservationService.ReserveAsync(model, table, user))
                 return Ok(new { Message = "The reservation was successfull!" });
 
             return BadRequest(new { Message = "Reservation was not successfull!" });
@@ -143,7 +147,10 @@ namespace RestaurantReservierung.Controllers
         [HttpPut("{reservationId}")]
         public async Task<IActionResult> UpdateReservation(int reservationId, ReservationFormModel model)
         {
-            if (await _reservationService.UpdateReservationAsync(model, reservationId))
+            var user = await _userService.GetLoggedInUserAsync();
+            var reservation = await _reservationService.GetReservationByIdAsync(reservationId);
+
+            if (await _reservationService.UpdateReservationAsync(model, reservation, user))
                 return Ok(new { Message = "The reservation was successfull!" });
 
             return BadRequest(new { Message = "Reservation was not successfull!" });
@@ -159,8 +166,11 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete("{reservationId}")]
         public async Task<IActionResult> DeleteReservation(int reservationId)
         {
+            var user = await _userService.GetLoggedInUserAsync();
 
-            if (await _reservationService.DeleteReservationAsync(reservationId))
+            var reservation = await _reservationService.GetReservationByIdAsync(reservationId);
+
+            if (await _reservationService.DeleteReservationAsync(reservation, user))
                 return Ok(new { Message = "The Reservation has been canceled successfully!" });
 
             return BadRequest( new { Message = "The Reservation could not be canceled"});
