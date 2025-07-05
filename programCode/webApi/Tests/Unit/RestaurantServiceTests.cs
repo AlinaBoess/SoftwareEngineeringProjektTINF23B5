@@ -83,11 +83,11 @@ namespace RestaurantReservierung.Tests.Unit
         [Test]
         public async Task DeleteRestaurantAsync_RemovesRestaurant()
         {
-            var rest = new Restaurant { RestaurantId = 10, Name = "ToRemove", UserId = _user.UserId };
+            var rest = new Restaurant { RestaurantId = 10, Name = "ToRemove", User = _user };
             inMemoryDBContext.Restaurants.Add(rest);
             await inMemoryDBContext.SaveChangesAsync();
 
-            await _service.DeleteRestaurantAsync(rest);
+            await _service.DeleteRestaurantAsync(rest, _user);
             var found = await inMemoryDBContext.Restaurants.FindAsync(10);
             Assert.That(found, Is.Null);
         }
@@ -123,7 +123,7 @@ namespace RestaurantReservierung.Tests.Unit
                 Website = "newurl"
             };
 
-            await _service.UpdateRestaurantAsync(rest, updateModel);
+            await _service.UpdateRestaurantAsync(updateModel, rest, _user);
             var updated = await inMemoryDBContext.Restaurants.FindAsync(50);
 
             Assert.That(updated.Name, Is.EqualTo("New"));

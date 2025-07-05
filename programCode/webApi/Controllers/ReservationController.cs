@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantReservierung.Dtos;
+using RestaurantReservierung.Models;
 using RestaurantReservierung.Services;
 
 namespace RestaurantReservierung.Controllers
@@ -31,27 +32,10 @@ namespace RestaurantReservierung.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("{tableId}")]
-        public async Task<IActionResult> makeReservation([FromBody] ReservationFormModel model, int tableId)
+        public async Task<IActionResult> MakeReservation([FromBody] ReservationFormModel model, int tableId)
         {
             var user = await _userService.GetLoggedInUserAsync();
-
             var table = await _tableService.GetTableByIdAsync(tableId);
-            if (table == null)
-                return NotFound(new { Message = "The table does not exist." });
-
-
-            if (model.EndTime <= model.StartTime)
-                return BadRequest(new { Message = "Illegal time interval!" });
-
-            if (!_reservationService.IsGreaterThenMinTimeInterval(model))
-                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationService.MinReservationTime.ToString() + "." });
-
-            if (_reservationService.IsInPast(model))
-                return BadRequest(new { Message = "The given Time interval is in the past!" });
-
-            if ((await _reservationService.GetReservationsForTimeIntervalAsync(model, table)).Count > 0)
-                return BadRequest(new { Message = "There already exists a reservation in the given time interval!" });
-
 
             if (await _reservationService.ReserveAsync(model, table, user))
                 return Ok(new { Message = "The reservation was successfull!" });
@@ -166,24 +150,7 @@ namespace RestaurantReservierung.Controllers
             var user = await _userService.GetLoggedInUserAsync();
             var reservation = await _reservationService.GetReservationByIdAsync(reservationId);
 
-
-            if(user.UserId != reservation.UserId && user.Role != "ADMIN")
-                return Unauthorized(new { Message = "You don't have Permissions to change the reservation"});
-
-            if (model.EndTime <= model.StartTime)
-                return BadRequest(new { Message = "Illegal time interval!" });
-
-            if (!_reservationService.IsGreaterThenMinTimeInterval(model))
-                return BadRequest(new { Message = "The reservation time interval has to be >= " + _reservationService.MinReservationTime.ToString() + "." });
-
-            if (_reservationService.IsInPast(model))
-                return BadRequest(new { Message = "The given Time interval is in the past!" });
-
-            if (! await _reservationService.CanUpdateReservationAsync(reservation, model))
-                return BadRequest(new { Message = "There already exists a reservation in the given time interval!" });
-
-
-            if (await _reservationService.UpdateReservationAsync(model, reservation))
+            if (await _reservationService.UpdateReservationAsync(model, reservation, user))
                 return Ok(new { Message = "The reservation was successfull!" });
 
             return BadRequest(new { Message = "Reservation was not successfull!" });
@@ -203,10 +170,7 @@ namespace RestaurantReservierung.Controllers
 
             var reservation = await _reservationService.GetReservationByIdAsync(reservationId);
 
-            if (user != reservation.User && user.Role != "ADMIN" && user != reservation.Table.Restaurant.User)
-                return Unauthorized(new { Message = "Your dont have permissions to perform this action!" });
-
-            if (await _reservationService.DeleteReservationAsync(reservation))
+            if (await _reservationService.DeleteReservationAsync(reservation, user))
                 return Ok(new { Message = "The Reservation has been canceled successfully!" });
 
             return BadRequest( new { Message = "The Reservation could not be canceled"});

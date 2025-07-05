@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -217,10 +218,10 @@ public class ReservationServiceTests
     [Test]
     public async Task ReserveAsync()
     {
-        var _user = new User() { Email = "a@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 1 };
+        var _user = new User() { Email = "a@b.com", Feedbacks = new List<Feedback>(), FirstName = "a", LastName = "b", Password = "123", Reservations = new List<Reservation>(), Restaurants = new List<Restaurant>(), Role = "USER", UserId = 2 };
         var table = new Table { TableId = 10, Area = "X", Capacity = 6, RestaurantId = 100 };
 
-        var form = new ReservationFormModel { StartTime = DateTime.Now.AddHours(-1) };
+        var form = new ReservationFormModel { StartTime = DateTime.Now.AddHours(+1), EndTime = DateTime.Now.AddHours(+2)};
         var result = await _service.ReserveAsync(form, table, _user);
         Assert.That(result, Is.True, "Reservation succeeded");
     }
@@ -248,26 +249,23 @@ public class ReservationServiceTests
             User = user,
             UserId = user.UserId,
             StartTime = now,
-            EndTime = now.AddMinutes(30)
+            EndTime = now.AddMinutes(60)
         });
         await inMemoryDBContext.SaveChangesAsync();
 
         var form = new ReservationFormModel
         {
             StartTime = now.AddMinutes(15),
-            EndTime = now.AddMinutes(45)
+            EndTime = now.AddMinutes(75)
         };
 
-        var form2 = new ReservationFormModel
-        {
-            StartTime = now.AddMinutes(35),
-            EndTime = now.AddMinutes(145)
-        };
+        var ex = Assert.ThrowsAsync<InvalidOperationException>(() => _service.ReserveAsync(form, table, user2));
 
-        await _service.ReserveAsync(form, table, user);
+        Assert.That(ex.Message, Is.EqualTo("There already exists a reservation in the given time interval!"));
 
-        var ex = Assert.ThrowsAsync<BadHttpRequestException>(() => _service.ReserveAsync(form2, table, user2));
-        Assert.That(ex.Message, Is.EqualTo("Der Tisch ist in diesem Zeitraum bereits reserviert."));
     }
 
+
 }
+
+

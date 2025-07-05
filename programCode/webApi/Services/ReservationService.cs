@@ -23,14 +23,24 @@ namespace RestaurantReservierung.Services
         }
 
         public async Task<bool> ReserveAsync(ReservationFormModel model, Table table, User user)
-        {
-            var existingUser = await _context.Users.FindAsync(user.UserId);
-            if (existingUser == null)
-                throw new Exception("User nicht gefunden");
+        {        
+
+            if (model.EndTime <= model.StartTime)
+                throw new BadHttpRequestException("Illegal time interval!" );
+
+            if (!IsGreaterThenMinTimeInterval(model))
+                throw new BadHttpRequestException("The reservation time interval has to be >= " + MinReservationTime.ToString() + "." );
+
+            if (IsInPast(model))
+                throw new BadHttpRequestException("The given Time interval is in the past!" );
+
+            if ((await GetReservationsForTimeIntervalAsync(model, table)).Count > 0)
+                throw new InvalidOperationException("There already exists a reservation in the given time interval!" );
+
 
             var reservation = new Reservation
             {
-                User = existingUser,
+                User = user,
                 Table = table,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
@@ -130,8 +140,25 @@ namespace RestaurantReservierung.Services
             return false;
         }
 
-        public async Task<bool> UpdateReservationAsync(ReservationFormModel model, Reservation reservation)
+        public async Task<bool> UpdateReservationAsync(ReservationFormModel model, Reservation reservation, User user)
         {
+
+            if (user.UserId != reservation.UserId && user.Role != "ADMIN")
+                throw new BadHttpRequestException("You don't have Permissions to change the reservation");
+
+            if (model.EndTime <= model.StartTime)
+                throw new BadHttpRequestException("Illegal time interval!");
+
+            if (!IsGreaterThenMinTimeInterval(model))
+                throw new BadHttpRequestException("The reservation time interval has to be >= " + MinReservationTime.ToString() + "." );
+
+            if (IsInPast(model))
+                throw new BadHttpRequestException("The given Time interval is in the past!");
+
+            if (!await CanUpdateReservationAsync(reservation, model))
+                throw new BadHttpRequestException("There already exists a reservation in the given time interval!");
+
+
             reservation.StartTime = model.StartTime;
             reservation.EndTime = model.EndTime;
             reservation.UpdatedAt = DateTime.Now;
@@ -140,8 +167,13 @@ namespace RestaurantReservierung.Services
 
         }
 
-        public async Task<bool> DeleteReservationAsync(Reservation reservation)
+        public async Task<bool> DeleteReservationAsync(Reservation reservation, User user)
         {
+
+            if (user != reservation.User && user.Role != "ADMIN" && user != reservation.Table.Restaurant.User)
+                throw new BadHttpRequestException("Your dont have permissions to perform this action!");
+
+
             _context.Reservations.Remove(reservation);
 
             if (await _context.SaveChangesAsync() > 0)

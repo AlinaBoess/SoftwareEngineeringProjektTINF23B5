@@ -8,7 +8,6 @@ namespace RestaurantReservierung.Services
     public class RestaurantService
     {
         private readonly AppDbContext _context;
-
         public RestaurantService(AppDbContext context)
         {
             _context = context;
@@ -44,18 +43,23 @@ namespace RestaurantReservierung.Services
             }
         }
 
-        public async Task<bool> UpdateRestaurantAsync(Restaurant restaurant, RestaurantFormModel restaurantModel)
+        public async Task<bool> UpdateRestaurantAsync(RestaurantFormModel restaurantModel, Restaurant restaurant, User user)
         {
-            restaurant.Name = restaurantModel.Name;
-            restaurant.Address = restaurantModel.Adress;
-            restaurant.OpeningHours = restaurantModel.OpeningHours;
-            restaurant.Website = restaurantModel.Website;
 
-            if (await _context.SaveChangesAsync() > 0)
+            if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
             {
-                return true;
+                restaurant.Name = restaurantModel.Name;
+                restaurant.Address = restaurantModel.Adress;
+                restaurant.OpeningHours = restaurantModel.OpeningHours;
+                restaurant.Website = restaurantModel.Website;
+
+                return await _context.SaveChangesAsync() > 0;
             }
-            return false;
+            else
+            {
+                throw new BadHttpRequestException("You are not the owner of this Restaurant!");
+            }
+           
         }
 
         public async Task<Restaurant> GetRestaurantByIdAsync(int id)
@@ -69,15 +73,21 @@ namespace RestaurantReservierung.Services
             return null;
         }
 
-        public async Task<bool> DeleteRestaurantAsync(Restaurant restaurant)
+        public async Task<bool> DeleteRestaurantAsync(Restaurant restaurant, User user)
         {
-            await DeleteImageByRestaurantIdAsync(restaurant.RestaurantId);
-            _context.Restaurants.Remove(restaurant);
+            
+            if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
+            {
+                await DeleteImageByRestaurantIdAsync(restaurant.RestaurantId, user);
+                _context.Restaurants.Remove(restaurant);
 
-            if (await _context.SaveChangesAsync() > 0) {  
-                return true; 
+                return await _context.SaveChangesAsync() > 0;
             }
-            return false;
+            else
+            {
+                throw new BadHttpRequestException("You are not the owner of this Restaurant!" );
+            }
+          
         }
 
         public async Task<List<Restaurant>> GetManyRestaurantsAsync(GetManyRestaurantFormModel model)
@@ -109,8 +119,15 @@ namespace RestaurantReservierung.Services
             return restaurant != null;
         }
 
-        public async Task<bool> UploadImageAsync(int restaurantId, IFormFile picture)
+        public async Task<bool> UploadImageAsync(int restaurantId, IFormFile picture, User user)
         {
+            
+
+            if (!await OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
+                throw new BadHttpRequestException("You do not have permission to perform this action");
+
+            if (picture == null || picture.Length == 0)
+                throw new BadHttpRequestException("No File was uploaded");
 
             using var memoryStream = new MemoryStream();
             await picture.CopyToAsync(memoryStream);
@@ -147,8 +164,11 @@ namespace RestaurantReservierung.Services
             return await _context.Images.FirstOrDefaultAsync(i => i.ImageId == restaurant.ImageId);
         }
 
-        public async Task<bool> DeleteImageByRestaurantIdAsync(int restaurantId)
+        public async Task<bool> DeleteImageByRestaurantIdAsync(int restaurantId, User user)
         {
+            if (!await OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
+                throw new BadHttpRequestException("You are not owner of the restaurant");
+
             var restaurant = await GetRestaurantByIdAsync(restaurantId);
 
             if (restaurant.ImageId == null)
