@@ -33,11 +33,7 @@ namespace RestaurantReservierung.Controllers
         public async Task<IActionResult> CreateRestaurant([FromBody] RestaurantFormModel restaurantModel)
         {
             var user = await _userService.GetLoggedInUserAsync();
-            if(user == null)
-            {
-                return BadRequest();
-            }
-
+         
             var restaurant = await _restaurantService.AddRestaurantAsync(restaurantModel, user);
 
             if (restaurant != null)
@@ -58,31 +54,10 @@ namespace RestaurantReservierung.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRestaurant([FromBody] RestaurantFormModel restaurantModel, int id)
         {
-            var user = await _userService.GetLoggedInUserAsync();
-            if(user == null)
-            {
-                return BadRequest();
+            if(await _restaurantService.UpdateRestaurantAsync(restaurantModel, id)){
+                return Ok(new { Message = "The restaurant has been updated successfully" });
             }
-
-            var restaurant = await _restaurantService.GetRestaurantByIdAsync(id);
-            if(restaurant == null)
-            {
-                return NotFound(new { Message = "The Restaurant with the id " + id + " does not exist!" });
-            }
-
-
-            if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
-            {
-                if (await _restaurantService.UpdateRestaurantAsync(restaurant, restaurantModel))
-                {
-                    return Ok(new { Message = "The restaurant has been updated successfully" });
-                }
-                return BadRequest(new { Message = "Restaurant could not be updated" });
-            }
-            else
-            {
-                return Unauthorized(new { Message = "You are not the owner of this Restaurant!"});
-            }
+            return BadRequest(new { Message = "Restaurant could not be updated" });
         }
 
         /// <summary>
@@ -94,31 +69,12 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRestaurant(int id)
         {
-            var user = await _userService.GetLoggedInUserAsync();
-            if (user == null)
+            if (await _restaurantService.DeleteRestaurantAsync(id))
             {
-                return BadRequest();
+                return Ok(new { Message = "The restaurant has been deleted successfully" });
             }
+            return BadRequest(new { Message = "Restaurant could not be deleted" });
 
-            var restaurant = await _restaurantService.GetRestaurantByIdAsync(id);
-            if (restaurant == null)
-            {
-                return NotFound(new { Message = "The Restaurant with the id " + id + " does not exist!" });
-            }
-
-
-            if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
-            {
-                if (await _restaurantService.DeleteRestaurantAsync(restaurant))
-                {
-                    return Ok(new { Message = "The restaurant has been deleted successfully" });
-                }
-                return BadRequest(new { Message = "Restaurant could not be deleted" });
-            }
-            else
-            {
-                return Unauthorized(new { Message = "You are not the owner of this Restaurant!" });
-            }
         }
 
         /// <summary>
@@ -196,18 +152,10 @@ namespace RestaurantReservierung.Controllers
         [HttpPut("Image/{restaurantId}")]
         public async Task<IActionResult> ChangeImage(int restaurantId, IFormFile picture)
         {
-            var user = await _userService.GetLoggedInUserAsync();
-
-            if(!await _restaurantService.OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
-                return Unauthorized();
-
-            if (picture == null || picture.Length == 0)
-                return BadRequest( new { Message = "No File was uploaded"});
-
             if (await _restaurantService.UploadImageAsync(restaurantId, picture))
                 return Ok(new { Message = "The picture has been uploaded successfully!" });
 
-            return BadRequest( new { Message = "The picture could not be uploaded!"});
+            return BadRequest(new { Message = "The picture could not be uploaded!"});
 
         }
 
@@ -236,11 +184,6 @@ namespace RestaurantReservierung.Controllers
         [HttpDelete("Image/{restaurantId}")]
         public async Task<IActionResult> DeleteImage(int restaurantId)
         {
-            var user = await _userService.GetLoggedInUserAsync();
-
-            if (!await _restaurantService.OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
-                return Unauthorized();
-
             if (await _restaurantService.DeleteImageByRestaurantIdAsync(restaurantId))
                 return Ok(new { Message = "The Image has been deleted successfully!"});
 

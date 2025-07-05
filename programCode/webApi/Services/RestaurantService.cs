@@ -8,10 +8,11 @@ namespace RestaurantReservierung.Services
     public class RestaurantService
     {
         private readonly AppDbContext _context;
-
-        public RestaurantService(AppDbContext context)
+        private readonly UserService _userService;
+        public RestaurantService(AppDbContext context, UserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
 
@@ -44,18 +45,31 @@ namespace RestaurantReservierung.Services
             }
         }
 
-        public async Task<bool> UpdateRestaurantAsync(Restaurant restaurant, RestaurantFormModel restaurantModel)
+        public async Task<bool> UpdateRestaurantAsync(RestaurantFormModel restaurantModel, int id)
         {
-            restaurant.Name = restaurantModel.Name;
-            restaurant.Address = restaurantModel.Adress;
-            restaurant.OpeningHours = restaurantModel.OpeningHours;
-            restaurant.Website = restaurantModel.Website;
+            var user = await _userService.GetLoggedInUserAsync();
 
-            if (await _context.SaveChangesAsync() > 0)
+            var restaurant = await GetRestaurantByIdAsync(id);
+
+            if (restaurant == null)
             {
-                return true;
+                throw new BadHttpRequestException("The Restaurant with the id " + id + " does not exist!" );
             }
-            return false;
+
+            if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
+            {
+                restaurant.Name = restaurantModel.Name;
+                restaurant.Address = restaurantModel.Adress;
+                restaurant.OpeningHours = restaurantModel.OpeningHours;
+                restaurant.Website = restaurantModel.Website;
+
+                return await _context.SaveChangesAsync() > 0;
+            }
+            else
+            {
+                throw new BadHttpRequestException("You are not the owner of this Restaurant!");
+            }
+           
         }
 
         public async Task<Restaurant> GetRestaurantByIdAsync(int id)
@@ -69,15 +83,24 @@ namespace RestaurantReservierung.Services
             return null;
         }
 
-        public async Task<bool> DeleteRestaurantAsync(Restaurant restaurant)
+        public async Task<bool> DeleteRestaurantAsync(int restaurantId)
         {
-            await DeleteImageByRestaurantIdAsync(restaurant.RestaurantId);
-            _context.Restaurants.Remove(restaurant);
+            var user = await _userService.GetLoggedInUserAsync();
 
-            if (await _context.SaveChangesAsync() > 0) {  
-                return true; 
+            var restaurant = await GetRestaurantByIdAsync(restaurantId) ?? throw new BadHttpRequestException("The Restaurant with the id " + restaurantId + " does not exist!" );
+            
+            if (restaurant.UserId == user.UserId || user.Role == "ADMIN")
+            {
+                await DeleteImageByRestaurantIdAsync(restaurant.RestaurantId);
+                _context.Restaurants.Remove(restaurant);
+
+                return await _context.SaveChangesAsync() > 0;
             }
-            return false;
+            else
+            {
+                throw new BadHttpRequestException("You are not the owner of this Restaurant!" );
+            }
+          
         }
 
         public async Task<List<Restaurant>> GetManyRestaurantsAsync(GetManyRestaurantFormModel model)
@@ -111,6 +134,13 @@ namespace RestaurantReservierung.Services
 
         public async Task<bool> UploadImageAsync(int restaurantId, IFormFile picture)
         {
+            var user = await _userService.GetLoggedInUserAsync();
+
+            if (!await OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
+                throw new BadHttpRequestException("You do not have permission to perform this action");
+
+            if (picture == null || picture.Length == 0)
+                throw new BadHttpRequestException("No File was uploaded");
 
             using var memoryStream = new MemoryStream();
             await picture.CopyToAsync(memoryStream);
@@ -149,6 +179,11 @@ namespace RestaurantReservierung.Services
 
         public async Task<bool> DeleteImageByRestaurantIdAsync(int restaurantId)
         {
+            var user = await _userService.GetLoggedInUserAsync();
+
+            if (!await OwnsRestaurantAsync(user, restaurantId) && user.Role != "ADMIN")
+                throw new BadHttpRequestException("You are not owner of the restaurant");
+
             var restaurant = await GetRestaurantByIdAsync(restaurantId);
 
             if (restaurant.ImageId == null)
