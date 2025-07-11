@@ -47,7 +47,7 @@ Die Tischreservierungsanwendung ist ein webbasiertes System zur Reservierung von
 
 ### Hauptkomponenten:  
 
-- **Frontend:** Benutzeroberfläche für Gäste und Administratoren (Angular)  
+- **Frontend:** Benutzeroberfläche für Gäste und Administratoren (React)  
 - **Backend:** Serverseitige Logik zur Verarbeitung von Reservierungen und Nutzerdaten (ASP.NET Core)  
 - **Datenbank:** Speicherung von Benutzer-, Reservierungs- und Restaurantdaten (MariaDB)  
 
@@ -63,7 +63,7 @@ Die Tischreservierungsanwendung ist ein webbasiertes System zur Reservierung von
 ## 1.4 Referenzen  
 
 Das GitHub-Repository enthält den Quellcode und weiterführende Informationen:  
-[GitHub Repository](Hier könnte ein Link eingefügt werden.)  
+[GitHub Repository](https://github.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/tree/main)
 
 ## 1.5 Überblick  
 
@@ -130,7 +130,7 @@ Dieses Kapitel beschreibt die wichtigsten Anwendungsfälle und deren technische 
 
 ### **Benutzerregistrierung**  
 
-1. Nutzer gibt Registrierungsdaten in der Angular-App ein.  
+1. Nutzer gibt Registrierungsdaten in der React-App ein.  
 2. Daten werden an die ASP.NET Core API gesendet.  
 3. Backend validiert die Eingaben und speichert sie in MariaDB.  
 4. Nutzer erhält eine Bestätigung der Registrierung.  
@@ -142,11 +142,13 @@ Dieses Kapitel beschreibt die wichtigsten Anwendungsfälle und deren technische 
 3. Backend prüft die Verfügbarkeit und speichert die Reservierung.  
 4. Nutzer erhält eine Bestätigung.  
 
-### **Feedback geben** (nur im Backend) 
+### **Feedback geben** (nur im Backend umgesetzt) 
 
-1. Nutzer gibt Bewertung in der Angular-App ein.  
+1. Nutzer gibt Bewertung in der React-App ein.  
 2. Daten werden an die ASP.NET Core API gesendet.  
-3. Feedback wird in MariaDB gespeichert und ist für andere sichtbar.  
+3. Feedback wird in MariaDB gespeichert und ist für andere sichtbar.
+> **Hinweis:** Die vollständige Umsetzung steht noch aus – aktuell ist das Feedback nur über Swagger testbar.
+
 
 ---
 
@@ -158,13 +160,13 @@ Das System ist in drei Hauptschichten unterteilt:
 
 | Schicht | Technologie | Funktion |  
 |---------|------------|----------|  
-| Präsentationsschicht | Angular (HTML, CSS, TypeScript) | UI und Interaktion |  
+| Präsentationsschicht | React (HTML, CSS, TypeScript) | UI und Interaktion |  
 | Anwendungsschicht | ASP.NET Core (C#) | Geschäftslogik und API-Endpoints |  
 | Datenzugriffsschicht | MariaDB | Speicherung und Abfragen von Daten |  
 
 ## 5.2 Architektonisch signifikante Design-Pakete  
 
-### **Frontend (Angular)**  
+### **Frontend (React)**  
 
 - Komponenten zur UI-Darstellung  
 - Services zur API-Kommunikation  
@@ -415,7 +417,7 @@ Die Verwendung von robusten Frameworks (z. B. ASP.NET Core) gewährleistet eine 
 
 - Übertragbarkeit
 
-Durch die Entwicklung mit HTML, CSS, JavaScript/TypeScript für das Frontend kann die Anwendung auf verschiedenen Webbrowsern eingesetzt werden, was die Zugänglichkeit auf unterschiedlichen Geräten gewährleistet. Die Verwendung von Standardtools wie GitHub unterstützt die Portabilität zusätzlich, indem sie eine nahtlose Bereitstellung und Zusammenarbeit in verschiedenen Umgebungen ermöglicht.
+Durch die Entwicklung mit React für das Frontend kann die Anwendung auf verschiedenen Webbrowsern eingesetzt werden, was die Zugänglichkeit auf unterschiedlichen Geräten gewährleistet. Die Verwendung von Standardtools wie GitHub unterstützt die Portabilität zusätzlich, indem sie eine nahtlose Bereitstellung und Zusammenarbeit in verschiedenen Umgebungen ermöglicht.
 Sicherheit
 
 - Obwohl nicht explizit beschrieben, bietet die Verwendung von ASP.NET Core in der Architektur integrierte Sicherheitsfunktionen wie Authentifizierung und Datenschutz. Diese helfen, sensible Reservierungsdaten zu schützen.
