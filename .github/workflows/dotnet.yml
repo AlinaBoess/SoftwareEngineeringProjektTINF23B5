@@ -39,13 +39,15 @@ jobs:
         dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
         cd TestResults
         cd $(ls -t | head -n 1)
-        grep '<coverage line-rate="' coverage.cobertura.xml | awk -F'line-rate="' '{print $2}' | awk -F'"' '{print "Coverage: " $1 " %"}'
+        grep '<coverage line-rate="' coverage.cobertura.xml | awk -F'line-rate="' '{print $2}' | awk -F'"' '{printf "coverage: %.2f %%\n", $1 * 100}'
+        cd ../../../..
     - name: Publish
       run: dotnet publish programCode/webApi/RestaurantReservierung.sln -c Release -o publish
     - name: Move files to deployment folder
       run: |
         rm -rf deployment
         mkdir deployment
+        cp webApi/Tests/TestResults/$(ls -t webApi/Tests/TestResults | head -n 1)/coverage.cobertura.xml coverage_report.xml
         cp -r publish/* deployment/
         cp programCode/webApi/bin/Release/net8.0/RestaurantReservierung.dll deployment/RestaurantReservierung.dll
     - name: Commit & push to repo
