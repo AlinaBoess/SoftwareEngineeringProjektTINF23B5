@@ -47,7 +47,7 @@ jobs:
       run: |
         rm -rf deployment
         mkdir deployment
-        cp webApi/Tests/TestResults/$(ls -t webApi/Tests/TestResults | head -n 1)/coverage.cobertura.xml coverage_report.xml
+        cp programCode/webApi/Tests/TestResults/$(ls -t webApi/Tests/TestResults | head -n 1)/coverage.cobertura.xml coverage_report.xml
         cp -r publish/* deployment/
         cp programCode/webApi/bin/Release/net8.0/RestaurantReservierung.dll deployment/RestaurantReservierung.dll
     - name: Commit & push to repo
