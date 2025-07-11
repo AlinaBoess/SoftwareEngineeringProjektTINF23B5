@@ -37,10 +37,10 @@ Der Zweck dieser Software Requirements Specification (SRS) ist es, eine klare un
 
 ### 1.2 Umfang  
 Das Restaurant-Buchungssystem wird als Webanwendung entwickelt, die es sowohl Benutzern (Kunden) als auch Administratoren (Restaurantmitarbeitern) ermöglicht, effektiv zu interagieren.
-- Benutzer (Kunden): Haben die Möglichkeit, verfügbare Tische einzusehen, Reservierungen vorzunehmen, bestehende Reservierungen zu stornieren und Feedback zu hinterlassen.
-- Administratoren (Restaurantmitarbeiter): Sind dafür verantwortlich, die Tische zu verwalten, Reservierungen einzusehen und gegebenenfalls zu bearbeiten.
+- Benutzer (Kunden): Haben die Möglichkeit, verfügbare Tische einzusehen, Reservierungen vorzunehmen und bestehende Reservierungen zu stornieren, Feedback in Form einer Sternebewertung ist über das Backend bereits möglich, Frontend-Umsetzung wäre der nächste Schritt, welcher aus Zeitgründen nicht mehr realisiert werden konnte.
+- Administratoren (Restaurantmitarbeiter): Sind dafür verantwortlich, die Tische zu verwalten und Reservierungen einzusehen.
 
-Das System wird unter Verwendung der Technologien C#, ASP.NET, HTML, JavaScript/TypeScript und CSS entwickelt und nutzt eine SQL-Datenbank zur Speicherung und Verwaltung der Daten.
+Das System wird unter Verwendung der Technologien C#, ASP.NET, HTML, JavaScript und CSS entwickelt und nutzt eine SQL-Datenbank zur Speicherung und Verwaltung der Daten.
 
 Zusätzlich wird die Anwendung sowohl auf Desktop- als auch auf mobilen Browsern zugänglich sein, um eine breite Benutzerbasis zu unterstützen.
 
@@ -54,7 +54,8 @@ Zusätzlich wird die Anwendung sowohl auf Desktop- als auch auf mobilen Browsern
 - **ASP.NET**: Ein von Microsoft entwickeltes Framework zur Erstellung von Webanwendungen und Webdiensten.
 - **HTML (Hypertext Markup Language)**: Eine Markup-Sprache zur Strukturierung und Präsentation von Inhalten im Web.
 - **CSS (Cascading Style Sheets)**: Eine Stylesheet-Sprache, die das Aussehen und Layout von HTML-Inhalten definiert.
-- **JavaScript/TypeScript**: Programmiersprachen, die verwendet werden, um interaktive und dynamische Inhalte auf Webseiten zu erstellen. TypeScript ist eine von Microsoft entwickelte Obermenge von JavaScript, die statische Typisierung bietet.
+- **JavaScript**: Programmiersprachen, die verwendet werden, um interaktive und dynamische Inhalte auf Webseiten zu erstellen.
+- **React**: Ein komponentenbasiertes Javascript-Framework, welches die effiziente Wiederverwendung von Komponenten erlaubt.
 
 ### 1.4 Referenzen  
 Die folgende Liste enthält alle Dokumente und Quellen, auf die im Rahmen dieser Software Requirements Specification (SRS) verwiesen wird:
@@ -93,18 +94,19 @@ Das System ist in eine eventuell bereits bestehende IT-Infrastruktur des Restaur
 
 ### 2.2 Produktfunktionen
 Das System umfasst folgende Kernfunktionen:
-- **Tischverwaltung:** Administratoren können Tische erstellen, konfigurieren und deren Verfügbarkeit anzeigen. Diese Funktion bietet eine Übersicht über den Restaurantgrundriss und zeigt, welche Tische verfügbar oder reserviert sind.
-- **Reservierungssystem:** Benutzer können verfügbare Tische und Zeitfenster einsehen und Reservierungen vornehmen. Dazu gehört auch die Möglichkeit, bestehende Reservierungen zu stornieren oder zu ändern.
+- **Tischverwaltung:** Administratoren können Tische erstellen und konfigurieren, bspw. mit Anzahl von Plätzen, Location des Tisches, ...
+- **Reservierungssystem:** Benutzer können verfügbare Tische und Zeitfenster einsehen und Reservierungen vornehmen. Dazu gehört auch die Möglichkeit, bestehende Reservierungen zu stornieren.
 - **Benutzersystem:** Sowohl Benutzer als auch Administratoren müssen ein Konto erstellen, um auf das System zuzugreifen. Benutzerinformationen werden in einer Datenbank gespeichert, um die Reservierungen mit spezifischen Benutzern zu verknüpfen.
 - **Feedbacksystem:** Nach einer Reservierung können Benutzer Feedback zur Reservierung und ihrer Erfahrung im Restaurant abgeben. Dieses Feedback wird genutzt, um den Service kontinuierlich zu verbessern und auf die Bedürfnisse der Benutzer einzugehen.
 
 ### 2.3 Benutzermerkmale
 Es gibt zwei Hauptakteure, die das System nutzen:
 - **Benutzer (Kunden):**  Sie sind die primären Nutzer des Systems und erwarten eine einfache, intuitive Möglichkeit, Tische zu reservieren, zu stornieren und ihre Reservierungen zu verwalten. Die Anwendung ist so gestaltet, dass sie benutzerfreundlich ist, sodass die Benutzer nur minimale technische Kenntnisse benötigen. Um Reservierungen vorzunehmen, müssen die Benutzer ein Konto erstellen.
-- **Administratoren (Restaurantmitarbeiter):** Administratoren sind für die Verwaltung der Tische und die Einsichtnahme in Reservierungen verantwortlich. Sie verfügen über zusätzliche Berechtigungen, um Tische hinzuzufügen, Zeitfenster zu ändern und überbuchte Zeiten zu verwalten. Administratoren benötigen grundlegende Kenntnisse der Anwendung sowie Zugriff auf das Backend der Webanwendung, um ihre Aufgaben effizient ausführen zu können.
+- **Administratoren des Systems:** Administratoren sind für die Verwaltung der Tische und die Einsichtnahme in Reservierungen verantwortlich. Sie verfügen über zusätzliche Berechtigungen, um Tische hinzuzufügen, Zeitfenster zu ändern und überbuchte Zeiten zu verwalten. Administratoren benötigen grundlegende Kenntnisse der Anwendung sowie Zugriff auf das Backend der Webanwendung, um ihre Aufgaben effizient ausführen zu können.
+- **Restaurant-Besitzer**: Können Restaurants hinzufügen, sowie Tische pro Restaurant und Liste aller Buchungen pro Restaurant anzeigen. 
 
 ### 2.4 Einschränkungen
-- **Technische Einschränkungen:** Das System wird als Webanwendung entwickelt und basiert auf Technologien wie C#, ASP.NET, HTML, JavaScript/TypeScript und CSS. Die Daten werden in einer SQL-Datenbank gespeichert. Es bestehen Einschränkungen hinsichtlich der Serverkapazitäten und Netzwerklatenz, die die Performance des Systems beeinträchtigen können.
+- **Technische Einschränkungen:** Das System wird als Webanwendung entwickelt und basiert auf Technologien wie C#, ASP.NET, HTML, CSS, JavaScript und React. Die Daten werden in einer SQL-Datenbank gespeichert. Es bestehen Einschränkungen hinsichtlich der Serverkapazitäten und Netzwerklatenz, die die Performance des Systems beeinträchtigen können.
 - **Sicherheitsanforderungen:** Bei der Verarbeitung persönlicher Daten und Reservierungen müssen strenge Datenschutzrichtlinien, insbesondere die Datenschutz-Grundverordnung (DSGVO), beachtet werden. Die Speicherung und Verarbeitung von Benutzerdaten muss den aktuellen Sicherheitsstandards entsprechen, um die Vertraulichkeit und Integrität der Informationen zu gewährleisten.
 - **Systemverfügbarkeit:** Das System sollte nahezu rund um die Uhr verfügbar sein, um Kunden die Möglichkeit zu geben, jederzeit Reservierungen vorzunehmen. Geplante Wartungszeiten müssen minimiert und rechtzeitig im Voraus angekündigt werden, um die Benutzererfahrung nicht zu beeinträchtigen.
 
@@ -131,13 +133,13 @@ Das System umfasst verschiedene Teilmengen von Anforderungen:
 3. **Tisch reservieren:**  
    Der Benutzer wählt einen Tisch und ein Zeitfenster aus, um eine Reservierung vorzunehmen.
 4. **Reservierungsbestätigung:**  
-   Nach erfolgreicher Reservierung erhält der Benutzer eine Bestätigung über die Reservierung, meist in Form eines Pop-ups oder einer E-Mail.
+   Nach erfolgreicher Reservierung erhält der Benutzer eine Bestätigung über die Reservierung als Pop-up.
 5. **Reservierung stornieren:**  
    Der Benutzer hat die Möglichkeit, eine bereits getätigte Reservierung zu stornieren.
 6. **Reservierungsübersicht:**  
    Der Benutzer kann eine Übersicht über all seine aktuellen und vergangenen Reservierungen abrufen.
 7. **Feedback abgeben:**  
-   Nach dem Restaurantbesuch kann der Benutzer Feedback zur Qualität des Services und der Erfahrung abgeben.
+   Nach dem Restaurantbesuch kann der Benutzer Feedback zur Qualität des Services und der Erfahrung abgeben als Sterne-Anzahl (aktuell nur im Backend möglich; Frontend-Umsetzung wäre nächster Schritt).
 #### Funktionen für Administrator (4. Semester)
 1. **Anmelden:**  
    Der Administrator gibt seine Zugangsdaten ein, um auf das Verwaltungssystem zuzugreifen.
@@ -151,7 +153,6 @@ Das System umfasst verschiedene Teilmengen von Anforderungen:
 ### 3.1 Funktionalität  
 Dieser Abschnitt erläutert die verschiedenen Anwendungsfälle, die im Use-Case Diagramm dargestellt sind, sowie deren Funktionalität.
 
-Bis Dezember planen wir die Implementierung der folgenden Benutzerfunktionen:
 - **3.1.1 Anmelden**  
   Benutzer können sich in ihr Konto einloggen, um auf die Funktionen des Systems zuzugreifen.
   
@@ -173,7 +174,6 @@ Bis Dezember planen wir die Implementierung der folgenden Benutzerfunktionen:
 - **3.1.7 Reservierungen einsehen**  
   Benutzer können alle ihre Reservireungen einsehen und verwalten.
 
-Bis Juni möchten wir die folgenden Administratorfunktionen implementieren:
 - **3.1.8 Anmelden**  
   Administratoren können sich einloggen, um auf ihre Verwaltungsfunktionen zuzugreifen.
 
@@ -270,7 +270,8 @@ sequenceDiagram
 Benutzer können einen verfügbaren Tisch für ein gewünschtes Datum und eine Uhrzeit reservieren. Dieser Vorgang beinhaltet die Auswahl des gewünschten Tisches sowie die Eingabe von persönlichen Informationen für die Reservierung.
 
 - **GUI Mockup**  
-![GUI-Mockup](../SRS/Bilder/GUI Mockup.png)
+<img width="422" height="343" alt="image" src="https://github.com/user-attachments/assets/798bb61e-5d05-46dd-984c-ccaf4e0fb9e9" />
+
 
 - **Ablauf von Events (Sequenzdiagramm)**  
 ```mermaid
@@ -291,7 +292,7 @@ sequenceDiagram
 
 - **Nachbedingungen**  
     - Die Reservierung ist erfolgreich in der Datenbank gespeichert.
-    - Der Benutzer erhält eine Bestätigung der Reservierung per E-Mail oder im System.
+    - Der Benutzer erhält eine Bestätigung der Reservierung per E-Mail als PopUp-Benachrichtigung
 
 - **Spezielle Anforderungen**  
     - Die Reservierungsbestätigung sollte innerhalb von 5 Sekunden angezeigt werden.
@@ -371,40 +372,7 @@ sequenceDiagram
         - Frontend: 2 Punkte  
         - Backend: 3 Punkte (Reservierung löschen und Bestätigung generieren)
 
-#### 3.1.6 Feedback geben
-
-- **Beschreibung**  
-Benutzer können nach ihrem Restaurantbesuch Feedback zu ihrer Reservierung und dem Gesamterlebnis geben. Dieses Feedback hilft dem Restaurant, den Service zu verbessern und auf die Wünsche der Gäste einzugehen.
-
-- **Ablauf von Events (Sequenzdiagramm)**  
-```mermaid
-sequenceDiagram
-    participant Benutzer
-    participant System
-    Benutzer ->> System: Feedback-Formular öffnen
-    Benutzer ->> System: Kommentar und Bewertung eingeben
-    Benutzer ->> System: Feedback absenden
-    System ->> System: Feedback speichern
-    System ->> Benutzer: Pop-up mit Bestätigung anzeigen
-```
-
-- **Vorbedingungen**  
-    - Der Benutzer muss über eine abgeschlossene Reservierung im System verfügen, um Feedback abgeben zu können.
-
-- **Nachbedingungen**  
-    - Das Feedback wird erfolgreich in der Datenbank gespeichert.
-    - Der Benutzer erhält eine Bestätigung seines Feedbacks in Form eines Pop-ups.
-
-- **Spezielle Anforderungen**  
-    - Das Pop-up mit der Bestätigung sollte innerhalb von 5 Sekunden nach dem Absenden des Feedbacks angezeigt werden.
-    - Das System muss sicherstellen, dass die Eingaben validiert werden, um Spam oder unangemessene Inhalte zu vermeiden.
-
-- **Aufwandsschätzung / Story Points**  
-    - Story Points: 8  
-        - Frontend: 3 Punkte  
-        - Backend: 5 Punkte (Feedback speichern, Validierung)
-
-#### 3.1.7 Reservierungen einsehen
+#### 3.1.6 Reservierungen einsehen
 
 - **Beschreibung**  
 Benutzer können alle ihre bisherigen und zukünftigen Reservierungen einsehen und verwalten. Dies ermöglicht es ihnen, Reservierungen zu überprüfen, Änderungen vorzunehmen oder Stornierungen vorzunehmen.
@@ -437,7 +405,7 @@ sequenceDiagram
         - Frontend: 2 Punkte  
         - Backend: 3 Punkte (Reservierungen abrufen)
 
-#### 3.1.8 Anmelden
+#### 3.1.7 Anmelden
 
 - **Beschreibung**  
 Administratoren können sich in das System einloggen, um Zugriff auf ihre Verwaltungsfunktionen zu erhalten. Dies ermöglicht es ihnen, Reservierungen zu verwalten und wichtige Systeminformationen einzusehen.
@@ -475,43 +443,7 @@ sequenceDiagram
         - Frontend: 1 Punkt  
         - Backend: 2 Punkte (Anmeldedaten validieren)
 
-#### 3.1.9 Tischverwaltung
-
-- **Beschreibung**  
-Administratoren können die Tische im System verwalten, einschließlich der Anpassung von Verfügbarkeiten, Einstellungen und der Zuweisung von Tischen zu bestimmten Reservierungen. Dies ermöglicht eine effiziente Organisation der Tischressourcen im Restaurant.
-
-- **Ablauf von Events (Sequenzdiagramm)**  
-```mermaid
-sequenceDiagram
-    participant Administrator
-    participant System
-    Administrator ->> System: Tische anzeigen
-    System ->> Administrator: Liste der Tische anzeigen
-    Administrator ->> System: Tisch auswählen
-    Administrator ->> System: Verfügbarkeit ändern
-    System ->> System: Änderungen speichern
-    System ->> Administrator: Bestätigung der Änderungen anzeigen
-```
-
-- **Vorbedingungen**  
-    - Der Administrator muss angemeldet sein.
-    - Es müssen Tische im System vorhanden sein.
-
-- **Nachbedingungen**  
-    - Änderungen an der Tischverfügbarkeit und den Einstellungen sind erfolgreich in der Datenbank gespeichert.
-    - Der Administrator erhält eine Bestätigung über die erfolgten Änderungen.
-
-- **Spezielle Anforderungen**  
-    - Änderungen an der Tischverfügbarkeit sollten innerhalb von 3 Sekunden gespeichert werden.
-    - Das System muss sicherstellen, dass keine Konflikte bei der Zuweisung von Tischen auftreten.
-
-- **Aufwandsschätzung / Story Points**  
-    - Story Points: 5  
-        - Frontend: 2 Punkte  
-        - Backend: 3 Punkte (Änderungen speichern, Konflikte prüfen)
-
-
-#### 3.1.10 Reservierungsübersicht
+#### 3.1.8 Reservierungsübersicht
 
 - **Beschreibung**  
 Administratoren können eine umfassende Übersicht über alle Reservierungen im System einsehen. Diese Funktion ermöglicht es ihnen, die aktuelle Auslastung des Restaurants zu überwachen und gegebenenfalls Anpassungen vorzunehmen.
@@ -543,41 +475,6 @@ sequenceDiagram
         - Frontend: 2 Punkte  
         - Backend: 3 Punkte (Daten abrufen, Filter- und Sortierfunktionen implementieren)
 
-#### 3.1.11 Feedback abgeben
-
-- **Beschreibung**  
-Administratoren können das Feedback der Benutzer einsehen, analysieren und darauf reagieren. Diese Funktion ermöglicht es ihnen, die Benutzererfahrung zu verbessern und etwaige Probleme zeitnah zu adressieren.
-
-- **Ablauf von Events (Sequenzdiagramm)**  
-```mermaid
-sequenceDiagram
-    participant Administrator
-    participant System
-    Administrator ->> System: Feedbackübersicht anfordern
-    System ->> System: Feedbackdaten abrufen
-    System ->> Administrator: Feedbackübersicht anzeigen
-    Administrator ->> System: Feedbackantwort eingeben
-    System ->> Administrator: Bestätigung der Antwort anzeigen
-```
-
-- **Vorbedingungen**  
-    - Der Administrator muss angemeldet sein.
-    - Es muss mindestens ein Feedback von Benutzern im System vorhanden sein.
-
-- **Nachbedingungen**  
-    - Das Feedback wird erfolgreich angezeigt.
-    - Der Administrator kann auf das Feedback reagieren, und die Antwort wird im System gespeichert.
-
-- **Spezielle Anforderungen**  
-    - Die Feedbackübersicht sollte innerhalb von 4 Sekunden geladen werden.
-    - Administratoren sollten die Möglichkeit haben, auf spezifisches Feedback direkt zu antworten.
-    - Es muss eine Historie der Antworten auf Benutzerfeedback geführt werden.
-
-- **Aufwandsschätzung / Story Points**  
-    - Story Points: 8  
-        - Frontend: 3 Punkte  
-        - Backend: 5 Punkte (Feedbackdaten abrufen, Antworten speichern)
-
 ### 3.2 Benutzbarkeit  
 #### 3.2.1 Benutzeroberfläche (UI)
 - **Beschreibung**  
@@ -585,8 +482,8 @@ Die Benutzeroberfläche muss intuitiv und benutzerfreundlich gestaltet sein, um 
 - **GUI Mockup**  
 ![GuiMockup](../SRS/Bilder/GUI-Mockup.png)
 - **Spezielle Anforderungen**  
-    - Die Schriftgröße sollte anpassbar sein, um die Lesbarkeit zu verbessern.  
-    - Die Anwendung muss auf verschiedenen Bildschirmgrößen (PC, Tablet, Smartphone) responsiv sein.  
+    - Die Schriftgröße eine gute Lesbarkeit ermöglichen.  
+    - Die Anwendung muss responsiv sein.  
 #### 3.2.2 Benutzerführung
 - **Beschreibung**  
 Das System soll den Benutzer durch den Reservierungsprozess führen, um sicherzustellen, dass alle erforderlichen Schritte leicht verständlich sind.   
@@ -604,9 +501,6 @@ Das System soll größtenteils den WCAG-Richtlinien (Web Content Accessibility G
 #### 3.2.5 Benutzerfeedback
 - **Beschreibung**  
 Das System soll eine Möglichkeit bieten, dass Benutzer Feedback zur Benutzeroberfläche und Benutzererfahrung geben können.  
-- **Spezielle Anforderungen**  
-    - Es sollte eine Feedback-Schaltfläche geben, die ein einfaches Formular zur Eingabe von Anregungen oder Beschwerden öffnet.  
-    - Benutzer sollten nach der Nutzung des Systems (z. B. nach einer Reservierung) zu Feedback aufgefordert werden. 
 
 ### 3.3 Zuverlässigkeit  
 #### 3.3.1 Verfügbarkeit
@@ -697,26 +591,14 @@ Alle Elemente des Systems (Variablen, Klassen, Methoden, etc.) müssen konsisten
 - **Beschreibung**  
 Das System sollte auf bewährte Klassenbibliotheken zurückgreifen, die regelmäßig aktualisiert werden. Die Verwendung von gängigen Bibliotheken fördert die Wiederverwendbarkeit von Code und erleichtert die Wartung. Beispiele hierfür sind:  
   - **Entity Framework** für Datenzugriff.  
-  - **ASP.NET Identity** für die Verwaltung von Benutzerauthentifizierung und -autorisierung.  
-
-#### 3.5.4 Wartungszugang
-- **Beschreibung**  
-Das System muss über einen klar definierten Wartungszugang verfügen, der es Administratoren ermöglicht, Wartungsarbeiten effizient durchzuführen, ohne den Betrieb der Anwendung zu stören. Dazu gehören:  
-  - Ein Admin-Panel zur Verwaltung von Tischen, Reservierungen und Benutzerdaten.  
-  - Protokollierung von Fehlern und Systemereignissen für die Fehlersuche und -analyse.  
-
-#### 3.5.5 Wartungshilfsprogramme
-- **Beschreibung**  
-Das System sollte Wartungshilfsprogramme beinhalten, die es den Entwicklern ermöglichen, gängige Wartungsaufgaben zu automatisieren. Dazu gehören:  
-  - **Backup-Skripte** für die regelmäßige Sicherung der Datenbank.  
-  - **Monitoring-Tools**, um die Systemleistung in Echtzeit zu überwachen und bei Bedarf Alarmmeldungen zu generieren.
+  - **ASP.NET Identity** für die Verwaltung von Benutzerauthentifizierung und -autorisierung.
 
 ### 3.6 Design-Beschränkungen  
 #### 3.6.1 Verwendete Programmiersprachen
 - **Beschreibung**  
 Das System muss in den folgenden Programmiersprachen entwickelt werden:  
   - **C#**: Als Hauptprogrammiersprache für die Backend-Entwicklung unter Verwendung von ASP.NET.  
-  - **HTML, CSS und JavaScript/TypeScript**: Für die Frontend-Entwicklung, um eine ansprechende Benutzeroberfläche zu gewährleisten.  
+  - **HTML, CSS und JavaScript mit React-Framework**: Für die Frontend-Entwicklung, um eine ansprechende Benutzeroberfläche zu gewährleisten.  
 
 #### 3.6.2 Softwareentwicklungsprozess
 - **Beschreibung**  
@@ -727,7 +609,7 @@ Das Entwicklungsteam muss den **Agilen Softwareentwicklungsprozess** anwenden, u
 Die folgenden Entwicklungswerkzeuge sind für die Erstellung der Anwendung vorgeschrieben:  
   - **Visual Studio**: Als integrierte Entwicklungsumgebung (IDE) für die Entwicklung in C# und ASP.NET.  
   - **Git**: Für die Versionskontrolle des Quellcodes, um die Zusammenarbeit im Team zu ermöglichen.  
-  - **SQL Server Management Studio**: Für die Verwaltung der SQL-Datenbank.  
+  - **phpMyAdmin**: Für die Verwaltung der SQL-Datenbank.  
 
 #### 3.6.4 Architektur- und Designbeschränkungen
 - **Beschreibung**  
@@ -738,7 +620,7 @@ Das System muss eine **Client-Server-Architektur** verwenden, bei der der Server
 
 #### 3.6.6 Datenbankmanagementsystem
 - **Beschreibung**  
-Das System muss eine relationale Datenbank mit **SQL Server** als Datenbankmanagementsystem verwenden, um die Datenverfügbarkeit, Integrität und Konsistenz zu gewährleisten.  
+Das System muss eine relationale Datenbank mit **MariaDB** als Datenbankmanagementsystem verwenden, um die Datenverfügbarkeit, Integrität und Konsistenz zu gewährleisten.  
 
 ### 3.7 Online-Benutzerdokumentation und Hilfesystemanforderungen  
 #### 3.7.1 Anforderungen
@@ -765,8 +647,8 @@ Da keine externen Komponenten verwendet werden, sind auch keine spezifischen Kom
 #### 3.9.1 Benutzeroberflächen
 Die Benutzeroberfläche des Restaurant-Buchungssystems wird webbasiert sein und eine intuitive, benutzerfreundliche Gestaltung aufweisen. Die Hauptfunktionen umfassen:
 - **Reservierungsseite:** Benutzer können verfügbare Tische, Datum und Uhrzeit auswählen und Reservierungen vornehmen.
-- **Administrationsseite:** Administratoren können Tische verwalten, Reservierungen einsehen und bearbeiten.
-- **Feedback-Seite:** Benutzer können nach einer Reservierung Feedback zur Erfahrung im Restaurant abgeben.
+- **Administrationsseite:** Administratoren können Tische verwalten, und Reservierungen einsehen und ggf. editieren.
+- **Feedback-Seite:** Benutzer können nach einer Reservierung Feedback zur Erfahrung im Restaurant abgeben (Sterne-Bewertung; in Backend schon realisiert).
 
 Die Benutzeroberfläche wird in HTML, CSS und JavaScript/TypeScript entwickelt und ist responsiv, sodass sie auf verschiedenen Geräten (PCs, Tablets, Smartphones) optimal angezeigt wird.
 
@@ -781,9 +663,7 @@ Die Hauptsoftware-Schnittstelle ist:
 - **Datenbankschnittstelle:** Diese Schnittstelle ermöglicht den Zugriff auf die Datenbank, um Daten zu speichern, abzurufen und zu bearbeiten.
 
 #### 3.9.4 Kommunikationsschnittstellen
-Das Restaurant-Buchungssystem kommuniziert über das Internet. Die Kommunikationsschnittstellen umfassen:
-- **HTTP/HTTPS:** Für die sichere Übertragung von Daten zwischen dem Benutzer und dem Server.
-- **WebSocket (optional):** Für Echtzeit-Kommunikation, z. B. Benachrichtigungen über Reservierungsbestätigungen oder Änderungen.
+Das Restaurant-Buchungssystem kommuniziert über das Internet. Die Kommunikationsschnittstellen umfassen ausschließlich **HTTPS** für die sichere Übertragung von Daten zwischen dem Benutzer und dem Server.
 
 ### 3.10 Lizenzierungsanforderungen  
 Für das Restaurant-Buchungssystem gelten folgende Lizenzierungsanforderungen:
@@ -796,7 +676,7 @@ Für das Restaurant-Buchungssystem gelten folgende Lizenzierungsanforderungen:
 ### 3.11 Rechtliche, urheberrechtliche und andere Hinweise 
 Für das Restaurant-Buchungssystem gelten folgende rechtliche und urheberrechtliche Hinweise:
 
-- **Urheberrecht:** Alle Quellcodes, Dokumentationen und Designmaterialien, die im Rahmen dieses Projekts erstellt wurden, sind urheberrechtlich geschützt. Die Rechte liegen beim Entwicklungsteam (Alina Moumen, Yahya, Alex, Lukas) und dürfen ohne deren Zustimmung nicht verwendet oder verbreitet werden.
+- **Urheberrecht:** Alle Quellcodes, Dokumentationen und Designmaterialien, die im Rahmen dieses Projekts erstellt wurden, sind urheberrechtlich geschützt. Die Rechte liegen beim Entwicklungsteam (Alina, Moumen, Yahya, Alex, Lukas) und dürfen ohne deren Zustimmung nicht verwendet oder verbreitet werden.
 
 - **Haftungsausschluss:** Die Software wird "so wie sie ist" bereitgestellt, ohne jegliche ausdrückliche oder stillschweigende Gewährleistung. Das Entwicklungsteam übernimmt keine Haftung für direkte, indirekte oder Folgeschäden, die aus der Nutzung oder der Unmöglichkeit der Nutzung der Software entstehen.
 
