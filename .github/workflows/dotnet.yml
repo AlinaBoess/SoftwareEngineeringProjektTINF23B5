@@ -34,7 +34,12 @@ jobs:
     - name: Build
       run: dotnet build programCode/webApi/RestaurantReservierung.sln --no-restore 
     - name: Test
-      run: dotnet test programCode/webApi/RestaurantReservierung.sln --no-build --verbosity normal
+      run: |
+        cd programCode/webApi/Tests
+        dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
+        cd programCode/webApi/Tests/TestResults
+        cd $(ls -t | head -n 1)
+        grep '<coverage line-rate="' coverage.cobertura.xml | awk -F'line-rate="' '{print $2}' | awk -F'"' '{print "Coverage: " $1 " %"}'
     - name: Publish
       run: dotnet publish programCode/webApi/RestaurantReservierung.sln -c Release -o publish
     - name: Move files to deployment folder
