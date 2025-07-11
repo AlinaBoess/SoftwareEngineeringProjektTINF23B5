@@ -303,7 +303,7 @@ function MainComponent() {
                 throw new Error(message || "Reservierung fehlgeschlagen.");
             }
 
-            alert("Reservierung erfolgreich! Sie erhalten in Kürze eine Bestätigungs-E-Mail.");
+            alert("Reservierung erfolgreich! ");
             setReservationModal(false);
             setSelectedRestaurant(null);
             setSelectedTable(null);
