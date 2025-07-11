@@ -37,7 +37,7 @@ jobs:
       run: |
         cd programCode/webApi/Tests
         dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
-        cd programCode/webApi/Tests/TestResults
+        cd TestResults
         cd $(ls -t | head -n 1)
         grep '<coverage line-rate="' coverage.cobertura.xml | awk -F'line-rate="' '{print $2}' | awk -F'"' '{print "Coverage: " $1 " %"}'
     - name: Publish
