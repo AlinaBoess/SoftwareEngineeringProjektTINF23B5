@@ -373,9 +373,10 @@ Die Datenbankstruktur basiert auf **MariaDB** mit **Entity Framework Core** für
 ### **Wichtige Tabellen:**  
 
 - **Benutzer** *(ID, Name, E-Mail, Passwort-Hash)*  
-- **Reservierungen** *(ID, Benutzer-ID, Restaurant-ID, Datum, Uhrzeit)*  
+- **Reservierungen** *(ID, Benutzer-ID, Tisch-ID, Startzeit, Endzeit)*  
 - **Feedback** *(ID, Benutzer-ID, Bewertung, Kommentar)*  
-![Screenshot 2025-02-09 202627](https://github.com/user-attachments/assets/ba54fac2-a639-45bd-9b74-e7b62f02dde7)
+<!-- ![Screenshot 2025-02-09 202627](https://github.com/user-attachments/assets/ba54fac2-a639-45bd-9b74-e7b62f02dde7)-->
+![Datenbankdiagramm](https://raw.githubusercontent.com/AlinaBoess/SoftwareEngineeringProjektTINF23B5/main/documentation/endPresentation/DatabaseDiagramm.png)
 
 
 # 10. Größe und Leistung 
